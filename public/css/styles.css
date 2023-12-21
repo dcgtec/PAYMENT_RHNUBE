@@ -1,0 +1,49 @@
+/* public/css/styles.css */
+
+body {
+    /* padding-top: 56px;  */
+    font-family: 'Poppins';
+}
+
+header {
+    text-align: center;
+    background-color: #f2f3f7;
+}
+
+.footer{
+    text-align: center;
+    background-color: #464b50;
+}
+
+.logo {
+    max-width: 100%; /* Ajusta el tamaño máximo de la imagen */
+     /* Ajusta la altura automáticamente para mantener la proporción */
+    display: block; /* Para centrar la imagen */
+    margin: 0 auto; /* Para centrar la imagen */
+}
+
+
+footer{
+    color: #fff;
+    font-size: 15px;
+    font-weight: 300;
+}
+
+.redeSociales,.enlacesExt{
+    grid-gap: 40px;
+}
+
+.enlacesExt a{
+    color: #fff;
+    grid-gap: 40px;
+    font-size: 14px;
+}
+
+@media screen and (max-width: 767px){
+    .enlacesExt {
+        flex-flow: column wrap;
+        flex: 0 auto;
+        grid-gap:0;
+    }
+
+}
