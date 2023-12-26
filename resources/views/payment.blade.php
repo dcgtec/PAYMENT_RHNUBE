@@ -45,9 +45,71 @@
                                     <div class="col-sm-5 mx-0 px-0">
                                         <select name="idCountry" required id="idCountry"
                                             class="form-control text-center">
-                                            <option value="">Seleccione su país</option>
+                                            <option value="">...</option>
+                                            <option value="otro_pais_valido">Alemania</option>
+                                            <option value="otro_pais_valido">Antigua y Barbuda</option>
+                                            <option value="otro_pais_valido">Aruba</option>
+                                            <option value="otro_pais_valido">Austria</option>
+                                            <option value="otro_pais_valido">Bahamas</option>
+                                            <option value="otro_pais_valido">Barbados</option>
+                                            <option value="otro_pais_valido">Bélgica</option>
+                                            <option value="otro_pais_valido">Belice</option>
+                                            <option value="otro_pais_valido">Bielorrusia</option>
+                                            <option value="otro_pais_valido">Bolivia</option>
+                                            <option value="otro_pais_valido">Brasil</option>
+                                            <option value="otro_pais_valido">Canada</option>
+                                            <option value="otro_pais_valido">Chile</option>
+                                            <option value="otro_pais_valido">Colombia</option>
+                                            <option value="otro_pais_valido">Costa Rica</option>
+                                            <option value="otro_pais_valido">Cuba</option>
+                                            <option value="otro_pais_valido">Dominica</option>
+                                            <option value="otro_pais_valido">Ecuador</option>
+                                            <option value="otro_pais_valido">El Salvador</option>
+                                            <option value="otro_pais_valido">España</option>
+                                            <option value="otro_pais_valido">Francia</option>
+                                            <option value="otro_pais_valido">Grecia</option>
+                                            <option value="otro_pais_valido">Grenada</option>
+                                            <option value="otro_pais_valido">Guadalupe</option>
+                                            <option value="otro_pais_valido">Guatemala</option>
+                                            <option value="otro_pais_valido">Guyana</option>
+                                            <option value="otro_pais_valido">Guyana Francesa</option>
+                                            <option value="otro_pais_valido">Haití</option>
+                                            <option value="otro_pais_valido">Honduras</option>
+                                            <option value="otro_pais_valido">Hungría</option>
+                                            <option value="otro_pais_valido">India</option>
+                                            <option value="otro_pais_valido">Islas Caimán</option>
+                                            <option value="otro_pais_valido">Islas Turcas y Caicos</option>
+                                            <option value="otro_pais_valido">Islas Vírgenes</option>
+                                            <option value="otro_pais_valido">Italia</option>
+                                            <option value="otro_pais_valido">Jamaica</option>
+                                            <option value="otro_pais_valido">Martinica</option>
+                                            <option value="otro_pais_valido">México</option>
+                                            <option value="otro_pais_valido">Nicaragua</option>
+                                            <option value="otro_pais_valido">Paises bajos</option>
+                                            <option value="otro_pais_valido">Panamá</option>
+                                            <option value="otro_pais_valido">Paraguay</option>
                                             <option value="PE">Perú</option>
-                                            <option value="Other">Otro País</option>
+                                            <option value="otro_pais_valido">Polonia</option>
+                                            <option value="otro_pais_valido">Portugal</option>
+                                            <option value="otro_pais_valido">Puerto Rico</option>
+                                            <option value="otro_pais_valido">Reino Unido</option>
+                                            <option value="otro_pais_valido">República checa</option>
+                                            <option value="otro_pais_valido">República Dominicana</option>
+                                            <option value="otro_pais_valido">Rumania</option>
+                                            <option value="otro_pais_valido">Rusia</option>
+                                            <option value="otro_pais_valido">San Bartolomé</option>
+                                            <option value="otro_pais_valido">San Cristóbal y Nieves</option>
+                                            <option value="otro_pais_valido">San Vicente y las Granadinas</option>
+                                            <option value="otro_pais_valido">Santa Lucía</option>
+                                            <option value="otro_pais_valido">Suecia</option>
+                                            <option value="otro_pais_valido">Suiza</option>
+                                            <option value="otro_pais_valido">Surinam</option>
+                                            <option value="otro_pais_valido">Trinidad y Tobago</option>
+                                            <option value="otro_pais_valido">Ucrania</option>
+                                            <option value="otro_pais_valido">Uruguay</option>
+                                            <option value="otro_pais_valido">USA</option>
+                                            <option value="otro_pais_valido">Venezuela</option>
+                                            <option value="otro_pais_valido">Otros países</option>
                                         </select>
                                     </div>
                                 </div>
@@ -63,8 +125,8 @@
                                     <div class="col-sm-5  px-0">
                                         <div class="rowAdd m-auto d-flex rounded-pill justify-content-center">
                                             <div class="dismin">-</div>
-                                            <input type="number" name="quanty" min="1" required value="1"
-                                                id="valor">
+                                            <input type="number" name="quanty" min="1" required
+                                                value="1" id="valor">
                                             <div class="addmin">+</div>
                                         </div>
                                     </div>
@@ -140,7 +202,7 @@
                     </div>
 
                 </div>
-                <div class="buttonBuy text-center mt-0 mb-5 ">
+                <div class="buttonBuy text-center mt-0 mb-3 ">
                     <button class="btn btn-primary showPayment w-100 rounded-pill" id="payWithStripe">Pagar</button>
                 </div>
         </form>
@@ -188,10 +250,10 @@
     }
 
     .card {
-        border: 1px solid #eff0f6;
-        box-shadow: 0 2px 7px 0 rgba(20, 20, 43, 0.06);
-        border-radius: 24px;
-        padding-top: 35px !important;
+        border: 1px solid #b0b4b9;
+        border-radius: 0px;
+        padding-top: 40px !important;
+        padding-bottom: 40px !important;
     }
 
     .selectMeth h5,
@@ -288,31 +350,6 @@
 </style>
 
 <script>
-    // $("button#mercadoPa_pay.selectPayment img").attr("src", "{{ asset('images/mercado-blanco.png') }}")
-
-    // $('.btnPay').click(function() {
-    //     // Remove the class from all buttons
-    //     $('.btnPay').removeClass('selectPayment');
-
-    //     // Add the class to the clicked button
-    //     $(this).addClass('selectPayment');
-    //     console.log($(this).attr("id"))
-
-    //     if ($(this).attr("id") == "mercadoPa_pay") {
-    //         $("#paymentMercado").prop("checked", true);
-    //         $("#paymentStripe").prop("checked", false);
-
-    //         $("button#mercadoPa_pay.selectPayment img").attr("src", "{{ asset('images/mercado-blanco.png') }}");
-    //         $("button#stripe_pay img").attr("src", "{{ asset('images/stripe-negro.png') }}");
-    //     } else {
-    //         $("button#stripe_pay.selectPayment img").attr("src", "{{ asset('images/stripe-blanco.png') }}");
-    //         $("button#mercadoPa_pay img").attr("src", "{{ asset('images/mercado-negro.png') }}");
-    //         $("#paymentStripe").prop("checked", true);
-    //         $("#paymentMercado").prop("checked", false);
-    //     }
-    // });
-
-    // seleccionarPeriodo($(".btnSelec"));
     $(document).ready(function() {
 
 
@@ -366,7 +403,7 @@
             //$("td.subtotal").text("$ " + response.subtotal);
             $("td.priceUn").text("$ " + response.price);
             $("td.quanty").text($("#valor").val());
-            $("td.total").text("$ " + response.total);
+            $("td.total b").text("$ " + response.total);
         }
 
         $(".dismin, .addmin").on("click", function() {
