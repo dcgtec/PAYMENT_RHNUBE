@@ -57,8 +57,7 @@
                                         <h5 class="my-3 mx-3 pr-3 text-sm-right text-center">Cant. empleados:
                                     </div>
                                     <div class="col-sm-6  px-0">
-                                        <div
-                                            class="rowAdd m-auto d-flex rounded-pill justify-content-center">
+                                        <div class="rowAdd m-auto d-flex rounded-pill justify-content-center">
                                             <div class="dismin">-</div>
                                             <input type="number" name="quanty" min="1" required value="1"
                                                 id="valor">
@@ -185,17 +184,24 @@
     .selectCountry h5,
     .resPago h5 {
         color: #464b50;
-        font-size: 15px;
+        font-size: 18px;
     }
 
     .rowAdd,
     select {
         background-color: #fff;
-        box-shadow: 0 1px 7px 0 #495057;
-        width: 180px;
-        height: calc(1.5em + 0.75rem + 2px);
+        width: 100%;
+        height: 41px;
         align-items: center;
         border-radius: 50rem !important;
+    }
+
+    .rowAdd {
+        border: 1px solid #ced4da;
+    }
+
+    select {
+        font-size: 18px !important;
     }
 
     .addmin,
