@@ -1,24 +1,24 @@
 @include('layouts.header')
 
-{{--
-@if ($message) --}}
-<div class="container my-5">
-    <div class="row">
-        <div class="col-md-8 offset-md-2">
-            <div class="card">
-                <div class="card-body text-center">
-                    <h2 class="success-message">Hubo un error</h2>
-                    <i class="fas fa-window-close icon-check mb-4"></i>
 
-                    <!-- Transaction Summary -->
-                    <div class="transaction-summary">
-                        <h4>Hubo un problema con su pedido</h4>
-                        <p><strong>Por favor, vuelva a intentarlo!!!</strong></p>
+@if ($message)
+    <div class="container my-5">
+        <div class="row">
+            <div class="col-md-8 offset-md-2">
+                <div class="card">
+                    <div class="card-body text-center">
+                        <h2 class="success-message">Hubo un error</h2>
+                        <i class="fas fa-window-close icon-check mb-4"></i>
 
-                        <!-- Add more details as needed -->
-                    </div>
+                        <!-- Transaction Summary -->
+                        <div class="transaction-summary">
+                            <h4>Hubo un problema con su pedido</h4>
+                            <p><strong>Por favor, vuelva a intentarlo!!!</strong></p>
 
-                    {{-- <!-- Order Details -->
+                            <!-- Add more details as needed -->
+                        </div>
+
+                        {{-- <!-- Order Details -->
                    <div class="order-details">
                        <h4>Detalles del pedido</h4>
                        <p><strong>Email:</strong> john.doe@example.com</p>
@@ -28,18 +28,18 @@
                     <!-- Add more details as needed -->
                 </div> --}}
 
-                    <!-- Add a button or link to go back to the home page or any other relevant page -->
-                    <a href="https://www.rhnube.com/precios" class="btn btn-primary previus">Volver a suscribirse</a>
+                        <!-- Add a button or link to go back to the home page or any other relevant page -->
+                        <a href="https://www.rhnube.com/precios" class="btn btn-primary previus">Volver a suscribirse</a>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
-</div>
-{{-- @else
+@else
     <script>
         window.location = "https://www.rhnube.com/precios";
-    </script> --}}
-{{-- @endif --}}
+    </script>
+@endif
 
 
 
