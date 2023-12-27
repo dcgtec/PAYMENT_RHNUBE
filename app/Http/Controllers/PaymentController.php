@@ -42,7 +42,7 @@ class PaymentController extends Controller
             // Configuración de impuestos según el país
             $taxes = [];
             if ($country == "PE") {
-                $taxes = ['txr_1OMyoaCbKz5YJFE3ajJh9S4U'];
+                $taxes = ['txr_1ORzFnCbKz5YJFE3k4IpT5vR'];
             }
 
             // Crear sesión de checkout para la suscripción
@@ -64,12 +64,15 @@ class PaymentController extends Controller
             // Redirigir al cliente a la página de checkout de Stripe
             return redirect()->away($session->url);
         } catch (\InvalidArgumentException $e) {
+            session('message');
             // Manejar errores de validación de entrada
             return redirect()->route('error')->with('message', $e->getMessage());
         } catch (\Exception $e) {
+            session('message');
             // Manejar otros errores
             return redirect()->route('error')->with('message', $e->getMessage());
         } catch (\Stripe\Exception\ApiErrorException $e) {
+            session('message');
             // Manejar errores de la API de Stripe
             return redirect()->route('error')->with('message', 'Error en la comunicación con Stripe: ' . $e->getMessage());
         }
@@ -78,7 +81,9 @@ class PaymentController extends Controller
 
     public function error()
     {
-        return view('error');
+        $message = session('message'); // Obtener el mensaje de la sesión
+
+        return view('error', ['message' => $message]);
     }
 
     public function success(Order $order, Request $request)
