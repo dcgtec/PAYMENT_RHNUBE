@@ -14,22 +14,43 @@ class CategoryPlanController extends Controller
         return view('welcome', compact('categoryPlans'));
     }
 
-    public function show($slug, $id)
+    public function show(Request $request, $slug)
     {
-        // if (!auth()->check()) {
-        //     // Usuario no autenticado, redirigir a la página de inicio de sesión
-        //     return redirect('/login');
-        // }
+        try {
+            // Validación del parámetro 'periodo'
+            $request->validate([
+                'periodo' => 'required|numeric|between:1,4',
+            ]);
 
-        // $user = auth()->user();
-        // $intent = $user->createSetupIntent();
+            $periodo = $request->input('periodo');
 
-        // Obtener el CategoryPlan por el slug y el id
-        $categoryPlan = CategoryPlan::where('slug', $slug)->where('id', $id)->firstOrFail();
+            // Verificar si el período está en el rango permitido
+            if ($periodo < 1 || $periodo > 4) {
+                abort(404);
+            }
 
-        // Obtener los planes donde id_plan sea igual al parámetro proporcionado
-        $plans = Plan::where('id_plan', $categoryPlan->id)->get();
-        return view('payment', compact('categoryPlan','plans'));
+            $categoryPlan = CategoryPlan::where('slug', $slug)->firstOrFail();
 
+            // Verificar si el recurso no se encuentra
+            if (!$categoryPlan) {
+                abort(404);
+            }
+
+            $periodoPago = Plan::where('id_plan', $categoryPlan->id)->get();
+
+            $plans = Plan::where('id_plan', $categoryPlan->id)->where('n_periodo', $periodo)->get();
+
+            // Verificar si no hay planes encontrados
+            if ($plans->isEmpty()) {
+                abort(404);
+            }
+
+            return view('payment', compact('categoryPlan', 'plans', 'periodo','periodoPago'));
+        } catch (\Illuminate\Validation\ValidationException $e) {
+            // Manejar la excepción de validación
+            abort(404);
+        } catch (\Exception $e) {
+            abort(404);
+        }
     }
 }

@@ -27,10 +27,7 @@ Route::get('/', [CategoryPlanController::class, 'index']);
 
 // Route::middleware("auth")->group(function () {
 
-Route::get('payment/{slug}/{id}', [CategoryPlanController::class, 'show'])->name('category_plans.show');
-
-// Ruta para actualizar el precio (probablemente debería ser PUT o PATCH en lugar de POST)
-Route::post('payment', [PlanController::class, 'actualizarPrecio'])->name("plans.actualizarPrecio");
+Route::get('payment/{slug}', [CategoryPlanController::class, 'show'])->name('category_plans.show');
 
 // routes/web.php
 Route::post('update_prices', [PlanController::class, 'updatePrices'])->name('update_prices');

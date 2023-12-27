@@ -9,7 +9,7 @@ class CategoryPlan extends Model
     protected $table = 'category_plan';
 
     protected $fillable = [
-        'name', 'slug','totNumMonth','description', 'action',
+        'id','name', 'slug','totNumMonth','description', 'action',
     ];
 
     public function getRouteKeyName()

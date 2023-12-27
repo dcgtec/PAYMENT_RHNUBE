@@ -19,7 +19,7 @@ class CreatePlansTable extends Migration
             $table->string('name');
             $table->decimal('price', 8, 2);
             $table->string('stripe_plan');
-            $table->integer('tax');
+            $table->integer('n_periodo');
             $table->timestamps();
         });
     }

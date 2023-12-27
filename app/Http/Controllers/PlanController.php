@@ -18,8 +18,6 @@ class PlanController extends Controller
         $quantity = $request->input('quantity');
         $country = $request->input('country');
 
-        // Realizar lógica para obtener precios, impuestos, etc. según el nuevo plan y cantidad de empleados
-
         // Obtener la información del nuevo plan
         $newPlan = Plan::findOrFail($planId);
 

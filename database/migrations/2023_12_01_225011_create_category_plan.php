@@ -18,7 +18,6 @@ class CreateCategoryPlan extends Migration
             $table->string('name');
             $table->integer('totNumMonth');
             $table->string('slug');
-            $table->decimal('price', 8, 2);
             $table->string('description');
             $table->string('action');
             $table->timestamps();

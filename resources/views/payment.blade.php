@@ -1,6 +1,5 @@
 @include('layouts.header')
 
-
 <section class="section py-5 formPage">
     <div class="container">
         <form id="miFormulario" action="/checkout" method="POST">
@@ -10,31 +9,11 @@
 
                         @csrf
                         <div class="selectMeth text-center d-none">
-                            {{-- <img src="{{ asset('images/group1.png') }}" alt="Paso 1" /> --}}
-                            {{-- <br /> --}}
-                            {{-- <h5 class="mt-3">Seleccione tu medio de pago</h5> --}}
                             <div class="row  w-75 m-auto">
-                                {{-- <div class="col-md-6 px-2 my-2">
-                                    <button type="button" id="mercadoPa_pay"
-                                        class="btnPay selectPayment w-100 btn rounded-pill" onclick="">Perú
-                                        <img class="ml-3" src="{{ asset('images/mercado-negro.png') }}"> </button>
-                            </div>
-
-                            <div class="col-md-6 px-2 my-2">
-                                <button type="button" id="stripe_pay" class="btnPay w-100 btn rounded-pill"
-                                    onclick="">Otros <img class="ml-3" src="{{ asset('images/stripe-negro.png') }}">
-                                </button>
-                            </div> --}}
-
-                                {{-- <input class="d-none" type="radio" name="paymetnPage" id="paymentMercado" checked="true"
-                                    value="Mercado_Pago"> --}}
-                                <!-- <input class="d-none" type="radio" name="paymetnPage" id="paymentStripe" checked="true"
-                                value="Stripe"> -->
                             </div>
                         </div>
 
                         <div class="row text-center mx-3">
-                            {{-- <img src="{{ asset('images/group2.png') }}" alt="Paso 2" /> --}}
                             <div class="col-md-12 my-3 px-3">
                                 <div class="row align-items-center">
                                     <div class="selectCountry col-sm-6 ">
@@ -125,8 +104,8 @@
                                     <div class="col-sm-5  px-0">
                                         <div class="rowAdd m-auto d-flex rounded-pill justify-content-center">
                                             <div class="dismin">-</div>
-                                            <input type="number" name="quanty" min="1" required
-                                                value="1" id="valor">
+                                            <input type="number" name="quanty" min="1" required value="1"
+                                                id="valor">
                                             <div class="addmin">+</div>
                                         </div>
                                     </div>
@@ -141,12 +120,20 @@
                                     <div class="selectCountry col-sm-1 ">
                                     </div>
                                     <div class="col-sm-5 mx-0 px-0">
-                                        <select name="idPla" id="idPla" class="form-control text-center"
-                                            id="">
-                                            @foreach ($plans as $plan)
-                                                <option value="{{ $plan->id }}">{{ $plan->name }}</option>
-                                            @endforeach
+                                        <select name="idPla" id="idPla" class="form-control text-center">
+                                            <option value=" {{ $periodoPago[0]->id }}"
+                                                {{ $periodo == 1 ? 'selected' : '' }}>Mensual
+                                            </option>
+                                            <option value="{{ $periodoPago[1]->id }}"
+                                                {{ $periodo == 2 ? 'selected' : '' }}>Trimestral
+                                            </option>
+                                            <option value="{{ $periodoPago[2]->id }}"
+                                                {{ $periodo == 3 ? 'selected' : '' }}>Semestral
+                                            </option>
+                                            <option value="{{ $periodoPago[3]->id }}"
+                                                {{ $periodo == 4 ? 'selected' : '' }}>Anual</option>
                                         </select>
+
                                     </div>
                                 </div>
                             </div>
@@ -167,8 +154,10 @@
                                         <tr>
                                             <td><b>{{ $categoryPlan->name }}</b></td>
                                             <td class="quanty">1</td>
-                                            <td class="priceUn">$ {{ $categoryPlan->price }}</td>
-                                            <td class="subtotal">$ {{ $categoryPlan->price }}</td>
+                                            <td class="priceUn">$ {{ $plans->first()->price }}</td>
+                                            <td class="subtotal">$
+                                                {{ number_format($plans->first()->price * $plans->first()->totNumMonth, 2, '.', '') }}
+                                            </td>
                                         </tr>
                                         {{-- <tr>
                                             <td></td>
@@ -189,7 +178,9 @@
                                             <td class="py-4"></td>
                                             <td class="py-4"></td>
                                             <td style="text-align: right;" class="py-4 titleTotal"><b>TOTAL</b></td>
-                                            <td class="total py-4 titleTotal"><b>$ {{ $categoryPlan->price }}</b></td>
+                                            <td class="total py-4 titleTotal"><b>$
+                                                    {{ number_format($plans->first()->price * $plans->first()->totNumMonth, 2, '.', '') }}</b>
+                                            </td>
                                         </tr>
                                     </tbody>
                                 </table>
@@ -215,8 +206,16 @@
 
 <style>
     header,
-    footer {
+    footer,
+    span.select2-selection__arrow {
         display: none;
+    }
+
+    *:focus {
+        outline: none;
+        border-color: inherit;
+        -webkit-box-shadow: none;
+        box-shadow: none;
     }
 
     input::-webkit-outer-spin-button,
@@ -268,7 +267,8 @@
     }
 
     .rowAdd,
-    select {
+    select,
+    .select2-container .select2-selection--single {
         background-color: #fff;
         width: 100%;
         height: 52px !important;
@@ -277,10 +277,23 @@
         border: 1px solid #08d7d4 !important;
     }
 
+    .select2-container--open .select2-dropdown--below {
+        padding-bottom: 5px;
+    }
+
+    .select2-container--default .select2-search--dropdown .select2-search__field,
+    .select2-container--open .select2-dropdown--below {
+        border: 1px solid #08d7d4 !important;
+    }
 
 
-    select {
+    select,
+    .select2-container .select2-selection--single {
         font-size: 25px !important;
+    }
+
+    .select2-container--default .select2-selection--single .select2-selection__rendered {
+        line-height: 52px;
     }
 
     .addmin,
@@ -346,13 +359,49 @@
         .formPage .container {
             width: 100%;
         }
+
+        .selectMeth h5,
+        .cantEmp h5,
+        .periodo h5,
+        .selectCountry h5,
+        .resPago h5,
+        .showPayment {
+            font-size: 18px;
+        }
+
+        select,
+        .select2-container .select2-selection--single,
+        .cantEmp input,
+        table {
+            font-size: 15px !important;
+        }
+
+        .rowAdd,
+        select,
+        .select2-container .select2-selection--single {
+            height: 45px !important;
+        }
+
+        .select2-container--default .select2-selection--single .select2-selection__rendered {
+            line-height: 45px;
+        }
+
+        .table td,
+        .table th {
+            padding-top: 0.5rem;
+            padding-bottom: 0.5rem;
+        }
+
+        .buttonBuy {
+            margin-top: 30px !important;
+        }
     }
 </style>
 
 <script>
     $(document).ready(function() {
 
-
+        $('select#idCountry,select#idPla').select2();
         var $valor = $("#valor");
         var $idPla = $("select#idPla");
         var $idCountry = $("select#idCountry");
@@ -398,9 +447,8 @@
         }
 
         function updatePrices(response) {
-
             $("td.tax").text("$ " + response.tax);
-            //$("td.subtotal").text("$ " + response.subtotal);
+            $("td.subtotal").text("$ " + response.subtotal);
             $("td.priceUn").text("$ " + response.price);
             $("td.quanty").text($("#valor").val());
             $("td.total b").text("$ " + response.total);
