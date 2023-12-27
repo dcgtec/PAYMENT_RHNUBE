@@ -38,7 +38,7 @@
 
                                 <div class="text-center buyPre mb-3">
                                     <a
-                                        href="{{ route('category_plans.show', ['slug' => $categoryPlan->slug, 'id' => $categoryPlan->id]) }}">
+                                        href="{{ route('category_plans.show', ['slug' => $categoryPlan->slug, 'periodo' => $categoryPlan->id]) }}">
                                         <button class="btn btn-primary">
                                             Suscribirse
                                         </button>

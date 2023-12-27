@@ -1,5 +1,4 @@
 @include('layouts.header')
-{{ $paymentIntent }}
 
 <div class="container my-5">
     <div class="row">

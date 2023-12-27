@@ -2,15 +2,9 @@
 
 namespace App\Http\Controllers;
 
-use App\CategoryPlan;
 use Illuminate\Http\Request;
 use App\Plan;
-use Illuminate\Support\Facades\Http;
-use MercadoPago\Item;
-use MercadoPago\Payer;
-use MercadoPago\Preference;
 use Stripe\Order;
-use Stripe\Stripe;
 
 class PaymentController extends Controller
 {
