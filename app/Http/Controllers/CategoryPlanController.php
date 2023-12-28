@@ -11,7 +11,8 @@ class CategoryPlanController extends Controller
     public function index()
     {
         $categoryPlans = CategoryPlan::get();
-        return view('welcome', compact('categoryPlans'));
+        //return view('welcome', compact('categoryPlans'));
+        return redirect('https://www.rhnube.com/precios');
     }
 
     public function show(Request $request, $slug)
