@@ -11,7 +11,7 @@ $codigoGenerado = str_pad($valorNumerico, 10, '0', STR_PAD_LEFT);
                 <div class="card-body text-center">
                     <h2 class="success-message">Pago exitoso</h2>
                     <i class="fas fa-check-circle icon-check mb-4"></i>
-                    <p class="p-0 m-0">Hola <?php echo explode(' ', $paymentIntent->customer_details->name)[0]; ?>, su pago se ha procesado con éxito.</p>
+                    <p class="p-0 m-0">Hola <?php echo explode(' ', $paymentIntent->customer_details->name)[0]; ?>, su compra se ha realizado con éxito.</p>
 
                     <!-- Transaction Summary -->
                     <div class="transaction-summary">
@@ -21,8 +21,10 @@ $codigoGenerado = str_pad($valorNumerico, 10, '0', STR_PAD_LEFT);
                         <p><strong>Monto Total:</strong> {{ $paymentIntent->amount_total / 100 }}
                             {{ strtoupper($paymentIntent->currency) }}
                         </p>
-                        <p><strong>Recuerde utilizar su código de compra para registrarte</strong>
-                        <p><strong>Código de compra:</strong> {{ $codigoGenerado }} </p>
+
+                        <p><strong>Tu código de compra es:</strong> {{ $codigoGenerado }} </p>
+                        <p>Haz click en el botón para continuar con el registro <br>de tu empresa en RHNUBE
+                            </p>
 
 
 
@@ -40,8 +42,7 @@ $codigoGenerado = str_pad($valorNumerico, 10, '0', STR_PAD_LEFT);
                 </div> --}}
 
                     <!-- Add a button or link to go back to the home page or any other relevant page -->
-                    <a href="/"  id="conEsp" class="btn btn-secondary m-2">Contactar especialista</a>
-                    <a href="/" id="enviarRe" class="btn btn-primary m-2">Registrate en RHNUBE</a>
+                    <a href="/" id="enviarRe" class="btn btn-primary m-2">Ir a RHNUBE</a>
                 </div>
             </div>
         </div>
@@ -65,22 +66,23 @@ $codigoGenerado = str_pad($valorNumerico, 10, '0', STR_PAD_LEFT);
         text-align: center;
     }
 
-    a#enviarRe, a#conEsp {
-    box-shadow: 0 4px 10px rgba(20, 20, 43, .04);
-    border-radius: 12px;
-    padding: 20px 40px;
-    font-size: 18px;
-}
+    a#enviarRe,
+    a#conEsp {
+        box-shadow: 0 4px 10px rgba(20, 20, 43, .04);
+        border-radius: 12px;
+        padding: 20px 40px;
+        font-size: 18px;
+    }
 
-a#enviarRe {
-    background: #00aafa;
-    border: none;
-}
+    a#enviarRe {
+        background: #00aafa;
+        border: none;
+    }
 
-a#conEsp{
-    background: #08d7d4;
-    border: none;
-}
+    a#conEsp {
+        background: #08d7d4;
+        border: none;
+    }
 </style>
 
 @include('layouts.footer')
