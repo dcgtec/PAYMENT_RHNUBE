@@ -11,8 +11,8 @@ class CategoryPlanController extends Controller
     public function index()
     {
         $categoryPlans = CategoryPlan::get();
-        //return view('welcome', compact('categoryPlans'));
-        return redirect('https://www.rhnube.com/precios');
+        return view('welcome', compact('categoryPlans'));
+        // return redirect('https://www.rhnube.com/precios');
     }
 
     public function show(Request $request, $slug)
@@ -46,7 +46,7 @@ class CategoryPlanController extends Controller
                 abort(404);
             }
 
-            return view('payment', compact('categoryPlan', 'plans', 'periodo','periodoPago'));
+            return view('payment', compact('categoryPlan', 'plans', 'periodo', 'periodoPago'));
         } catch (\Illuminate\Validation\ValidationException $e) {
             // Manejar la excepción de validación
             abort(404);

@@ -24,7 +24,7 @@
                                     </div>
                                     <div class="col-sm-5 mx-0 px-0">
                                         <select name="idCountry" required id="idCountry"
-                                            class="form-control text-center">
+                                            class="form-control text-center w-100">
                                             <option value="">...</option>
                                             <option value="otro_pais_valido">Alemania</option>
                                             <option value="otro_pais_valido">Antigua y Barbuda</option>
@@ -121,7 +121,7 @@
                                     <div class="selectCountry col-sm-1 ">
                                     </div>
                                     <div class="col-sm-5 mx-0 px-0">
-                                        <select name="idPla" id="idPla" class="form-control text-center">
+                                        <select name="idPla" id="idPla" class="w-100 form-control text-center">
                                             <option value=" {{ $periodoPago[0]->id }}"
                                                 {{ $periodo == 1 ? 'selected' : '' }}>Mensual
                                             </option>
@@ -194,10 +194,67 @@
                     </div>
 
                 </div>
-                <div class="buttonBuy text-center mt-0 mb-3 ">
-                    <button class="btn btn-primary showPayment w-100 rounded-pill" id="payWithStripe">Pagar</button>
+                <div class="buttonBuy text-center mt-0 mb-3 row ">
+                    <div class="col-md-6  my-2">
+                        <button type="button" class="btn btn-secondary solicitarDemo w-100 rounded-pill"
+                            id="solicitarDemo" data-toggle="modal" data-target="#modalDemo">Solicitar demo</button>
+                    </div>
+                    <div class="col-md-6 my-2 ">
+                        <button type="submit" class="btn btn-primary showPayment w-100 rounded-pill"
+                            id="payWithStripe">Pagar</button>
+                    </div>
                 </div>
         </form>
+    </div>
+
+    <!-- Modal -->
+    <div class="modal fade" id="modalDemo" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel" class="font-weight-bold">Agendar una DEMO</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <form>
+                        <div class="form-group">
+                            <label for="exampleFormControlInput1">Nombres <span id="requi">*</span> </label>
+                            <input type="text" class="form-control" id="namePer"
+                                placeholder="Ingrese sus nombres">
+                        </div>
+
+                        <div class="form-group">
+                            <label for="exampleFormControlInput1">Ruc <span id="requi">*</span> </label>
+                            <input type="number" class="form-control" id="rucPer" placeholder="Ingrese sus ruc">
+                        </div>
+
+                        <div class="form-group">
+                            <label for="exampleFormControlInput1">Email <span id="requi">*</span> </label>
+                            <input type="email" class="form-control" id="emailPer"
+                                placeholder="Ingrese su correo electrónico">
+                        </div>
+
+                        <div class="form-group">
+                            <label for="exampleFormControlInput1">N° Celular <span id="requi">*</span> </label>
+                            <input type="tel" class="form-control" id="celPer"
+                                placeholder="Ingrese su número móvil">
+                        </div>
+
+                        <div class="form-group">
+                            <label for="exampleFormControlTextarea1">Por favor detalla tus necesidades
+                                (opcional)</label>
+                            <textarea class="form-control" id="detallePer" rows="3"></textarea>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+                    <button type="button" class="btn btn-primary">Agendar Reunión</button>
+                </div>
+            </div>
+        </div>
     </div>
 </section>
 

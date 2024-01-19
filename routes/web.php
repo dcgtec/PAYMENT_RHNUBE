@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Automatizacion\AutomatizacionController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\PlanController;
 use App\Http\Controllers\CategoryPlanController;
@@ -42,5 +43,6 @@ Route::get('/pending', [PaymentController::class, 'pending'])->name('pending');
 Route::post('/', [PaymentController::class, 'index'])->name('index');
 
 
+//Automatizacion
 
-// });
+Route::get('/RegistroOrganizacion',[AutomatizacionController::class, 'registroEmpresa']);

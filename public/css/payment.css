@@ -31,8 +31,15 @@ header,
         width: 60%;
     }
 
-    .showPayment {
+    .showPayment{
         background: #08d7d4;
+    }
+
+    .solicitarDemo{
+        background: #554e63;
+    }
+
+    .showPayment,.solicitarDemo {
         border-radius: 10px !important;
         border: none;
         font-size: 25px;
@@ -99,6 +106,11 @@ header,
     .addmin:hover,
     .dismin:hover {
         cursor: pointer;
+    }
+
+    span#requi {
+        color: red;
+        font-weight: bold;
     }
 
     .addmin {

@@ -1,12 +1,27 @@
 $(document).ready(function () {
-    $("select#idCountry,select#idPla").select2();
+    // Aplicar Select2 a los elementos select
+    $("select#idCountry, select#idPla").select2();
+    // Manejar el evento select2:open para establecer el foco después de abrir el cuadro de opciones
+    $(document).on("select2:open", () => {
+        document
+            .querySelector(".select2-container--open .select2-search__field")
+            .focus();
+    });
+
     var $valor = $("#valor");
     var $idPla = $("select#idPla");
     var $idCountry = $("select#idCountry");
 
     $valor.on("change", function () {
         var valor = parseInt($valor.val()) || 1;
-        $valor.val(valor < 5 ? 1 : valor);
+
+        if (valor > 100) {
+            // Mostrar alerta cuando el valor es mayor a 100
+            $("#modalDemo").modal('show');
+            valor = 100; // Limitar el valor a 100
+        }
+
+        $valor.val(valor);
         changePer();
     });
 
