@@ -15,11 +15,11 @@ $(document).ready(function () {
     $valor.on("change", function () {
         var valor = parseInt($valor.val()) || 1;
 
-        if (valor > 100) {
-            // Mostrar alerta cuando el valor es mayor a 100
-            $("#modalDemo").modal('show');
-            valor = 100; // Limitar el valor a 100
-        }
+        // if (valor > 100) {
+        //     // Mostrar alerta cuando el valor es mayor a 100
+        //     $("#modalDemo").modal('show');
+        //     valor = 100; // Limitar el valor a 100
+        // }
 
         $valor.val(valor);
         changePer();

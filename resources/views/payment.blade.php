@@ -3,17 +3,16 @@
 <link rel="stylesheet" href="{{ asset('css/payment.css') }}">
 <section class="section py-5 formPage">
     <div class="container">
+        <div class="row">
+            <div class="col-md-12">
+                <h1 class="titleGeneral">Enhorabuena! Un paso más a la eficiencia en RH</h1>
+            </div>
+        </div>
         <form id="miFormulario" action="/checkout" method="POST">
             <div class="card px-4 pt-2 pb-0">
                 <div class="row">
                     <div class="col-md-12">
-
                         @csrf
-                        <div class="selectMeth text-center d-none">
-                            <div class="row  w-75 m-auto">
-                            </div>
-                        </div>
-
                         <div class="row text-center mx-3">
                             <div class="col-md-12 my-3 px-3">
                                 <div class="row align-items-center">
@@ -195,11 +194,11 @@
 
                 </div>
                 <div class="buttonBuy text-center mt-0 mb-3 row ">
-                    <div class="col-md-6  my-2">
+                    {{-- <div class="col-md-6  my-2">
                         <button type="button" class="btn btn-secondary solicitarDemo w-100 rounded-pill"
                             id="solicitarDemo" data-toggle="modal" data-target="#modalDemo">Solicitar demo</button>
-                    </div>
-                    <div class="col-md-6 my-2 ">
+                    </div> --}}
+                    <div class="col-md-12 my-2 ">
                         <button type="submit" class="btn btn-primary showPayment w-100 rounded-pill"
                             id="payWithStripe">Pagar</button>
                     </div>
@@ -208,7 +207,7 @@
     </div>
 
     <!-- Modal -->
-    <div class="modal fade" id="modalDemo" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    {{-- <div class="modal fade" id="modalDemo" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
@@ -255,7 +254,7 @@
                 </div>
             </div>
         </div>
-    </div>
+    </div> --}}
 </section>
 
 

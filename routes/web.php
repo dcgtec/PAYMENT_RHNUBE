@@ -18,9 +18,9 @@ use Illuminate\Support\Facades\Auth;
 |
 */
 
-// Route::get('/', function () {
-//     return view('plans');
-// });
+Route::get('/', function () {
+    return view('plans');
+});
 
 Auth::routes();
 
@@ -41,8 +41,3 @@ Route::get('/error', [PaymentController::class, 'error'])->name('error');
 Route::get('/failure', [PaymentController::class, 'failure'])->name('failure');
 Route::get('/pending', [PaymentController::class, 'pending'])->name('pending');
 Route::post('/', [PaymentController::class, 'index'])->name('index');
-
-
-//Automatizacion
-
-Route::get('/RegistroOrganizacion',[AutomatizacionController::class, 'registroEmpresa']);

@@ -76,7 +76,6 @@ class PaymentController extends Controller
     public function error()
     {
         $message = session('message'); // Obtener el mensaje de la sesión
-
         return view('error', ['message' => $message]);
     }
 
