@@ -2,8 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use App\CategoryPlan;
 use Illuminate\Http\Request;
 use App\Plan;
+use Illuminate\Support\Facades\Http;
 use Stripe\Order;
 
 class PaymentController extends Controller
@@ -53,7 +55,11 @@ class PaymentController extends Controller
             ]);
 
             // Guardar la ID de la sesión de Stripe en la sesión de Laravel
-            session(['stripe_session_id' => $session->id]);
+            session([
+                'stripe_session_id' => $session->id,
+                'cantEmpleados' => $quanty,
+                'plan' => $idplan
+            ]);
 
             // Redirigir al cliente a la página de checkout de Stripe
             return redirect()->away($session->url);
@@ -83,14 +89,61 @@ class PaymentController extends Controller
     {
         // Obtener el ID de la sesión de Stripe de la sesión
         $stripeSessionId = session('stripe_session_id');
+        $plan = session('plan');
+        $cantEmpleados = session('cantEmpleados');
+
+        $plan = Plan::select('id_plan', 'name', 'totNumMonth')
+            ->where('id', $plan)
+            ->first();
+
+        $category = CategoryPlan::select()
+            ->where('id', $plan->id_plan)
+            ->first();
+
+
 
         // Establecer la clave secreta de Stripe
         \Stripe\Stripe::setApiKey(config('services.stripe.secret'));
 
 
         $stripeSession = \Stripe\Checkout\Session::retrieve($stripeSessionId);
+        $valorNumerico = abs(crc32($stripeSession->id));
+        $codigoGenerado = str_pad($valorNumerico, 10, '0', STR_PAD_LEFT);
 
-        //dd($stripeSession);
+
+
+        // Obtener los valores
+        $name = $plan->name;
+        $cantEmpleados = $cantEmpleados; // Supongo que ya tienes este valor definido
+        $categorySlug = $category->slug;
+        $customerName = $stripeSession->customer_details->name;
+
+        $jsonCompra = [
+            'namePlan' => $name, 'cantEmpleados' => $cantEmpleados, 'categorySlug' => $categorySlug, 'customerName' => $customerName,
+        ];
+
+        $jsonDetalleCompra = json_encode($jsonCompra);
+
+
+        // Consumir la API  
+        $response = Http::get('https://beta.rhnube.com.pe/api/verificarSaveCodigo', [
+            'codigo_compra' => $codigoGenerado,
+        ]);
+
+
+        $data = $response->json();
+
+        if (!$data['message']) {
+            $newParams = [
+                'codigo_compra' => $codigoGenerado,
+                'dato_usuario' =>  $jsonDetalleCompra,
+                'code_stripe' => $stripeSession->id,
+                'correo' => $stripeSession->customer_details->email,
+            ];
+            
+            dd($newParams);
+            // $responseNew = Http::post('https://beta.rhnube.com.pe/api/saveCode', $newParams);
+        }
 
         // Verificar el estado de la transacción de pago
         if ($stripeSession->mode === 'subscription' && $stripeSession->status === 'complete') {

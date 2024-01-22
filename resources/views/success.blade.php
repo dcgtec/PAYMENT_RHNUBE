@@ -4,6 +4,7 @@ $valorNumerico = abs(crc32($paymentIntent->id));
 $codigoGenerado = str_pad($valorNumerico, 10, '0', STR_PAD_LEFT);
 
 ?>
+
 <div class="container my-5">
     <div class="row">
         <div class="col-md-8 offset-md-2">
@@ -24,7 +25,7 @@ $codigoGenerado = str_pad($valorNumerico, 10, '0', STR_PAD_LEFT);
 
                         <p><strong>Tu código de compra es:</strong> {{ $codigoGenerado }} </p>
                         <p>Haz click en el botón para continuar con el registro <br>de tu empresa en RHNUBE
-                            </p>
+                        </p>
 
 
 
