@@ -43,7 +43,7 @@ $codigoGenerado = str_pad($valorNumerico, 10, '0', STR_PAD_LEFT);
                 </div> --}}
 
                     <!-- Add a button or link to go back to the home page or any other relevant page -->
-                    <a href="/" id="enviarRe" class="btn btn-primary m-2">Ir a RHNUBE</a>
+                    <a href="https://www.rhnube.com.pe/start" id="enviarRe" class="btn btn-primary m-2">Ir a RHNUBE</a>
                 </div>
             </div>
         </div>

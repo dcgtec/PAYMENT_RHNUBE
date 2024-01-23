@@ -140,9 +140,8 @@ class PaymentController extends Controller
                 'code_stripe' => $stripeSession->id,
                 'correo' => $stripeSession->customer_details->email,
             ];
-            
-            dd($newParams);
-            // $responseNew = Http::post('https://beta.rhnube.com.pe/api/saveCode', $newParams);
+
+            $responseNew = Http::post('https://beta.rhnube.com.pe/api/saveCode', $newParams);
         }
 
         // Verificar el estado de la transacción de pago
