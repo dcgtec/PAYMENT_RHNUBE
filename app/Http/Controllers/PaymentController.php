@@ -3,9 +3,11 @@
 namespace App\Http\Controllers;
 
 use App\CategoryPlan;
+use App\Mail\CompraExitosa;
 use Illuminate\Http\Request;
 use App\Plan;
 use Illuminate\Support\Facades\Http;
+use Illuminate\Support\Facades\Mail;
 use Stripe\Order;
 
 class PaymentController extends Controller
@@ -110,13 +112,13 @@ class PaymentController extends Controller
         $valorNumerico = abs(crc32($stripeSession->id));
         $codigoGenerado = str_pad($valorNumerico, 10, '0', STR_PAD_LEFT);
 
-
-
         // Obtener los valores
         $name = $plan->name;
         $cantEmpleados = $cantEmpleados; // Supongo que ya tienes este valor definido
         $categorySlug = $category->slug;
-        $customerName = $stripeSession->customer_details->name;
+        $customerName = explode(' ', $stripeSession->customer_details->name)[0];
+        $fecha = \Carbon\Carbon::parse($stripeSession->created)->format('Y-m-d H:i:s');
+        $monto = $stripeSession->amount_total / 100;
 
         $jsonCompra = [
             'namePlan' => $name, 'cantEmpleados' => $cantEmpleados, 'categorySlug' => $categorySlug, 'customerName' => $customerName,
@@ -125,7 +127,7 @@ class PaymentController extends Controller
         $jsonDetalleCompra = json_encode($jsonCompra);
 
 
-        // Consumir la API  
+        // Consumir la API
         $response = Http::get('https://beta.rhnube.com.pe/api/verificarSaveCodigo', [
             'codigo_compra' => $codigoGenerado,
         ]);
@@ -142,7 +144,9 @@ class PaymentController extends Controller
             ];
 
             $responseNew = Http::post('https://beta.rhnube.com.pe/api/saveCode', $newParams);
+            Mail::to($stripeSession->customer_details->email)->send(new CompraExitosa($codigoGenerado, $customerName, $fecha, $monto));
         }
+
 
         // Verificar el estado de la transacción de pago
         if ($stripeSession->mode === 'subscription' && $stripeSession->status === 'complete') {

@@ -2,7 +2,6 @@
 <?php
 $valorNumerico = abs(crc32($paymentIntent->id));
 $codigoGenerado = str_pad($valorNumerico, 10, '0', STR_PAD_LEFT);
-
 ?>
 
 <div class="container my-5">
@@ -27,22 +26,8 @@ $codigoGenerado = str_pad($valorNumerico, 10, '0', STR_PAD_LEFT);
                         <p>Haz click en el botón para continuar con el registro <br>de tu empresa en RHNUBE
                         </p>
 
-
-
-                        <!-- Add more details as needed -->
                     </div>
 
-                    {{-- <!-- Order Details -->
-                   <div class="order-details">
-                       <h4>Detalles del pedido</h4>
-                       <p><strong>Email:</strong> john.doe@example.com</p>
-                       <p><strong>Producto:</strong> {{ $response->additional_info->items[0]->title }}</p>
-                    <p><strong>Cantidad:</strong> {{ $response->additional_info->items[0]->quantity }}</p>
-                    <p><strong>Método de pago:</strong> Credit Card</p>
-                    <!-- Add more details as needed -->
-                </div> --}}
-
-                    <!-- Add a button or link to go back to the home page or any other relevant page -->
                     <a href="https://www.rhnube.com.pe/start" id="enviarRe" class="btn btn-primary m-2">Ir a RHNUBE</a>
                 </div>
             </div>
