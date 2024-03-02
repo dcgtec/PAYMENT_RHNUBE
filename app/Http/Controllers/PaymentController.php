@@ -149,7 +149,7 @@ class PaymentController extends Controller
 
 
         // Verificar el estado de la transacción de pago
-        if ($stripeSession->mode- === 'subscription' && $stripeSession->status === 'complete') {
+        if ($stripeSession->mode === 'subscription' && $stripeSession->status === 'complete') {
             // El pago fue aprobado, puedes procesar la orden o mostrar una página de éxito
             return view('success', ['paymentIntent' => $stripeSession]);
         } else {
