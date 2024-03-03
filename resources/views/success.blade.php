@@ -27,11 +27,43 @@ $codigoGenerado = str_pad($valorNumerico, 10, '0', STR_PAD_LEFT);
                         </p>
 
                     </div>
-
+                    <a data-toggle="modal" data-target="#exampleModal" id="abrirModal"
+                        class="btn btn-secondary m-2">Enviar correo</a>
                     <a href="https://www.rhnube.com.pe/start" id="enviarRe" class="btn btn-primary m-2">Ir a RHNUBE</a>
                 </div>
             </div>
         </div>
+    </div>
+</div>
+
+<!-- Modal -->
+<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+    aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <form>
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Enviar a otro correo</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+
+                    <div class="form-group">
+                        <label for="exampleInputEmail1">Correo electrónico</label>
+                        <input type="email" class="form-control" id="email" required
+                            placeholder="Escriba un correo electrónico válido">
+
+                    </div>
+
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+                    <button type="submit" class="btn btn-primary">Enviar</button>
+                </div>
+            </div>
+        </form>
     </div>
 </div>
 
@@ -53,7 +85,8 @@ $codigoGenerado = str_pad($valorNumerico, 10, '0', STR_PAD_LEFT);
     }
 
     a#enviarRe,
-    a#conEsp {
+    a#conEsp,
+    a#abrirModal {
         box-shadow: 0 4px 10px rgba(20, 20, 43, .04);
         border-radius: 12px;
         padding: 20px 40px;
@@ -72,3 +105,48 @@ $codigoGenerado = str_pad($valorNumerico, 10, '0', STR_PAD_LEFT);
 </style>
 
 @include('layouts.footer')
+
+<script>
+    $(document).ready(function() {
+        $('form').submit(function(event) {
+            event.preventDefault();
+            var csrfToken = $('meta[name="csrf-token"]').attr('content');
+            $('button[type="submit"]').prop('disabled', true);
+            $.ajax({
+                url: '/reenviar-correo',
+                type: 'POST',
+                data: {
+                    correoElectronico: $("input#email").val().trim(),
+                    _token: csrfToken
+                },
+                success: function(response) {
+                    if (response.success) {
+                        Swal.fire({
+                            title: "¡Mensaje enviado!",
+                            text: response.message,
+                            icon: "success"
+                        });
+                    } else {
+                        Swal.fire({
+                            title: "¡Mensaje no enviado!",
+                            text: response.message,
+                            icon: "error"
+                        });
+                    }
+                },
+                error: function(xhr, status, error) {
+                    Swal.fire({
+                        title: "¡Vuelva a intentarlo!",
+                        text: 'Hubo un problema con nuestra conexión',
+                        icon: "error"
+                    });
+                },
+                complete: function() {
+                    // Habilitar el botón nuevamente después de que se completa la solicitud, ya sea éxito o error
+                    $('button[type="submit"]').prop('disabled', false);
+                }
+            });
+
+        });
+    });
+</script>

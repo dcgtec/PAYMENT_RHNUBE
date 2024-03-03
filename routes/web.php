@@ -38,6 +38,7 @@ Route::post('update_prices', [PlanController::class, 'updatePrices'])->name('upd
 Route::post('/checkout', [PaymentController::class, 'checkout'])->name('checkout');
 Route::get('/success', [PaymentController::class, 'success'])->name('success');
 Route::get('/error', [PaymentController::class, 'error'])->name('error');
+Route::post('/reenviar-correo', [PaymentController::class, 'reenviarCorreo']);
 Route::get('/failure', [PaymentController::class, 'failure'])->name('failure');
 Route::get('/pending', [PaymentController::class, 'pending'])->name('pending');
 Route::post('/', [PaymentController::class, 'index'])->name('index');

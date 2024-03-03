@@ -87,6 +87,54 @@ class PaymentController extends Controller
         return view('error', ['message' => $message]);
     }
 
+
+    public function reenviarCorreo(Request $request)
+    {
+        try {
+
+            $correoElectronico = $request->input('correoElectronico');
+            // Obtener el ID de la sesión de Stripe de la sesión
+            $stripeSessionId = session('stripe_session_id');
+            $plan = session('plan');
+            $cantEmpleados = session('cantEmpleados');
+
+            $plan = Plan::select('id_plan', 'name', 'totNumMonth')
+                ->where('id', $plan)
+                ->first();
+
+            $category = CategoryPlan::select('slug')
+                ->where('id', $plan->id_plan)
+                ->first();
+
+            // Establecer la clave secreta de Stripe
+            \Stripe\Stripe::setApiKey(config('services.stripe.secret'));
+            $stripeSession = \Stripe\Checkout\Session::retrieve($stripeSessionId);
+            $valorNumerico = abs(crc32($stripeSession->id));
+            $codigoGenerado = str_pad($valorNumerico, 10, '0', STR_PAD_LEFT);
+
+            // Obtener los valores
+            $name = $plan->name;
+            $cantEmpleados = $cantEmpleados; // Supongo que ya tienes este valor definido
+            $categorySlug = $category->slug;
+            $customerName = explode(' ', $stripeSession->customer_details->name)[0];
+            $fecha = \Carbon\Carbon::parse($stripeSession->created)->format('Y-m-d H:i:s');
+            $monto = $stripeSession->amount_total / 100;
+
+            // Verificar si la dirección de correo electrónico es válida
+            $correoDestino = filter_var($correoElectronico, FILTER_VALIDATE_EMAIL);
+
+            if ($correoDestino) {
+                Mail::to($correoDestino)->send(new CompraExitosa($codigoGenerado, $customerName, $fecha, $monto));
+                return response()->json(['success' => true, 'message' => 'Correo electrónico reenviado exitosamente']);
+            } else {
+                throw new \Exception('La dirección de correo electrónico no es válida');
+            }
+        } catch (\Exception $e) {
+            return response()->json(['success' => false, 'message' => 'Error al reenviar el correo electrónico: ' . $e->getMessage()]);
+        }
+    }
+
+
     public function success(Order $order, Request $request)
     {
         // Obtener el ID de la sesión de Stripe de la sesión
