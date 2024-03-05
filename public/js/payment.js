@@ -47,6 +47,7 @@ $(document).ready(function () {
         var valorPer = $idBotonPeriodoSeleccionado.val();
         var quantity = $valor.val();
         var country = $idCountry.val();
+        $("input#idPla").val(valorPer);
 
         $.ajax({
             url: "../update_prices",

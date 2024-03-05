@@ -111,11 +111,15 @@
                                 <div class="row align-items-center">
                                     <div class="selectCountry col-sm-12 ">
                                         <h5 class="my-3 mx-3 pr-3 text-center">Periodo de pago </h5>
+                                        <input type="hidden" name="idPla" id="idPla" min="1" required id="valor"
+                                            value="{{ $plans[0]->id }}">
+
                                     </div>
 
                                     @foreach ($periodoPago as $periodoPagos)
                                     <div class="col-md-6 my-2">
-                                        <button type="button"
+
+                                        <button type="button" name="idPla"
                                             class="w-75 btn btn-primary {{ $periodoPagos->n_periodo == $periodo ? 'seleccionado' : '' }}"
                                             value="{{ $periodoPagos->id }}">
                                             {{ $periodoPagos->name }}
