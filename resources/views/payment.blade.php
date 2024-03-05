@@ -14,14 +14,12 @@
                     <div class="col-md-12">
                         @csrf
                         <div class="row text-center mx-3">
-                            <div class="col-md-12 my-3 px-3">
+                            <div class="col-md-12 my-3 px-3 selecPais">
                                 <div class="row align-items-center">
-                                    <div class="selectCountry col-sm-6 ">
-                                        <h5 class="my-3 mx-3 pr-3 text-sm-left text-center">Elige tu país </h5>
+                                    <div class="selectCountry col-sm-12 ">
+                                        <h5 class="my-3 mx-3 pr-3 text-center">Elige tu país </h5>
                                     </div>
-                                    <div class="selectCountry col-sm-1 ">
-                                    </div>
-                                    <div class="col-sm-5 mx-0 px-0">
+                                    <div class="col-sm-12 mx-0 px-0">
                                         <select name="idCountry" required id="idCountry"
                                             class="form-control text-center w-100">
                                             <option value="">...</option>
@@ -95,17 +93,14 @@
                             </div>
 
                             <div class="col-md-12  my-3 cantEmp">
-                                <div class="row align-items-center">
-                                    <div class="selectCountry col-sm-6 ">
-                                        <h5 class="my-3 mx-3 pr-3 text-sm-left text-center">N° de empleados
+                                <div class="row align-items-center place-content-center">
+                                    <div class="selectCountry col-sm-12 ">
+                                        <h5 class="my-3 mx-3 pr-3  text-center">N° de empleados
                                     </div>
-                                    <div class="selectCountry col-sm-1 ">
-                                    </div>
-                                    <div class="col-sm-5  px-0">
+                                    <div class="col-sm-12 px-0">
                                         <div class="rowAdd m-auto d-flex rounded-pill justify-content-center">
                                             <div class="dismin">-</div>
-                                            <input type="number" name="quanty" min="1" required value="1"
-                                                id="valor">
+                                            <input type="number" name="quanty" min="1" required value="1" id="valor">
                                             <div class="addmin">+</div>
                                         </div>
                                     </div>
@@ -114,12 +109,21 @@
 
                             <div class="periodo col-md-12 my-3">
                                 <div class="row align-items-center">
-                                    <div class="selectCountry col-sm-6 ">
-                                        <h5 class="my-3 mx-3 pr-3 text-sm-left text-center">Periodo de pago </h5>
+                                    <div class="selectCountry col-sm-12 ">
+                                        <h5 class="my-3 mx-3 pr-3 text-center">Periodo de pago </h5>
                                     </div>
-                                    <div class="selectCountry col-sm-1 ">
+
+                                    @foreach ($periodoPago as $periodoPagos)
+                                    <div class="col-md-6 my-2">
+                                        <button type="button"
+                                            class="w-75 btn btn-primary {{ $periodoPagos->n_periodo == $periodo ? 'seleccionado' : '' }}"
+                                            value="{{ $periodoPagos->id }}">
+                                            {{ $periodoPagos->name }}
+                                        </button>
                                     </div>
-                                    <div class="col-sm-5 mx-0 px-0">
+                                    @endforeach
+                                    <!-- 
+                                    <div class="col-sm-12 mx-0 px-0">
                                         <select name="idPla" id="idPla" class="w-100 form-control text-center">
                                             <option value=" {{ $periodoPago[0]->id }}"
                                                 {{ $periodo == 1 ? 'selected' : '' }}>Mensual
@@ -134,7 +138,7 @@
                                                 {{ $periodo == 4 ? 'selected' : '' }}>Anual</option>
                                         </select>
 
-                                    </div>
+                                    </div> -->
                                 </div>
                             </div>
 

@@ -10,6 +10,8 @@ $(document).ready(function () {
 
     var $valor = $("#valor");
     var $idPla = $("select#idPla");
+    var $idBotonPeriodo = $(".periodo button");
+    var $idBotonPeriodoSeleccionado = $(".periodo button.seleccionado");
     var $idCountry = $("select#idCountry");
 
     $valor.on("change", function () {
@@ -29,12 +31,20 @@ $(document).ready(function () {
         changePer();
     });
 
+    $idBotonPeriodo.click(function () {
+        $(".periodo button").removeClass("seleccionado");
+        $(this).addClass("seleccionado");
+        $idBotonPeriodoSeleccionado = $(".periodo button.seleccionado");
+        changePer();
+    });
+
     $idCountry.change(function () {
         changePer();
     });
 
     function changePer() {
-        var valorPer = $idPla.val();
+        var $idBotonPeriodoSeleccionado = $(".periodo button.seleccionado");
+        var valorPer = $idBotonPeriodoSeleccionado.val();
         var quantity = $valor.val();
         var country = $idCountry.val();
 

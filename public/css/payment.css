@@ -1,209 +1,250 @@
 header,
-    footer,
-    span.select2-selection__arrow {
-        display: none;
-    }
+footer,
+span.select2-selection__arrow {
+    display: none;
+}
 
-    *:focus {
-        outline: none;
-        border-color: inherit;
-        -webkit-box-shadow: none;
-        box-shadow: none;
-    }
+*:focus {
+    outline: none;
+    border-color: inherit;
+    -webkit-box-shadow: none;
+    box-shadow: none;
+}
 
-    input::-webkit-outer-spin-button,
-    input::-webkit-inner-spin-button {
-        display: none !important;
-    }
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+    display: none !important;
+}
 
-    select {
-        -webkit-appearance: none;
-        -moz-appearance: none;
-        text-indent: 1px;
-        text-overflow: '';
-    }
+select {
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    text-indent: 1px;
+    text-overflow: "";
+}
 
-    input:focus {
-        outline: none
-    }
+input:focus {
+    outline: none;
+}
 
-    h1.titleGeneral{
-        font-size: 25px;
-        color: #08d7d4;
-        margin-bottom: 20px;
-    }
+h1.titleGeneral {
+    font-size: 25px;
+    color: #08d7d4;
+    margin-bottom: 20px;
+}
 
+.formPage .container {
+    width: 60%;
+}
+
+.showPayment {
+    background: #08d7d4;
+}
+
+.solicitarDemo {
+    background: #554e63;
+}
+
+.showPayment,
+.solicitarDemo {
+    border-radius: 10px !important;
+    border: none;
+    font-size: 25px;
+    text-transform: uppercase;
+    font-weight: bold;
+    height: 50px;
+}
+
+.card {
+    margin: 0 auto;
+    width: 650px;
+    border: none;
+    padding-top: 40px !important;
+    padding-bottom: 40px !important;
+    border-radius: 20px;
+    box-shadow: 0 0 10px rgb(222 223 228 / 85%);
+}
+
+.selectMeth h5,
+.cantEmp h5,
+.periodo h5,
+.selectCountry h5,
+.resPago h5 {
+    color: #464b50;
+    font-size: 24px;
+    font-weight: 600;
+}
+
+.periodo button {
+    height: 47px;
+    border-radius: 24px;
+    border: none;
+    font-size: 18px;
+    font-weight: bold;
+    background: none;
+    color: #464b50;
+    box-shadow: 0 0 10px rgb(222 223 228 / 85%);
+}
+
+.seleccionado {
+    background: #1f71f0 !important;
+    color: #fff !important;
+}
+
+.cantEmp .row,
+.selecPais .row {
+    width: 300px !important;
+    max-width: 300px !important;
+    margin: 0 auto;
+}
+
+.rowAdd,
+select,
+.select2-container .select2-selection--single {
+    background-color: #fff;
+    width: 100%;
+    height: 47px !important;
+    align-items: center;
+    border-radius: 50rem !important;
+    border: none;
+    box-shadow: 0 0 10px rgb(222 223 228 / 85%);
+}
+
+.select2-container--open .select2-dropdown--below {
+    padding-bottom: 5px;
+}
+
+.select2-container--default .select2-search--dropdown .select2-search__field,
+.select2-container--open .select2-dropdown--below {
+    border: 1px solid #08d7d4 !important;
+}
+
+select,
+.select2-container .select2-selection--single {
+    font-size: 25px !important;
+}
+
+.select2-container--default
+    .select2-selection--single
+    .select2-selection__rendered {
+    line-height: 47px;
+}
+
+.addmin,
+.dismin {
+    color: #1f71f0;
+    font-size: 20px;
+    font-weight: 500;
+}
+
+.addmin:hover,
+.dismin:hover {
+    cursor: pointer;
+}
+
+span#requi {
+    color: red;
+    font-weight: bold;
+}
+
+.addmin {
+    margin-left: 10px;
+}
+
+.dismin {
+    margin-right: 10px;
+}
+
+.cantEmp input {
+    width: 100px;
+    text-align: center;
+    border: none;
+    font-size: 20px;
+}
+
+/* .periodo button,
+.selectMeth button {
+    border: 2px solid #eff0f6;
+    font-size: 25px;
+} */
+
+.periodo button.btnSelec,
+button.selectPayment {
+    background: #5654e6;
+    color: #fff !important;
+    font-weight: 600;
+    border-color: #5654e6;
+}
+
+table {
+    font-size: 25px;
+}
+
+.titleTotal {
+    color: #08d7d4;
+}
+
+.table td,
+.table th {
+    padding-top: 1.45rem;
+    padding-bottom: 1.45rem;
+}
+
+.table thead th {
+    border-top: none;
+}
+
+tr td b,
+.table thead th {
+    color: #464b50;
+    font-size: 24px;
+    font-weight: 600;
+}
+
+tbody {
+    font-size: 20px;
+}
+
+@media screen and (max-width: 1000px) {
     .formPage .container {
-        width: 60%;
-    }
-
-    .showPayment{
-        background: #08d7d4;
-    }
-
-    .solicitarDemo{
-        background: #554e63;
-    }
-
-    .showPayment,.solicitarDemo {
-        border-radius: 10px !important;
-        border: none;
-        font-size: 25px;
-        text-transform: uppercase;
-        font-weight: bold;
-        height: 50px;
-    }
-
-    .card {
-        border: 1px solid #b0b4b9;
-        border-radius: 0px;
-        padding-top: 40px !important;
-        padding-bottom: 40px !important;
+        width: 100%;
     }
 
     .selectMeth h5,
     .cantEmp h5,
     .periodo h5,
     .selectCountry h5,
-    .resPago h5 {
-        color: #b0b4b9;
-        font-size: 25px;
-        font-weight: 400;
-        border-bottom: 2px solid #dee2e6;
+    .resPago h5,
+    .showPayment {
+        font-size: 18px;
+    }
+
+    select,
+    .select2-container .select2-selection--single,
+    .cantEmp input,
+    table {
+        font-size: 15px !important;
     }
 
     .rowAdd,
     select,
     .select2-container .select2-selection--single {
-        background-color: #fff;
-        width: 100%;
-        height: 52px !important;
-        align-items: center;
-        border-radius: 50rem !important;
-        border: 1px solid #08d7d4 !important;
+        height: 45px !important;
     }
 
-    .select2-container--open .select2-dropdown--below {
-        padding-bottom: 5px;
-    }
-
-    .select2-container--default .select2-search--dropdown .select2-search__field,
-    .select2-container--open .select2-dropdown--below {
-        border: 1px solid #08d7d4 !important;
-    }
-
-
-    select,
-    .select2-container .select2-selection--single {
-        font-size: 25px !important;
-    }
-
-    .select2-container--default .select2-selection--single .select2-selection__rendered {
-        line-height: 52px;
-    }
-
-    .addmin,
-    .dismin {
-        color: #5654e6;
-        font-size: 20px;
-        font-weight: 500;
-    }
-
-    .addmin:hover,
-    .dismin:hover {
-        cursor: pointer;
-    }
-
-    span#requi {
-        color: red;
-        font-weight: bold;
-    }
-
-    .addmin {
-        margin-left: 10px;
-    }
-
-    .dismin {
-        margin-right: 10px;
-    }
-
-    .cantEmp input {
-        width: 100px;
-        text-align: center;
-        border: none;
-        font-size: 22px;
-    }
-
-    .periodo button,
-    .selectMeth button {
-        border: 2px solid #EFF0F6;
-        font-size: 25px;
-    }
-
-    .periodo button.btnSelec,
-    button.selectPayment {
-        background: #5654e6;
-        color: #fff !important;
-        font-weight: 600;
-        border-color: #5654e6;
-    }
-
-    table {
-        font-size: 25px;
-    }
-
-    .titleTotal {
-        color: #08d7d4;
+    .select2-container--default
+        .select2-selection--single
+        .select2-selection__rendered {
+        line-height: 45px;
     }
 
     .table td,
     .table th {
-        padding-top: 1.45rem;
-        padding-bottom: 1.45rem;
+        padding-top: 0.5rem;
+        padding-bottom: 0.5rem;
     }
 
-    .table thead th {
-        border-top: none;
+    .buttonBuy {
+        margin-top: 30px !important;
     }
-
-    @media screen and (max-width:1000px) {
-        .formPage .container {
-            width: 100%;
-        }
-
-        .selectMeth h5,
-        .cantEmp h5,
-        .periodo h5,
-        .selectCountry h5,
-        .resPago h5,
-        .showPayment {
-            font-size: 18px;
-        }
-
-        select,
-        .select2-container .select2-selection--single,
-        .cantEmp input,
-        table {
-            font-size: 15px !important;
-        }
-
-        .rowAdd,
-        select,
-        .select2-container .select2-selection--single {
-            height: 45px !important;
-        }
-
-        .select2-container--default .select2-selection--single .select2-selection__rendered {
-            line-height: 45px;
-        }
-
-        .table td,
-        .table th {
-            padding-top: 0.5rem;
-            padding-bottom: 0.5rem;
-        }
-
-        .buttonBuy {
-            margin-top: 30px !important;
-        }
-    }
+}
