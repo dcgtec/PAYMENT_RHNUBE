@@ -176,7 +176,7 @@ class PaymentController extends Controller
 
 
         // Consumir la API
-        $response = Http::get('https://beta.rhnube.com.pe/api/verificarSaveCodigo', [
+        $response = Http::get('https://rhnube.com.pe/api/verificarSaveCodigo', [
             'codigo_compra' => $codigoGenerado,
         ]);
 
@@ -191,7 +191,7 @@ class PaymentController extends Controller
                 'correo' => $stripeSession->customer_details->email,
             ];
 
-            $responseNew = Http::post('https://beta.rhnube.com.pe/api/saveCode', $newParams);
+            $responseNew = Http::post('https://rhnube.com.pe/api/saveCode', $newParams);
             Mail::to($stripeSession->customer_details->email)->send(new CompraExitosa($codigoGenerado, $customerName, $fecha, $monto));
         }
 
