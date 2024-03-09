@@ -71,7 +71,7 @@ h1.titleGeneral {
 .periodo h5,
 .selectCountry h5,
 .resPago h5 {
-    color: #464b50;
+    color: #211f54;
     font-size: 15px;
     font-weight: 600;
 }
@@ -79,12 +79,12 @@ h1.titleGeneral {
 .periodo button {
     padding: 0;
     height: 35px;
-    border-radius: 24px;
+    border-radius: 48px;
     border: none;
     font-size: 15px;
     font-weight: 500;
     background: none;
-    color: #464b50;
+    color: #6e7191;
     box-shadow: 0 0 10px rgb(222 223 228 / 85%);
 }
 
@@ -126,11 +126,17 @@ select,
     font-size: 25px !important;
 }
 
+.select2-results__option[aria-selected] {
+    color: #6e7191;
+    font-size: 15px;
+}
+
 .select2-container--default
     .select2-selection--single
     .select2-selection__rendered {
     line-height: 35px;
     font-size: 15px;
+    color: #6e7191;
 }
 
 .addmin,
@@ -159,6 +165,7 @@ span#requi {
 }
 
 .cantEmp input {
+    color: #6e7191;
     width: 100px;
     text-align: center;
     border: none;
@@ -187,10 +194,15 @@ table {
     color: #08d7d4;
 }
 
+td.total.py-4.titleTotal b {
+    color: #6e7191;
+}
 .table td,
 .table th {
     padding-top: 0.5rem !important;
     padding-bottom: 0.5rem !important;
+    color: #6e7191;
+    font-weight: 500;
 }
 
 .table thead th {
@@ -199,7 +211,7 @@ table {
 
 tr td b,
 .table thead th {
-    color: #464b50;
+    color: #211f54;
     font-size: 15px;
     font-weight: 600;
 }
