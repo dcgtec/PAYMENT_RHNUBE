@@ -3,7 +3,7 @@
 <link rel="stylesheet" href="{{ asset('css/payment.css') }}">
 <section class="section py-5 formPage">
     <div class="container">
-        <div class="row">
+        <div class="row d-none">
             <div class="col-md-12">
                 <h1 class="titleGeneral">Enhorabuena! Un paso más a la eficiencia en RH</h1>
             </div>
@@ -14,15 +14,22 @@
                     <div class="col-md-12">
                         @csrf
                         <div class="row text-center mx-3">
-                            <div class="col-md-12 my-3 px-3 selecPais">
-                                <div class="row align-items-center">
+                            <div class="col-md-12  mt-1 titleGeneral">
+                                <div class="row align-items-center place-content-center">
                                     <div class="selectCountry col-sm-12 ">
-                                        <h5 class="my-3 mx-3 pr-3 text-center">Elige tu país </h5>
+                                        <h5 class=" mx-3 pr-3  text-center">CONFIGUREMOS TU PLAN
                                     </div>
-                                    <div class="col-sm-12 mx-0 px-0">
-                                        <select name="idCountry" required id="idCountry"
-                                            class="form-control text-center w-100">
-                                            <option value="">...</option>
+
+                                </div>
+                            </div>
+                            <div class="col-md-12 my-1 px-3 selecPais">
+                                <div class="row align-items-center">
+                                    <div class="selectCountry col-sm-4 ">
+                                        <h5 class="my-3  pr-3 text-left">País:</h5>
+                                    </div>
+                                    <div class="col-sm-4 mx-0 px-0">
+                                        <select name="idCountry" required id="idCountry" class="form-control text-center w-100">
+                                            <option value="">Seleccionar</option>
                                             <option value="otro_pais_valido">Alemania</option>
                                             <option value="otro_pais_valido">Antigua y Barbuda</option>
                                             <option value="otro_pais_valido">Aruba</option>
@@ -92,12 +99,14 @@
                                 </div>
                             </div>
 
-                            <div class="col-md-12  my-3 cantEmp">
+
+
+                            <div class="col-md-12  my-1 cantEmp">
                                 <div class="row align-items-center place-content-center">
-                                    <div class="selectCountry col-sm-12 ">
-                                        <h5 class="my-3 mx-3 pr-3  text-center">N° de empleados
+                                    <div class="selectCountry col-sm-4 ">
+                                        <h5 class="my-3  pr-3 text-left">N° de empleados:
                                     </div>
-                                    <div class="col-sm-12 px-0">
+                                    <div class="col-sm-4 mx-0 px-0">
                                         <div class="rowAdd m-auto d-flex rounded-pill justify-content-center">
                                             <div class="dismin">-</div>
                                             <input type="number" name="quanty" min="1" required value="1" id="valor">
@@ -107,25 +116,28 @@
                                 </div>
                             </div>
 
-                            <div class="periodo col-md-12 my-3">
-                                <div class="row align-items-center">
-                                    <div class="selectCountry col-sm-12 ">
-                                        <h5 class="my-3 mx-3 pr-3 text-center">Periodo de pago </h5>
-                                        <input type="hidden" name="idPla" id="idPla" min="1" required id="valor"
-                                            value="{{ $plans[0]->id }}">
+                            <div class="periodo col-md-12 my-1">
+                                <div class="row">
+                                    <div class="selectCountry col-sm-4 ">
+                                        <h5 class="my-3  pr-3 text-left">Periodo: </h5>
+                                        <input type="hidden" name="idPla" id="idPla" min="1" required id="valor" value="{{ $plans[0]->id }}">
 
                                     </div>
 
-                                    @foreach ($periodoPago as $periodoPagos)
-                                    <div class="col-md-6 my-2">
+                                    <div class="col-sm-8 mx-0 px-0">
+                                        <div class="row">
+                                            @foreach ($periodoPago as $periodoPagos)
+                                            <div class="col-md-6 my-2">
 
-                                        <button type="button" name="idPla"
-                                            class="w-75 btn btn-primary {{ $periodoPagos->n_periodo == $periodo ? 'seleccionado' : '' }}"
-                                            value="{{ $periodoPagos->id }}">
-                                            {{ $periodoPagos->name }}
-                                        </button>
+                                                <button type="button" name="idPla" class="w-100 btn btn-primary {{ $periodoPagos->n_periodo == $periodo ? 'seleccionado' : '' }}" value="{{ $periodoPagos->id }}">
+                                                    {{ $periodoPagos->name }}
+                                                </button>
+                                            </div>
+                                            @endforeach
+                                        </div>
                                     </div>
-                                    @endforeach
+
+
                                     <!-- 
                                     <div class="col-sm-12 mx-0 px-0">
                                         <select name="idPla" id="idPla" class="w-100 form-control text-center">
@@ -146,10 +158,20 @@
                                 </div>
                             </div>
 
-                            <div class="resPago table-responsive w-100 text-center my-3 mb-0">
+                            <div class="resPago table-responsive w-100 text-center mt-2 mb-0">
                                 {{-- <img src="{{ asset('images/group4.png') }}" alt="Paso 4" /> --}}
 
-                                <table class="table w-100 mt-3 pb-0 mb-0">
+
+                                <div class="col-md-12  mt-3 titleGeneral">
+                                    <div class="row align-items-center place-content-center">
+                                        <div class="selectCountry col-sm-12 ">
+                                            <h5 class=" mx-3 pr-3  text-center">RESUMEN DE PAGO
+                                        </div>
+
+                                    </div>
+                                </div>
+
+                                <table class="table w-100 pb-0 mb-0">
                                     <thead>
                                         <tr>
                                             <th></th>
@@ -201,14 +223,13 @@
                     </div>
 
                 </div>
-                <div class="buttonBuy text-center mt-0 mb-3 row ">
+                <div class="buttonBuy text-center mt-0 mb-0 row ">
                     {{-- <div class="col-md-6  my-2">
                         <button type="button" class="btn btn-secondary solicitarDemo w-100 rounded-pill"
                             id="solicitarDemo" data-toggle="modal" data-target="#modalDemo">Solicitar demo</button>
                     </div> --}}
-                    <div class="col-md-12 my-2 ">
-                        <button type="submit" class="btn btn-primary showPayment w-100 rounded-pill"
-                            id="payWithStripe">Pagar</button>
+                    <div class="col-md-12 mt-2 ">
+                        <button type="submit" class="btn btn-primary showPayment w-100 rounded-pill" id="payWithStripe">Pagar</button>
                     </div>
                 </div>
         </form>
