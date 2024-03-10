@@ -80,7 +80,7 @@
                         <img src="https://uxwing.com/wp-content/themes/uxwing/download/checkmark-cross/success-green-check-mark-icon.png"
                             alt="Paso 4" />
                         <i class="fas fa-check-circle icon-check mb-4"></i>
-                        <p class="p-0 m-0 text-center">Hola {{ $customerName }}, su compra se ha realizado con éxito.
+                        <p class="p-0 m-0 text-center">Hola {{ $customerName }}, tu compra se ha realizado con éxito.
                         </p>
 
                         <!-- Transaction Summary -->
@@ -93,9 +93,6 @@
                                 <br>
                                 <br>
                                 <strong>Tu código de compra es:</strong> {{ $codigoGenerado }}
-                                <br>
-                                <br>
-                                Haz click en el botón para continuar con el registro de tu empresa en RHNUBE
                                 <br>
                                 <br>
                                 <br>
