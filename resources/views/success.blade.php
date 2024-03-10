@@ -28,8 +28,8 @@ $codigoGenerado = str_pad($valorNumerico, 10, '0', STR_PAD_LEFT);
 
                     </div>
                     <a data-toggle="modal" data-target="#exampleModal" id="abrirModal"
-                        class="btn btn-secondary m-2">Enviar correo</a>
-                    <a href="https://www.rhnube.com.pe/start" id="enviarRe" class="btn btn-primary m-2">Ir a RHNUBE</a>
+                        class="btn btn-secondary m-2">Copiar al correo <i class="ml-2 fa fa-envelope"></i> </a>
+                    <a href="https://www.rhnube.com.pe/start" id="enviarRe" class="btn btn-primary m-2">Continuar</a>
                 </div>
             </div>
         </div>
@@ -88,8 +88,10 @@ $codigoGenerado = str_pad($valorNumerico, 10, '0', STR_PAD_LEFT);
     a#conEsp,
     a#abrirModal {
         box-shadow: 0 4px 10px rgba(20, 20, 43, .04);
-        border-radius: 12px;
-        padding: 20px 40px;
+        border-radius: 0.5rem;
+        padding: 0.75rem 1.75rem;
+        font-size: 18px;
+        border: none;
         font-size: 18px;
     }
 
