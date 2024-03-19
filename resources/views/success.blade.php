@@ -11,7 +11,7 @@ $codigoGenerado = str_pad($valorNumerico, 10, '0', STR_PAD_LEFT);
                 <div class="card-body text-center">
                     <h2 class="success-message">Pago exitoso</h2>
                     <i class="fas fa-check-circle icon-check mb-4"></i>
-                    <p class="p-0 m-0">Hola <?php echo explode(' ', $paymentIntent->customer_details->name)[0]; ?>, su compra se ha realizado con éxito.</p>
+                    <p class="p-0 m-0">Hola <?php echo explode(' ', $paymentIntent->customer_details->name)[0]; ?>, tu compra se ha realizado con éxito.</p>
 
                     <!-- Transaction Summary -->
                     <div class="transaction-summary">
@@ -23,13 +23,13 @@ $codigoGenerado = str_pad($valorNumerico, 10, '0', STR_PAD_LEFT);
                         </p>
 
                         <p><strong>Tu código de compra es:</strong> {{ $codigoGenerado }} </p>
-                        <p>Haz click en el botón para continuar con el registro <br>de tu empresa en RHNUBE
-                        </p>
+                        {{-- <p>Haz click en el botón para continuar con el registro <br>de tu empresa en RHNUBE
+                        </p> --}}
 
                     </div>
                     <a data-toggle="modal" data-target="#exampleModal" id="abrirModal"
-                        class="btn btn-secondary m-2">Enviar correo</a>
-                    <a href="https://www.rhnube.com.pe/start" id="enviarRe" class="btn btn-primary m-2">Ir a RHNUBE</a>
+                        class="btn btn-secondary m-2">Copiar al correo <i class="ml-2 fa fa-envelope"></i> </a>
+                    <a href="https://www.rhnube.com.pe/start" id="enviarRe" class="btn btn-primary m-2">Continuar</a>
                 </div>
             </div>
         </div>
@@ -88,9 +88,13 @@ $codigoGenerado = str_pad($valorNumerico, 10, '0', STR_PAD_LEFT);
     a#conEsp,
     a#abrirModal {
         box-shadow: 0 4px 10px rgba(20, 20, 43, .04);
-        border-radius: 12px;
-        padding: 20px 40px;
-        font-size: 18px;
+        border-radius: 25px;
+        padding-top: 10px;
+        padding-bottom: 10px;
+        padding-left: 20px;
+        padding-right: 20px;
+        font-size: 15px !important;
+        border: none;
     }
 
     a#enviarRe {

@@ -34,7 +34,7 @@ h1.titleGeneral {
 }
 
 .formPage .container {
-    width: 60%;
+    width: 65%;
 }
 
 .showPayment {
@@ -58,7 +58,7 @@ h1.titleGeneral {
 
 .card {
     margin: 0 auto;
-    width: 650px;
+    width: 100%;
     border: none;
     padding-top: 20px !important;
     padding-bottom: 20px !important;
