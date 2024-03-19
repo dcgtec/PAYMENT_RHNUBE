@@ -1,4 +1,27 @@
 $(document).ready(function () {
+    var $valor = $("#valor");
+    var $idPla = $("select#idPla");
+    var $cupon = $("input#cupon");
+    var $idBotonPeriodo = $(".periodo button");
+    var $idCountry = $("select#idCountry");
+    var $editar = $("img#editarCupon");
+    var $eliminar = $("img#eliminarCupon");
+    var $guardar = $("img#guardarCupon");
+
+    $editar.click(function () {
+        $guardar.removeClass("d-none");
+        $eliminar.removeClass("d-none");
+        $editar.addClass("d-none");
+    });
+
+    $guardar.click(function () {
+        $("#miModal").modal({ backdrop: "static", keyboard: false });
+    });
+
+    $cupon.on("input", function () {
+        $(this).val($(this).val().toUpperCase());
+    });
+
     // Aplicar Select2 a los elementos select
     $("select#idCountry, select#idPla").select2();
     // Manejar el evento select2:open para establecer el foco después de abrir el cuadro de opciones
@@ -8,21 +31,8 @@ $(document).ready(function () {
             .focus();
     });
 
-    var $valor = $("#valor");
-    var $idPla = $("select#idPla");
-    var $idBotonPeriodo = $(".periodo button");
-    var $idBotonPeriodoSeleccionado = $(".periodo button.seleccionado");
-    var $idCountry = $("select#idCountry");
-
     $valor.on("change", function () {
         var valor = parseInt($valor.val()) || 1;
-
-        // if (valor > 100) {
-        //     // Mostrar alerta cuando el valor es mayor a 100
-        //     $("#modalDemo").modal('show');
-        //     valor = 100; // Limitar el valor a 100
-        // }
-
         $valor.val(valor);
         changePer();
     });

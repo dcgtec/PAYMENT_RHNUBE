@@ -1,5 +1,7 @@
 @include('layouts.header')
 
+
+
 <link rel="stylesheet" href="{{ asset('css/payment.css') }}">
 <section class="section py-5 formPage">
     <div class="container">
@@ -28,7 +30,8 @@
                                         <h5 class="my-3  pr-3 text-left">País:</h5>
                                     </div>
                                     <div class="col-sm-4 mx-0 px-0">
-                                        <select name="idCountry" required id="idCountry" class="form-control text-center w-100">
+                                        <select name="idCountry" required id="idCountry"
+                                            class="form-control text-center w-100">
                                             <option value="">Seleccionar</option>
                                             <option value="otro_pais_valido">Alemania</option>
                                             <option value="otro_pais_valido">Antigua y Barbuda</option>
@@ -120,7 +123,8 @@
                                 <div class="row">
                                     <div class="selectCountry col-sm-4 ">
                                         <h5 class="my-3  pr-3 text-left">Periodo: </h5>
-                                        <input type="hidden" name="idPla" id="idPla" min="1" required id="valor" value="{{ $plans[0]->id }}">
+                                        <input type="hidden" name="idPla" id="idPla" min="1" required id="valor"
+                                            value="{{ $plans[0]->id }}">
 
                                     </div>
 
@@ -129,32 +133,45 @@
                                             @foreach ($periodoPago as $periodoPagos)
                                             <div class="col-md-6 my-2">
 
-                                                <button type="button" name="idPla" class="w-100 btn btn-primary {{ $periodoPagos->n_periodo == $periodo ? 'seleccionado' : '' }}" value="{{ $periodoPagos->id }}">
+                                                <button type="button" name="idPla"
+                                                    class="w-100 btn btn-primary {{ $periodoPagos->n_periodo == $periodo ? 'seleccionado' : '' }}"
+                                                    value="{{ $periodoPagos->id }}">
                                                     {{ $periodoPagos->name }}
                                                 </button>
                                             </div>
                                             @endforeach
                                         </div>
                                     </div>
+                                </div>
+                            </div>
 
-
-                                    <!-- 
-                                    <div class="col-sm-12 mx-0 px-0">
-                                        <select name="idPla" id="idPla" class="w-100 form-control text-center">
-                                            <option value=" {{ $periodoPago[0]->id }}"
-                                                {{ $periodo == 1 ? 'selected' : '' }}>Mensual
-                                            </option>
-                                            <option value="{{ $periodoPago[1]->id }}"
-                                                {{ $periodo == 2 ? 'selected' : '' }}>Trimestral
-                                            </option>
-                                            <option value="{{ $periodoPago[2]->id }}"
-                                                {{ $periodo == 3 ? 'selected' : '' }}>Semestral
-                                            </option>
-                                            <option value="{{ $periodoPago[3]->id }}"
-                                                {{ $periodo == 4 ? 'selected' : '' }}>Anual</option>
-                                        </select>
-
-                                    </div> -->
+                            <div class="col-md-12  my-1 cantEmp">
+                                <div class="row align-items-center place-content-center">
+                                    <div class="selectCountry col-sm-4 ">
+                                        <h5 class="my-3  pr-3 text-left">Cupón:
+                                    </div>
+                                    <div class="col-sm-4 mx-0 px-0">
+                                        <div class="rowAdd m-auto d-flex rounded-pill justify-content-center">
+                                            <input type="text" value="{{ request('cupon') }}" name="cupon" min="1"
+                                                placeholder="------" id="cupon">
+                                            @if(request('cupon'))
+                                            <img src="{{ asset('images/editar.png') }}" id="editarCupon"
+                                                title="Editar cupón" width="20px" alt="editar" />
+                                            <img src="{{ asset('images/disco-flexible.png') }}" class="ml-1 d-none"
+                                                title="Guardar cupón" id="guardarCupon" width="20px" alt="guardar" />
+                                            <img src="{{ asset('images/eliminar.png') }}" id="eliminarCupon"
+                                                class="ml-1" title="Eliminar cupón" width="20px" alt="eliminar" />
+                                            @else
+                                            <img src="{{ asset('images/editar.png') }}" class="d-none" id="editarCupon"
+                                                title="Editar cupón" width="20px" alt="editar" />
+                                            <img src="{{ asset('images/disco-flexible.png') }}" class="ml-1"
+                                                title="Guardar cupón" id="guardarCupon" width="20px" alt="guardar" />
+                                            <img src="{{ asset('images/eliminar.png') }}" id="eliminarCupon"
+                                                class="ml-1 d-none" title="Eliminar cupón" width="20px"
+                                                alt="eliminar" />
+                                            @endif
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
 
@@ -229,11 +246,37 @@
                             id="solicitarDemo" data-toggle="modal" data-target="#modalDemo">Solicitar demo</button>
                     </div> --}}
                     <div class="col-md-12 mt-2 ">
-                        <button type="submit" class="btn btn-primary showPayment w-100 rounded-pill" id="payWithStripe">Pagar</button>
+                        <button type="submit" class="btn btn-primary showPayment w-100 rounded-pill"
+                            id="payWithStripe">Pagar</button>
                     </div>
                 </div>
         </form>
     </div>
+
+    <div class="modal fade" id="miModal" tabindex="-1" role="dialog" aria-labelledby="miModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-body">
+                    <!-- Preloader -->
+                    <div class="text-center">
+                        <div class="loader">
+                            <div class="circle"></div>
+                            <div class="circle"></div>
+                            <div class="circle"></div>
+                            <div class="circle"></div>
+                        </div>
+
+                        <div class="text cargarInf">
+                            Obteniendo información ...
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
 
     <!-- Modal -->
     {{-- <div class="modal fade" id="modalDemo" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
@@ -286,6 +329,62 @@
     </div> --}}
 </section>
 
+<style>
+.loader {
+    height: 100px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+}
+
+.circle {
+    position: absolute;
+    width: 0px;
+    height: 0px;
+    border-radius: 100%;
+    background: rgba(31, 113, 240, 1);
+    animation: radar 3s ease-out infinite;
+    box-shadow: 0px 0px 10px rgba(31, 113, 240, .5);
+    /*   box-shadow:0px 0px 10px rgba(0,0,0,.5); */
+    /*   border:1px solid rgba(255,255,255,.2); */
+}
+
+.circle:nth-of-type(1) {
+    animation-delay: 0.2s;
+}
+
+.circle:nth-of-type(2) {
+    animation-delay: 0.6s;
+}
+
+.circle:nth-of-type(3) {
+    animation-delay: 1s;
+}
+
+.circle:nth-of-type(4) {
+    animation-delay: 1.4s;
+}
+
+.circle:nth-of-type(5) {
+    animation-delay: 1.8s;
+}
+
+@keyframes radar {
+    0% {}
+
+    30% {
+        width: 50px;
+        height: 50px;
+    }
+
+    100% {
+        width: 50px;
+        height: 50px;
+        opacity: 0;
+    }
+}
+</style>
 
 <script src="{{ asset('js/payment.js') }}"></script>
 @include('layouts.footer')
