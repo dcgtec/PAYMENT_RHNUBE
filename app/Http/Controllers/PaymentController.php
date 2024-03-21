@@ -3,12 +3,16 @@
 namespace App\Http\Controllers;
 
 use App\CategoryPlan;
+use App\cupon;
+use App\detalle_cupones;
 use App\Mail\CompraExitosa;
 use Illuminate\Http\Request;
 use App\Plan;
 use Illuminate\Support\Facades\Http;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Mail;
 use Stripe\Order;
+use Illuminate\Validation\ValidationException;
 
 class PaymentController extends Controller
 {
@@ -203,6 +207,56 @@ class PaymentController extends Controller
         } else {
             // El pago no fue aprobado, puedes redirigir a una página de error o manejarlo según tus necesidades
             return view('error', ['message' => 'El pago no fue aprobado']);
+        }
+    }
+
+
+
+    function obtenerDetalleCupon(Request $request)
+    {
+        try {
+            $request->validate([
+                'codigo' => 'required|string',
+            ]);
+
+            $codigo = $request->codigo;
+            $cupon = cupon::where('name_cupon', $codigo)->first();
+
+            if (!$cupon) {
+                // Si el cupón no se encuentra, se devuelve un JSON con el mensaje indicando que el cupón no fue encontrado
+                return response()->json(['success' => false, 'message' => 'Cupón no encontrado'], 404);
+            }
+
+            $detalles_cupones = detalle_cupones::select(
+                'id_detalle_cupon_uso',
+                'cupon_payment.codigo_cupon as cupon',
+                'cupon_payment.id_cupon as id_cupon',
+                'cupon_payment.name_cupon as name_cupon',
+                'paquete_payment.paquete as paquete',
+                'paquete_payment.id_paquete as id_paquete',
+                'tipo_periodo.periodo as periodo',
+                'tipo_periodo.id_tipo_periodo as id_tipo_periodo',
+                'cupon_payment.fecha_inicio',
+                'cupon_payment.fecha_fin',
+                'detalle_cupon.ganancia',
+                'cupon_payment.descuento',
+                'cupon_payment.cantidad_uso',
+                'detalle_cupon.link'
+            )
+                ->join('cupon_payment', 'detalle_cupon.id_cupon', '=', 'cupon_payment.id_cupon')
+                ->join('paquete_payment', 'detalle_cupon.id_paquete', '=', 'paquete_payment.id_paquete')
+                ->join('tipo_periodo', 'detalle_cupon.id_tipo_periodo', '=', 'tipo_periodo.id_tipo_periodo')
+                ->where('detalle_cupon.id_cupon', $cupon->id_cupon)
+                ->get();
+
+            return response()->json(['success' => true, 'message' => $detalles_cupones], 200);
+        } catch (ValidationException $validationException) {
+            $errors = $validationException->errors();
+            Log::error('Excepción en obtenerDetalleCupon - Validación: ' . json_encode($errors));
+            return response()->json(['error' => 'Ha ocurrido un error de validación.', 'details' => $errors], 422);
+        } catch (\Exception $e) {
+            Log::error('Excepción en obtenerDetalleCupon: ' . $e->getMessage());
+            return response()->json(['error' => 'Ha ocurrido un error.', 'details' => $e->getMessage()], 500);
         }
     }
 
