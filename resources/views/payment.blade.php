@@ -222,6 +222,14 @@
                                         </tr>
 
                                         <tr>
+                                            <td></td>
+
+                                            <td></td>
+                                            <td style="text-align: right;">Descuento</td>
+                                            <td class="desc">$ 0.00</td>
+                                        </tr>
+
+                                        <tr>
                                             <td class="py-4"></td>
                                             <td class="py-4"></td>
                                             <td style="text-align: right;" class="py-4 titleTotal"><b>TOTAL</b></td>
