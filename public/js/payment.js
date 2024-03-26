@@ -31,7 +31,6 @@ $(document).ready(function () {
     var valorCupon = obtenerValorCupon();
     var descuento = 0;
     if (valorCupon !== null) {
-        $("div#modalCarga").modal({ backdrop: "static", keyboard: false });
         var csrfToken = $('meta[name="csrf-token"]').attr("content");
         $.ajax({
             url: "/obtenerCupon",
@@ -53,7 +52,6 @@ $(document).ready(function () {
                         codCupon = detallesCupon[0]["cupon"];
                         $("input#cupon").attr("descuento", descuento);
                         $("input#cupon").attr("codCupon", codCupon);
-
                         $('button[name="idPla"]').each(function () {
                             var valorBoton = $(this).text().trim();
 
@@ -76,6 +74,11 @@ $(document).ready(function () {
                         });
                         descuento = 0;
                         changePer(descuento);
+                        Swal.fire({
+                            title: "¡Cupón no válido!",
+                            text: response.message,
+                            icon: "error"
+                        });
                     }
                 } else {
                     $('button[name="idPla"]').each(function () {
@@ -83,6 +86,11 @@ $(document).ready(function () {
                     });
                     descuento = 0;
                     changePer(descuento);
+                    Swal.fire({
+                        title: "¡Cupón no válido!",
+                        text: response.message,
+                        icon: "error"
+                    });
                 }
             },
 
@@ -153,6 +161,11 @@ $(document).ready(function () {
 
                             changePer(descuento);
                         } else {
+                            Swal.fire({
+                                title: "¡Cupón no válido!",
+                                text: response.message,
+                                icon: "error"
+                            });
                             $('button[name="idPla"]').each(function () {
                                 $(this).show();
                             });
@@ -165,6 +178,11 @@ $(document).ready(function () {
                         });
                         descuento = 0;
                         changePer(descuento);
+                        Swal.fire({
+                            title: "¡Cupón no válido!",
+                            text: response.message,
+                            icon: "error"
+                        });
                     }
                 },
 
