@@ -12,7 +12,7 @@ use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Mail;
 use Stripe\Order;
-use Illuminate\Validation\ValidationException;
+use Illuminate\Support\Facades\Validator;
 
 class PaymentController extends Controller
 {
@@ -306,66 +306,109 @@ class PaymentController extends Controller
         }
     }
 
-    function updateUseCupon(Request $request)
+    function obtenerCupon(Request $request)
     {
 
-        try {
+        $validator = Validator::make($request->all(), [
+            'codigo' => 'required',
+            'paquete' => 'required',
+        ]);
 
 
-            $request->validate([
-                'codigo' => 'required',
-            ]);
-
-            $codigo = $request->codigo;
-            $cupon = Cupon::where('name_cupon', $codigo)->first();
-
-            if (!$cupon) {
-                return response()->json(['success' => false, 'message' => 'Cupón no encontrado']);
-            }
-
-            $fechaActual = now(); // Obtener la fecha y hora actual
-            $fechaFinCupon = \Carbon\Carbon::parse($cupon->fecha_fin); // Convertir la fecha de finalización del cupón a un objeto Carbon
-
-            if ($fechaFinCupon->isPast() && !$fechaFinCupon->isSameDay($fechaActual)) {
-                return response()->json(['success' => false, 'message' => 'El cupón ha caducado']);
-            }
-
-            if ($cupon->cant_usada < $cupon->cantidad_uso) {
-                $cantiReem = $cupon->cant_usada += 1;
-
-                $detalles_cupones = detalle_cupones::select(
-                    'id_detalle_cupon_uso',
-                    'cupon_payment.codigo_cupon as cupon',
-                    'cupon_payment.id_cupon as id_cupon',
-                    'cupon_payment.name_cupon as name_cupon',
-                    'paquete_payment.paquete as paquete',
-                    'paquete_payment.id_paquete as id_paquete',
-                    'tipo_periodo.periodo as periodo',
-                    'tipo_periodo.id_tipo_periodo as id_tipo_periodo',
-                    'cupon_payment.fecha_inicio',
-                    'cupon_payment.fecha_fin',
-                    'detalle_cupon.ganancia',
-                    'cupon_payment.descuento',
-                    'cupon_payment.cantidad_uso',
-                    'detalle_cupon.link'
-                )
-                    ->join('cupon_payment', 'detalle_cupon.id_cupon', '=', 'cupon_payment.id_cupon')
-                    ->join('paquete_payment', 'detalle_cupon.id_paquete', '=', 'paquete_payment.id_paquete')
-                    ->join('tipo_periodo', 'detalle_cupon.id_tipo_periodo', '=', 'tipo_periodo.id_tipo_periodo')
-                    ->where('detalle_cupon.id_cupon', $cupon->id_cupon)
-                    ->get();
-                return response()->json(['success' => true, 'message' => $detalles_cupones, 'cantiReem' => $cantiReem], 200);
-            } else {
-                return response()->json(['success' => false, 'message' => 'El cupón limitado'], 400);
-            }
-        } catch (ValidationException $validationException) {
-            $errors = $validationException->errors();
-            Log::error('Excepción en updateUseCupon - Validación: ' . json_encode($errors));
-            return response()->json(['error' => 'Ha ocurrido un error de validación.', 'details' => $errors], 422);
-        } catch (\Exception $e) {
-            Log::error('Excepción en updateUseCupon: ' . $e->getMessage());
-            return response()->json(['error' => 'Ha ocurrido un error.', 'details' => $e->getMessage()], 500);
+        if ($validator->fails()) {
+            return response()->json(['error' => $validator->errors()->first()], 400);
         }
+
+        $codigo = $request->input('codigo');
+        $paquete = $request->input('paquete');
+
+        if ($paquete == 'rhnube-plus') {
+            $paquete = 1;
+        }
+
+        if ($paquete == 'rhnube-remote') {
+            $paquete = 2;
+        }
+
+        if ($paquete == 'rhnube-route') {
+            $paquete = 3;
+        }
+
+        $params = [
+            'codigo' => $codigo,
+            'paquete' => $paquete,
+        ];
+
+        $response = Http::post('https://beta.rhnube.com.pe/api/updateUseCupon', $params);
+
+        if ($response->successful()) {
+            // Obtener los datos de la respuesta
+            $responseData = $response->json();
+            // Hacer algo con los datos de la respuesta, si es necesario
+            // Por ejemplo, devolver los datos como respuesta de tu controlador
+            return response()->json($responseData);
+        } else {
+            // En caso de error en la solicitud, devolver un mensaje de error
+            return response()->json(['error' => 'Error al consumir la API'], $response->status());
+        }
+
+        // try {
+
+
+        //     $request->validate([
+        //         'codigo' => 'required',
+        //     ]);
+
+        //     $codigo = $request->codigo;
+        //     $cupon = Cupon::where('name_cupon', $codigo)->first();
+
+        //     if (!$cupon) {
+        //         return response()->json(['success' => false, 'message' => 'Cupón no encontrado']);
+        //     }
+
+        //     $fechaActual = now(); // Obtener la fecha y hora actual
+        //     $fechaFinCupon = \Carbon\Carbon::parse($cupon->fecha_fin); // Convertir la fecha de finalización del cupón a un objeto Carbon
+
+        //     if ($fechaFinCupon->isPast() && !$fechaFinCupon->isSameDay($fechaActual)) {
+        //         return response()->json(['success' => false, 'message' => 'El cupón ha caducado']);
+        //     }
+
+        //     if ($cupon->cant_usada < $cupon->cantidad_uso) {
+        //         $cantiReem = $cupon->cant_usada += 1;
+
+        //         $detalles_cupones = detalle_cupones::select(
+        //             'id_detalle_cupon_uso',
+        //             'cupon_payment.codigo_cupon as cupon',
+        //             'cupon_payment.id_cupon as id_cupon',
+        //             'cupon_payment.name_cupon as name_cupon',
+        //             'paquete_payment.paquete as paquete',
+        //             'paquete_payment.id_paquete as id_paquete',
+        //             'tipo_periodo.periodo as periodo',
+        //             'tipo_periodo.id_tipo_periodo as id_tipo_periodo',
+        //             'cupon_payment.fecha_inicio',
+        //             'cupon_payment.fecha_fin',
+        //             'detalle_cupon.ganancia',
+        //             'cupon_payment.descuento',
+        //             'cupon_payment.cantidad_uso',
+        //             'detalle_cupon.link'
+        //         )
+        //             ->join('cupon_payment', 'detalle_cupon.id_cupon', '=', 'cupon_payment.id_cupon')
+        //             ->join('paquete_payment', 'detalle_cupon.id_paquete', '=', 'paquete_payment.id_paquete')
+        //             ->join('tipo_periodo', 'detalle_cupon.id_tipo_periodo', '=', 'tipo_periodo.id_tipo_periodo')
+        //             ->where('detalle_cupon.id_cupon', $cupon->id_cupon)
+        //             ->get();
+        //         return response()->json(['success' => true, 'message' => $detalles_cupones, 'cantiReem' => $cantiReem], 200);
+        //     } else {
+        //         return response()->json(['success' => false, 'message' => 'El cupón limitado'], 400);
+        //     }
+        // } catch (ValidationException $validationException) {
+        //     $errors = $validationException->errors();
+        //     Log::error('Excepción en updateUseCupon - Validación: ' . json_encode($errors));
+        //     return response()->json(['error' => 'Ha ocurrido un error de validación.', 'details' => $errors], 422);
+        // } catch (\Exception $e) {
+        //     Log::error('Excepción en updateUseCupon: ' . $e->getMessage());
+        //     return response()->json(['error' => 'Ha ocurrido un error.', 'details' => $e->getMessage()], 500);
+        // }
     }
 
 

@@ -27,25 +27,36 @@ function obtenerValorCupon() {
     return null;
 }
 
+function obtenerPlan() {
+    var url = window.location.href;
+    var partesURL = url.split("/");
+    var ultimaParte = partesURL.pop();
+    var nombreServicio = ultimaParte.split("?")[0];
+    return nombreServicio;
+}
+
 $(document).ready(function () {
     var valorCupon = obtenerValorCupon();
+    var plan = obtenerPlan();
     var descuento = 0;
     if (valorCupon !== null) {
         var csrfToken = $('meta[name="csrf-token"]').attr("content");
+
         $.ajax({
             url: "/obtenerCupon",
-            type: "POST",
+            type: "get",
             dataType: "json",
             data: {
                 codigo: valorCupon,
+                paquete: plan,
             },
             headers: {
                 "X-CSRF-TOKEN": csrfToken,
             },
             success: function (response) {
-                console.log(response);
                 if (response.message.length) {
                     if (response.success) {
+                        var botonSeleccionado = false;
                         // Procesar los detalles del cupón recibidos en la respuesta
                         var detallesCupon = response.message;
                         descuento = detallesCupon[0]["descuento"];
@@ -62,6 +73,10 @@ $(document).ready(function () {
                                 })
                             ) {
                                 $(this).show();
+                                if (!botonSeleccionado) {
+                                    $(this).click(); // Simula un clic en el botón para seleccionarlo
+                                    botonSeleccionado = true; // Marca que se ha seleccionado un botón
+                                }
                             } else {
                                 $(this).hide();
                             }
@@ -77,7 +92,7 @@ $(document).ready(function () {
                         Swal.fire({
                             title: "¡Cupón no válido!",
                             text: response.message,
-                            icon: "error"
+                            icon: "error",
                         });
                     }
                 } else {
@@ -89,7 +104,7 @@ $(document).ready(function () {
                     Swal.fire({
                         title: "¡Cupón no válido!",
                         text: response.message,
-                        icon: "error"
+                        icon: "error",
                     });
                 }
             },
@@ -121,24 +136,28 @@ $(document).ready(function () {
     // Agregar el evento blur al elemento cupon
     $cupon.blur(function () {
         var cuponVal = $cupon.val();
+        console.log(cuponVal);
+        var obPlan = obtenerPlan();
+        console.log(obPlan);
         if (cuponVal) {
             var csrfToken = $('meta[name="csrf-token"]').attr("content");
             $.ajax({
                 url: "/obtenerCupon",
-                type: "POST",
+                type: "get",
                 dataType: "json",
                 data: {
                     codigo: cuponVal,
+                    paquete: obPlan,
                 },
                 headers: {
                     "X-CSRF-TOKEN": csrfToken,
                 },
                 success: function (response) {
-                    console.log(response);
                     if (response.message.length) {
                         if (response.success) {
                             // Procesar los detalles del cupón recibidos en la respuesta
                             var detallesCupon = response.message;
+                            var botonSeleccionado = false;
                             descuento = detallesCupon[0]["descuento"];
                             codCupon = detallesCupon[0]["cupon"];
                             $("input#cupon").attr("descuento", descuento);
@@ -154,6 +173,10 @@ $(document).ready(function () {
                                     })
                                 ) {
                                     $(this).show();
+                                    if (!botonSeleccionado) {
+                                        $(this).click(); // Simula un clic en el botón para seleccionarlo
+                                        botonSeleccionado = true; // Marca que se ha seleccionado un botón
+                                    }
                                 } else {
                                     $(this).hide();
                                 }
@@ -164,7 +187,7 @@ $(document).ready(function () {
                             Swal.fire({
                                 title: "¡Cupón no válido!",
                                 text: response.message,
-                                icon: "error"
+                                icon: "error",
                             });
                             $('button[name="idPla"]').each(function () {
                                 $(this).show();
@@ -175,13 +198,17 @@ $(document).ready(function () {
                     } else {
                         $('button[name="idPla"]').each(function () {
                             $(this).show();
+                            if (!botonSeleccionado) {
+                                $(this).click(); // Simula un clic en el botón para seleccionarlo
+                                botonSeleccionado = true; // Marca que se ha seleccionado un botón
+                            }
                         });
                         descuento = 0;
                         changePer(descuento);
                         Swal.fire({
                             title: "¡Cupón no válido!",
                             text: response.message,
-                            icon: "error"
+                            icon: "error",
                         });
                     }
                 },
@@ -244,8 +271,6 @@ $(document).ready(function () {
 
         var $valor = $("#valor");
         var $idCountry = $("select#idCountry");
-
-        console.log(descuento);
         var $idBotonPeriodoSeleccionado = $(".periodo button.seleccionado");
         var valorPer = $idBotonPeriodoSeleccionado.val();
         var quantity = $valor.val();
@@ -253,7 +278,7 @@ $(document).ready(function () {
         $("input#idPla").val(valorPer);
 
         $.ajax({
-            url: "../update_prices",
+            url: "/update_prices",
             method: "POST",
             headers: {
                 "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr("content"),
@@ -276,7 +301,6 @@ $(document).ready(function () {
     }
 
     function updatePrices(response, descuento) {
-        console.log(descuento);
         var calcudes = (descuento * parseFloat(response.subtotal)) / 100;
         var totaldes = parseFloat(response.total) - calcudes;
         // Redondear los valores a dos decimales
