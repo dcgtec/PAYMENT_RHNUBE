@@ -76,7 +76,8 @@ h1.titleGeneral {
     font-weight: 600;
 }
 
-.periodo button {
+.periodo button,
+.plan button {
     padding: 0;
     height: 35px;
     border-radius: 48px;

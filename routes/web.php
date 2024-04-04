@@ -28,7 +28,8 @@ Route::get('/', [CategoryPlanController::class, 'index']);
 
 // Route::middleware("auth")->group(function () {
 
-Route::get('payment/{slug}', [CategoryPlanController::class, 'show'])->name('category_plans.show');
+// Route::get('payment/{slug}', [CategoryPlanController::class, 'show'])->name('category_plans.show');
+Route::get('payment/{slug?}', [CategoryPlanController::class, 'show'])->name('category_plans.show')->where('slug', '(.*)');
 
 // routes/web.php
 Route::post('update_prices', [PlanController::class, 'updatePrices'])->name('update_prices');

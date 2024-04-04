@@ -24,7 +24,7 @@
         crossorigin="anonymous" referrerpolicy="no-referrer" />
     <!-- Agrega esto en tu vista o layout -->
     <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
-    <script src="{{ asset('js/payment.js') }}"></script>
+
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/js/select2.min.js"
         integrity="sha512-2ImtlRlf2VVmiGZsjm9bEyhjGW4dU7B6TNwh/hx/iSByxNENtj3WVE6o/9Lj4TJeVXPi4bnOIMXFIJJAeufa0A=="
@@ -38,24 +38,24 @@
     <!-- Puedes personalizar el contenido del encabezado según tus necesidades -->
     <header>
         @if (Route::has('login'))
-            <nav class="py-3 navbar justify-content-center navbar-expand-lg navbar-light bg-light">
-                @auth
+        <nav class="py-3 navbar justify-content-center navbar-expand-lg navbar-light bg-light">
+            @auth
 
-                    <a class="navbar-brand" href="/">
-                        <img src="{{ asset('images/logo.svg') }}" alt="Logo del Sitio" class="logo" />
-                    </a>
-                    <!-- Agrega aquí tus elementos de navegación, por ejemplo, menú de navegación -->
-                @else
-                    <a class="navbar-brand" href="/">
-                        <img src="{{ asset('images/logo.svg') }}" alt="Logo del Sitio" class="logo" />
-                    </a>
+            <a class="navbar-brand" href="/">
+                <img src="{{ asset('images/logo.svg') }}" alt="Logo del Sitio" class="logo" />
+            </a>
+            <!-- Agrega aquí tus elementos de navegación, por ejemplo, menú de navegación -->
+            @else
+            <a class="navbar-brand" href="/">
+                <img src="{{ asset('images/logo.svg') }}" alt="Logo del Sitio" class="logo" />
+            </a>
 
-                    <!-- <a href="{{ route('login') }}">Login</a>
+            <!-- <a href="{{ route('login') }}">Login</a>
 
                                                 @if (Route::has('register'))
     <a href="{{ route('register') }}">Register</a>
     @endif  -->
-                @endauth
-            </nav>
+            @endauth
+        </nav>
         @endif
     </header>

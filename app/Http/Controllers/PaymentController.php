@@ -315,12 +315,17 @@ class PaymentController extends Controller
         ]);
 
 
+
+
         if ($validator->fails()) {
             return response()->json(['error' => $validator->errors()->first()], 400);
         }
 
         $codigo = $request->input('codigo');
         $paquete = $request->input('paquete');
+
+
+
 
         if ($paquete == 'rhnube-plus') {
             $paquete = 1;

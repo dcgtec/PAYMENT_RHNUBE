@@ -30,7 +30,8 @@
                                         <h5 class="my-3  pr-3 text-left">País:</h5>
                                     </div>
                                     <div class="col-sm-4 mx-0 px-0">
-                                        <select name="idCountry" required id="idCountry" class="form-control text-center w-100">
+                                        <select name="idCountry" required id="idCountry"
+                                            class="form-control text-center w-100">
                                             <option value="">Seleccionar</option>
                                             <option value="otro_pais_valido">Alemania</option>
                                             <option value="otro_pais_valido">Antigua y Barbuda</option>
@@ -118,22 +119,46 @@
                                 </div>
                             </div>
 
-                            <div class="periodo col-md-12 my-1">
+                            <div class="plan col-md-12 my-1">
                                 <div class="row">
                                     <div class="selectCountry col-sm-4 ">
-                                        <h5 class="my-3  pr-3 text-left">Periodo: </h5>
-                                        <input type="hidden" name="idPla" id="idPla" min="1" required id="valor" value="{{ $plans[0]->id }}">
+                                        <h5 class="my-3  pr-3 text-left">Plan: </h5>
+                                        <input type="hidden" name="idPla" id="idPla" min="1" required id="valor"
+                                            value="">
 
                                     </div>
 
                                     <div class="col-sm-8 mx-0 px-0">
                                         <div class="row">
-                                            @foreach ($periodoPago as $periodoPagos)
+                                            @foreach($datos['paquetes'] as $key => $paquete)
                                             <div class="col-md-6 my-2">
-
-                                                <button type="button" name="idPla" class="w-100 btn btn-primary {{ $periodoPagos->n_periodo == $periodo ? 'seleccionado' : '' }}" value="{{ $periodoPagos->id }}">
-                                                    {{ $periodoPagos->name }}
+                                                <button type="button" value="{{ $paquete['id_paquete'] }}" name="plan"
+                                                    class="w-100 btn btn-primary {{ $key === 0 ? 'seleccionado' : '' }}">
+                                                    {{ $paquete['paquete'] }}
                                                 </button>
+                                            </div>
+                                            @endforeach
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="periodo col-md-12 my-1">
+                                <div class="row">
+                                    <div class="selectCountry col-sm-4 ">
+                                        <h5 class="my-3  pr-3 text-left">Periodo: </h5>
+                                        <input type="hidden" name="idPla" id="idPla" min="1" required id="valor"
+                                            value="">
+
+                                    </div>
+
+                                    <div class="col-sm-8 mx-0 px-0">
+                                        <div class="row">
+                                            @foreach($datos['periodos'] as $key => $periodo)
+                                            <div class="col-md-6 my-2">
+                                                <button type="button" value="{{ $periodo['id_tipo_periodo'] }}"
+                                                    name="idPla"
+                                                    class="w-100 btn btn-primary {{ $key === 0 ? 'seleccionado' : '' }}">{{ $periodo['periodo'] }}</button>
                                             </div>
                                             @endforeach
                                         </div>
@@ -148,7 +173,8 @@
                                     </div>
                                     <div class="col-sm-4 mx-0 px-0">
                                         <div class="rowAdd m-auto d-flex rounded-pill justify-content-center">
-                                            <input type="text" value="{{ request('cupon') }}" name="cupon" min="1" placeholder="------" id="cupon">
+                                            <input type="text" value="{{ request('cupon') }}" name="cupon" min="1"
+                                                placeholder="------" id="cupon">
 
                                         </div>
                                     </div>
@@ -179,11 +205,11 @@
                                     </thead>
                                     <tbody>
                                         <tr>
-                                            <td><b>{{ $categoryPlan->name }}</b></td>
+                                            <td><b class="plan"></b></td>
                                             <td class="quanty">1</td>
-                                            <td class="priceUn">$ {{ $plans->first()->price }}</td>
+                                            <td class="priceUn">$ </td>
                                             <td class="subtotal">$
-                                                {{ number_format($plans->first()->price * $plans->first()->totNumMonth, 2, '.', '') }}
+
                                             </td>
                                         </tr>
                                         {{-- <tr>
@@ -191,7 +217,7 @@
 
                                             <td></td>
                                             <td style="text-align: right;">Subtotal</td>
-                                            <td class="subtotal">$ {{ $categoryPlan->price }}</td>
+                                            <td class="subtotal">$ </td>
                                         </tr> --}}
                                         <tr>
                                             <td></td>
@@ -216,7 +242,7 @@
                                             <td class="py-4"></td>
                                             <td style="text-align: right;" class="py-4 titleTotal"><b>TOTAL</b></td>
                                             <td class="total py-4 titleTotal"><b>$
-                                                    {{ number_format($plans->first()->price * $plans->first()->totNumMonth, 2, '.', '') }}</b>
+                                                </b>
                                             </td>
                                         </tr>
                                     </tbody>
@@ -231,13 +257,15 @@
                             id="solicitarDemo" data-toggle="modal" data-target="#modalDemo">Solicitar demo</button>
                     </div> --}}
                     <div class="col-md-12 mt-2 ">
-                        <button type="submit" class="btn btn-primary showPayment w-100 rounded-pill" id="payWithStripe">Pagar</button>
+                        <button type="submit" class="btn btn-primary showPayment w-100 rounded-pill"
+                            id="payWithStripe">Pagar</button>
                     </div>
                 </div>
         </form>
     </div>
 
-    <div class="modal fade" id="modalCarga" tabindex="-1" role="dialog" aria-labelledby="modalCargaLabel" aria-hidden="true">
+    <div class="modal fade" id="modalCarga" tabindex="-1" role="dialog" aria-labelledby="modalCargaLabel"
+        aria-hidden="true">
 
         <div class="modal-dialog modal-dialog-centered" role="document">
             <div class="modal-content">
@@ -315,61 +343,61 @@
 </section>
 
 <style>
-    .loader {
-        height: 100px;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        position: relative;
+.loader {
+    height: 100px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+}
+
+.circle {
+    position: absolute;
+    width: 0px;
+    height: 0px;
+    border-radius: 100%;
+    background: rgba(31, 113, 240, 1);
+    animation: radar 3s ease-out infinite;
+    box-shadow: 0px 0px 10px rgba(31, 113, 240, .5);
+    /*   box-shadow:0px 0px 10px rgba(0,0,0,.5); */
+    /*   border:1px solid rgba(255,255,255,.2); */
+}
+
+.circle:nth-of-type(1) {
+    animation-delay: 0.2s;
+}
+
+.circle:nth-of-type(2) {
+    animation-delay: 0.6s;
+}
+
+.circle:nth-of-type(3) {
+    animation-delay: 1s;
+}
+
+.circle:nth-of-type(4) {
+    animation-delay: 1.4s;
+}
+
+.circle:nth-of-type(5) {
+    animation-delay: 1.8s;
+}
+
+@keyframes radar {
+    0% {}
+
+    30% {
+        width: 50px;
+        height: 50px;
     }
 
-    .circle {
-        position: absolute;
-        width: 0px;
-        height: 0px;
-        border-radius: 100%;
-        background: rgba(31, 113, 240, 1);
-        animation: radar 3s ease-out infinite;
-        box-shadow: 0px 0px 10px rgba(31, 113, 240, .5);
-        /*   box-shadow:0px 0px 10px rgba(0,0,0,.5); */
-        /*   border:1px solid rgba(255,255,255,.2); */
+    100% {
+        width: 50px;
+        height: 50px;
+        opacity: 0;
     }
-
-    .circle:nth-of-type(1) {
-        animation-delay: 0.2s;
-    }
-
-    .circle:nth-of-type(2) {
-        animation-delay: 0.6s;
-    }
-
-    .circle:nth-of-type(3) {
-        animation-delay: 1s;
-    }
-
-    .circle:nth-of-type(4) {
-        animation-delay: 1.4s;
-    }
-
-    .circle:nth-of-type(5) {
-        animation-delay: 1.8s;
-    }
-
-    @keyframes radar {
-        0% {}
-
-        30% {
-            width: 50px;
-            height: 50px;
-        }
-
-        100% {
-            width: 50px;
-            height: 50px;
-            opacity: 0;
-        }
-    }
+}
 </style>
+<script src="{{ asset('js/paymentCupon.js') }}"></script>
 
-<script src="{{ asset('js/payment.js') }}"></script>
 @include('layouts.footer')
