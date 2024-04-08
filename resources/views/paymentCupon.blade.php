@@ -112,34 +112,40 @@
                                     <div class="col-sm-4 mx-0 px-0">
                                         <div class="rowAdd m-auto d-flex rounded-pill justify-content-center">
                                             <div class="dismin">-</div>
-                                            <input type="number" name="quanty" min="1" required value="1" id="valor">
+                                            <input type="number" name="quanty" min="1" required
+                                                value="1" id="valor">
                                             <div class="addmin">+</div>
                                         </div>
                                     </div>
                                 </div>
                             </div>
 
-                            <div class="plan col-md-12 my-1">
-                                <div class="row">
+                            <div class="paquete col-md-12 my-1">
+                                <div class="row align-items-center">
                                     <div class="selectCountry col-sm-4 ">
                                         <h5 class="my-3  pr-3 text-left">Plan: </h5>
-                                        <input type="hidden" name="idPla" id="idPla" min="1" required id="valor"
-                                            value="">
+                                    </div>
+
+                                    <div class="col-sm-4 mx-0 px-0">
+                                        <select class="form-control text-center w-100" required id="idPaquete"
+                                            name="idPaquete">
+                                            @if (is_array($datos) && !empty($datos['paquetes']))
+                                                @php $primerElemento = true; @endphp
+                                                @foreach ($datos['paquetes'] as $key => $paquete)
+                                                    <option value="{{ $paquete['id_paquete'] }}"
+                                                        @if ($primerElemento) selected @php $primerElemento = false; @endphp @endif>
+                                                        {{ $paquete['paquete'] }}
+                                                    </option>
+                                                @endforeach
+                                            @else
+                                                <option value="1" selected>Plus</option>
+                                                <option value="2">Remote</option>
+                                                <option value="3">Route</option>
+                                            @endif
+                                        </select>
 
                                     </div>
 
-                                    <div class="col-sm-8 mx-0 px-0">
-                                        <div class="row">
-                                            @foreach($datos['paquetes'] as $key => $paquete)
-                                            <div class="col-md-6 my-2">
-                                                <button type="button" value="{{ $paquete['id_paquete'] }}" name="plan"
-                                                    class="w-100 btn btn-primary {{ $key === 0 ? 'seleccionado' : '' }}">
-                                                    {{ $paquete['paquete'] }}
-                                                </button>
-                                            </div>
-                                            @endforeach
-                                        </div>
-                                    </div>
                                 </div>
                             </div>
 
@@ -147,120 +153,147 @@
                                 <div class="row">
                                     <div class="selectCountry col-sm-4 ">
                                         <h5 class="my-3  pr-3 text-left">Periodo: </h5>
-                                        <input type="hidden" name="idPla" id="idPla" min="1" required id="valor"
-                                            value="">
-
+                                        <input type="hidden" name="idPla" id="idPla">
                                     </div>
 
                                     <div class="col-sm-8 mx-0 px-0">
-                                        <div class="row">
-                                            @foreach($datos['periodos'] as $key => $periodo)
-                                            <div class="col-md-6 my-2">
-                                                <button type="button" value="{{ $periodo['id_tipo_periodo'] }}"
-                                                    name="idPla"
-                                                    class="w-100 btn btn-primary {{ $key === 0 ? 'seleccionado' : '' }}">{{ $periodo['periodo'] }}</button>
-                                            </div>
-                                            @endforeach
+                                        <div class="row lisPer">
+                                            @if (is_array($datos))
+                                                @foreach ($datos['periodos'] as $key => $periodo)
+                                                    <div class="col-md-6 my-2">
+                                                        <button type="button"
+                                                            value="{{ $periodo['id_tipo_periodo'] }}" name="idPla"
+                                                            class="w-100 btn btn-primary {{ $key === 0 ? 'seleccionado' : '' }}">{{ $periodo['periodo'] }}</button>
+                                                    </div>
+                                                @endforeach
+                                            @else
+                                                <div class="col-md-6 my-2 ">
+                                                    <button type="button" value="1" name="idPla"
+                                                        class="w-100 btn btn-primary seleccionado">Mensual</button>
+                                                </div>
+                                                <div class="col-md-6 my-2 ">
+                                                    <button type="button" value="2" name="idPla"
+                                                        class="w-100 btn btn-primary">Trimestral</button>
+                                                </div>
+                                                <div class="col-md-6 my-2 ">
+                                                    <button type="button" value="3" name="idPla"
+                                                        class="w-100 btn btn-primary">Semestral</button>
+                                                </div>
+                                                <div class="col-md-6 my-2 ">
+                                                    <button type="button" value="4" name="idPla"
+                                                        class="w-100 btn btn-primary">Anual</button>
+                                                </div>
                                         </div>
+                                        @endif
                                     </div>
                                 </div>
                             </div>
+                        </div>
 
-                            <div class="col-md-12  my-1 cantEmp">
-                                <div class="row align-items-center place-content-center">
-                                    <div class="selectCountry col-sm-4 ">
-                                        <h5 class="my-3  pr-3 text-left">Cupón:
-                                    </div>
-                                    <div class="col-sm-4 mx-0 px-0">
-                                        <div class="rowAdd m-auto d-flex rounded-pill justify-content-center">
-                                            <input type="text" value="{{ request('cupon') }}" name="cupon" min="1"
+                        <div class="col-md-12  my-1 cantEmp">
+                            <div class="row align-items-center place-content-center">
+                                <div class="selectCountry col-sm-4 ">
+                                    <h5 class="my-3  pr-3 text-left">Cupón:
+                                </div>
+                                <div class="col-sm-4 mx-0 px-0">
+                                    <div class="rowAdd m-auto d-flex rounded-pill justify-content-center">
+                                        @if (is_array($datos))
+                                            <input type="text" value="{{ request('cupon') }}"
+                                                descuento="{{ $datos['descuento'] }}"
+                                                codcupon="{{ $datos['codigo_cupon'] }}" name="cupon" min="1"
                                                 placeholder="------" id="cupon">
+                                        @else
+                                            <input type="text" value="{{ request('cupon') }}" descuento="0.00"
+                                                codcupon="" name="cupon" min="1" placeholder="------"
+                                                id="cupon">
+                                        @endif
 
-                                        </div>
+
                                     </div>
                                 </div>
                             </div>
+                        </div>
 
-                            <div class="resPago table-responsive w-100 text-center mt-2 mb-0">
-                                {{-- <img src="{{ asset('images/group4.png') }}" alt="Paso 4" /> --}}
+                        <div class="resPago table-responsive w-100 text-center mt-2 mb-0">
+                            {{-- <img src="{{ asset('images/group4.png') }}" alt="Paso 4" /> --}}
 
 
-                                <div class="col-md-12  mt-3 titleGeneral">
-                                    <div class="row align-items-center place-content-center">
-                                        <div class="selectCountry col-sm-12 ">
-                                            <h5 class=" mx-3 pr-3  text-center">RESUMEN DE PAGO
-                                        </div>
-
+                            <div class="col-md-12  mt-3 titleGeneral">
+                                <div class="row align-items-center place-content-center">
+                                    <div class="selectCountry col-sm-12 ">
+                                        <h5 class=" mx-3 pr-3  text-center">RESUMEN DE PAGO
                                     </div>
+
                                 </div>
+                            </div>
 
-                                <table class="table w-100 pb-0 mb-0">
-                                    <thead>
-                                        <tr>
-                                            <th></th>
-                                            <th>Cantidad</th>
-                                            <th>P.U</th>
-                                            <th>Subtotal</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        <tr>
-                                            <td><b class="plan"></b></td>
-                                            <td class="quanty">1</td>
-                                            <td class="priceUn">$ </td>
-                                            <td class="subtotal">$
+                            <table class="table w-100 pb-0 mb-0">
+                                <thead>
+                                    <tr>
+                                        <th></th>
+                                        <th>Cantidad</th>
+                                        <th>P.U</th>
+                                        <th>Subtotal</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td><b class="plan"></b></td>
+                                        <td class="quanty">1</td>
+                                        <td class="priceUn">$ </td>
+                                        <td class="subtotal">$
 
-                                            </td>
-                                        </tr>
-                                        {{-- <tr>
+                                        </td>
+                                    </tr>
+                                    {{-- <tr>
                                             <td></td>
 
                                             <td></td>
                                             <td style="text-align: right;">Subtotal</td>
                                             <td class="subtotal">$ </td>
                                         </tr> --}}
-                                        <tr>
-                                            <td></td>
+                                    <tr>
+                                        <td></td>
 
-                                            <td></td>
-                                            <td style="text-align: right;">Impuesto</td>
-                                            <td class="tax">$ 0.00</td>
-                                        </tr>
-
-
-                                        <tr>
-                                            <td></td>
-
-                                            <td></td>
-                                            <td style="text-align: right;">Descuento</td>
-                                            <td class="desc">$ 0.00</td>
-                                        </tr>
+                                        <td></td>
+                                        <td style="text-align: right;">Impuesto</td>
+                                        <td class="tax">$ 0.00</td>
+                                    </tr>
 
 
-                                        <tr>
-                                            <td class="py-4"></td>
-                                            <td class="py-4"></td>
-                                            <td style="text-align: right;" class="py-4 titleTotal"><b>TOTAL</b></td>
-                                            <td class="total py-4 titleTotal"><b>$
-                                                </b>
-                                            </td>
-                                        </tr>
-                                    </tbody>
-                                </table>
-                            </div>
+                                    <tr>
+                                        <td></td>
+
+                                        <td></td>
+                                        <td style="text-align: right;">Descuento</td>
+                                        <td class="desc">$ 0.00</td>
+                                    </tr>
+
+
+                                    <tr>
+                                        <td class="py-4"></td>
+                                        <td class="py-4"></td>
+                                        <td style="text-align: right;" class="py-4 titleTotal"><b>TOTAL</b></td>
+                                        <td class="total py-4 titleTotal"><b>$
+                                            </b>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
                         </div>
                     </div>
                 </div>
-                <div class="buttonBuy text-center mt-0 mb-0 row ">
-                    {{-- <div class="col-md-6  my-2">
+            </div>
+            <div class="buttonBuy text-center mt-0 mb-0 row ">
+                {{-- <div class="col-md-6  my-2">
                         <button type="button" class="btn btn-secondary solicitarDemo w-100 rounded-pill"
                             id="solicitarDemo" data-toggle="modal" data-target="#modalDemo">Solicitar demo</button>
                     </div> --}}
-                    <div class="col-md-12 mt-2 ">
-                        <button type="submit" class="btn btn-primary showPayment w-100 rounded-pill"
-                            id="payWithStripe">Pagar</button>
-                    </div>
+                <div class="col-md-12 mt-2 ">
+                    <button type="submit" class="btn btn-primary showPayment w-100 rounded-pill"
+                        id="payWithStripe">Pagar</button>
                 </div>
+            </div>
         </form>
     </div>
 
@@ -343,61 +376,70 @@
 </section>
 
 <style>
-.loader {
-    height: 100px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    position: relative;
-}
-
-.circle {
-    position: absolute;
-    width: 0px;
-    height: 0px;
-    border-radius: 100%;
-    background: rgba(31, 113, 240, 1);
-    animation: radar 3s ease-out infinite;
-    box-shadow: 0px 0px 10px rgba(31, 113, 240, .5);
-    /*   box-shadow:0px 0px 10px rgba(0,0,0,.5); */
-    /*   border:1px solid rgba(255,255,255,.2); */
-}
-
-.circle:nth-of-type(1) {
-    animation-delay: 0.2s;
-}
-
-.circle:nth-of-type(2) {
-    animation-delay: 0.6s;
-}
-
-.circle:nth-of-type(3) {
-    animation-delay: 1s;
-}
-
-.circle:nth-of-type(4) {
-    animation-delay: 1.4s;
-}
-
-.circle:nth-of-type(5) {
-    animation-delay: 1.8s;
-}
-
-@keyframes radar {
-    0% {}
-
-    30% {
-        width: 50px;
-        height: 50px;
+    .loader {
+        height: 100px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        position: relative;
     }
 
-    100% {
-        width: 50px;
-        height: 50px;
-        opacity: 0;
+    .circle {
+        position: absolute;
+        width: 0px;
+        height: 0px;
+        border-radius: 100%;
+        background: rgba(31, 113, 240, 1);
+        animation: radar 3s ease-out infinite;
+        box-shadow: 0px 0px 10px rgba(31, 113, 240, .5);
+        /*   box-shadow:0px 0px 10px rgba(0,0,0,.5); */
+        /*   border:1px solid rgba(255,255,255,.2); */
     }
-}
+
+    .circle:nth-of-type(1) {
+        animation-delay: 0.2s;
+    }
+
+    .circle:nth-of-type(2) {
+        animation-delay: 0.6s;
+    }
+
+    .circle:nth-of-type(3) {
+        animation-delay: 1s;
+    }
+
+    .circle:nth-of-type(4) {
+        animation-delay: 1.4s;
+    }
+
+    .circle:nth-of-type(5) {
+        animation-delay: 1.8s;
+    }
+
+    @keyframes radar {
+        0% {}
+
+        30% {
+            width: 50px;
+            height: 50px;
+        }
+
+        100% {
+            width: 50px;
+            height: 50px;
+            opacity: 0;
+        }
+    }
 </style>
+@if (!is_array($datos))
+    <script>
+        Swal.fire({
+            title: "¡Cupón no válido!",
+            text: '',
+            icon: "error",
+        });
+    </script>
+@endif
 <script src="{{ asset('js/paymentCupon.js') }}"></script>
 
 @include('layouts.footer')

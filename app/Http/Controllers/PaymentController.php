@@ -6,6 +6,7 @@ use App\CategoryPlan;
 use App\cupon;
 use App\detalle_cupones;
 use App\Mail\CompraExitosa;
+use App\Periodo;
 use Illuminate\Http\Request;
 use App\Plan;
 use Illuminate\Support\Facades\Http;
@@ -16,6 +17,39 @@ use Illuminate\Support\Facades\Validator;
 
 class PaymentController extends Controller
 {
+
+    public function obtenerPlan(Request $request)
+    {
+        try {
+            $validator = Validator::make($request->all(), [
+                'plan' => 'required',
+                'periodo' => 'required',
+            ]);
+
+            $idplan = $request->input('plan');
+            $idPeriodo = $request->input('periodo');
+
+            $periodo = Periodo::select('periodo')->where('id_tipo_periodo', $idPeriodo)->firstOrFail();
+            $plan = Plan::select('id')->where('id_plan', $idplan)
+                ->where('name', $periodo->periodo)
+                ->firstOrFail();
+
+            return response()->json($plan['id']); // Por ejemplo, podrías devolver el plan en formato JSON
+        } catch (\InvalidArgumentException $e) {
+            // Manejar errores de validación de entrada
+            return response()->json(['error' => $e->getMessage()], 400);
+        } catch (\Exception $e) {
+            // Manejar otros errores
+            return response()->json(['error' => $e->getMessage()], 500);
+        } catch (\Illuminate\Database\Eloquent\ModelNotFoundException $e) {
+            // Manejar errores cuando no se encuentra el modelo
+            return response()->json(['error' => $e->getMessage()], 404);
+        } catch (\Stripe\Exception\ApiErrorException $e) {
+            // Manejar errores de la API de Stripe
+            return response()->json(['error' => 'Error en la comunicación con Stripe: ' . $e->getMessage()], 500);
+        }
+    }
+
 
     public function checkout(Request $request)
     {
@@ -40,20 +74,23 @@ class PaymentController extends Controller
             }
 
             $cupon = $request->input('cupon');
-            $responseCu = $this->obtenerdatosCupon($cupon);
-            $dataCu = $responseCu->getData();
-            $messageCu = $dataCu->message;
-            $successCu = $dataCu->success;
+
+            $response = Http::post('https://beta.rhnube.com.pe/api/obtenerdatosCupon', [
+                'codigo' => $cupon,
+            ]);
 
 
+            $data = $response->json();
+            $successCu = $data["success"];
 
             $codCupn = '';
             $cant_usada = '';
 
             if ($successCu) {
-                $codCupn = $messageCu->codigo_cupon;
-                $cant_usada = $messageCu->cant_usada;
+                $codCupn = $data["message"]["codigo_cupon"];
+                $cant_usada =  $data["message"]["cant_usada"];
             }
+
 
 
             \Stripe\Stripe::setApiKey(config('services.stripe.secret'));

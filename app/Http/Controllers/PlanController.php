@@ -13,6 +13,8 @@ class PlanController extends Controller
     // CategoryPlanController.php
     public function updatePrices(Request $request)
     {
+
+
         // Obtener el ID del plan seleccionado y la cantidad de empleados desde la solicitud
         $planId = $request->input('plan_id');
         $quantity = $request->input('quantity');

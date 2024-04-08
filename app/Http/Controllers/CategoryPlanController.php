@@ -37,21 +37,29 @@ class CategoryPlanController extends Controller
             if (!$slug) {
 
                 $cupon = $request->input('cupon');
-
-
-
                 $params = [
                     'codigo' => $cupon,
                     'paquete' => '0',
                 ];
 
+
                 $response = Http::post('https://beta.rhnube.com.pe/api/updateUseCupon', $params);
 
+
+
                 if ($response->successful()) {
-                    // Obtener los datos de la respuesta
+
                     $responseData = $response->json();
-                    $datos =  $responseData["message"][0];
-                    return view('paymentCupon', compact('datos'));
+
+                    // Verificar si el mensaje está vacío
+                    if (!empty($responseData['message'])) {
+                        // Si hay datos en el mensaje, continuar con el procesamiento
+                        $datos = $responseData["message"][0];
+                        return view('paymentCupon', compact('datos'));
+                    } else {
+                        $datos = null;
+                        return view('paymentCupon', compact('datos'));
+                    }
                 } else {
                     // En caso de error en la solicitud, devolver un mensaje de error
                     return response()->json(['error' => 'Error al consumir la API'], $response->status());

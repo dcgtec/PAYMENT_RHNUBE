@@ -65,27 +65,28 @@ $(document).ready(function () {
                         $("input#cupon").attr("codCupon", codCupon);
                         $('button[name="idPla"]').each(function () {
                             var valorBoton = $(this).text().trim();
-
+                            var columna = $(this).closest('.col-md-6');
                             // Ocultar los botones que no corresponden al periodo del cupón
                             if (
                                 detallesCupon.some(function (detalle) {
                                     return detalle.periodo === valorBoton;
                                 })
                             ) {
-                                $(this).show();
+                                columna.show();
                                 if (!botonSeleccionado) {
                                     $(this).click(); // Simula un clic en el botón para seleccionarlo
                                     botonSeleccionado = true; // Marca que se ha seleccionado un botón
                                 }
                             } else {
-                                $(this).hide();
+                                columna.hide();
                             }
                         });
 
                         changePer(descuento);
                     } else {
                         $('button[name="idPla"]').each(function () {
-                            $(this).show();
+                            var columna = $(this).closest('.col-md-6');
+                            columna.show();
                         });
                         descuento = 0;
                         changePer(descuento);
@@ -97,7 +98,8 @@ $(document).ready(function () {
                     }
                 } else {
                     $('button[name="idPla"]').each(function () {
-                        $(this).show();
+                        var columna = $(this).closest('.col-md-6');
+                        columna.show();
                     });
                     descuento = 0;
                     changePer(descuento);
@@ -111,7 +113,8 @@ $(document).ready(function () {
 
             error: function (xhr, status, error) {
                 $('button[name="idPla"]').each(function () {
-                    $(this).show();
+                    var columna = $(this).closest('.col-md-6');
+                    columna.show();
                 });
                 descuento = 0;
                 changePer(descuento);
@@ -119,7 +122,8 @@ $(document).ready(function () {
         });
     } else {
         $('button[name="idPla"]').each(function () {
-            $(this).show();
+            var columna = $(this).closest('.col-md-6');
+            columna.show();
         });
         descuento = 0;
         changePer(descuento);
@@ -165,20 +169,20 @@ $(document).ready(function () {
 
                             $('button[name="idPla"]').each(function () {
                                 var valorBoton = $(this).text().trim();
-
+                                var columna = $(this).closest('.col-md-6');
                                 // Ocultar los botones que no corresponden al periodo del cupón
                                 if (
                                     detallesCupon.some(function (detalle) {
                                         return detalle.periodo === valorBoton;
                                     })
                                 ) {
-                                    $(this).show();
+                                    columna.show();
                                     if (!botonSeleccionado) {
                                         $(this).click(); // Simula un clic en el botón para seleccionarlo
                                         botonSeleccionado = true; // Marca que se ha seleccionado un botón
                                     }
                                 } else {
-                                    $(this).hide();
+                                    columna.hide();
                                 }
                             });
 
@@ -190,7 +194,8 @@ $(document).ready(function () {
                                 icon: "error",
                             });
                             $('button[name="idPla"]').each(function () {
-                                $(this).show();
+                                var columna = $(this).closest('.col-md-6');
+                                columna.show();
                             });
                             descuento = 0;
                             changePer(descuento);
@@ -215,7 +220,8 @@ $(document).ready(function () {
 
                 error: function (xhr, status, error) {
                     $('button[name="idPla"]').each(function () {
-                        $(this).show();
+                        var columna = $(this).closest('.col-md-6');
+                        columna.show();
                     });
                     descuento = 0;
                     changePer(descuento);
@@ -223,7 +229,8 @@ $(document).ready(function () {
             });
         } else {
             $('button[name="idPla"]').each(function () {
-                $(this).show();
+                var columna = $(this).closest('.col-md-6');
+                columna.show();
             });
             descuento = 0;
             changePer(descuento);
@@ -279,7 +286,7 @@ $(document).ready(function () {
 
         $.ajax({
             url: "/update_prices",
-            method: "POST",
+            method: "get",
             headers: {
                 "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr("content"),
             },

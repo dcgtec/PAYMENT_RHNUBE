@@ -32,15 +32,17 @@ Route::get('/', [CategoryPlanController::class, 'index']);
 Route::get('payment/{slug?}', [CategoryPlanController::class, 'show'])->name('category_plans.show')->where('slug', '(.*)');
 
 // routes/web.php
-Route::post('update_prices', [PlanController::class, 'updatePrices'])->name('update_prices');
+Route::get('update_prices', [PlanController::class, 'updatePrices'])->name('update_prices');
 
 // Ruta para el proceso de pago (checkout)
 // Rutas en web.php (o donde defines tus rutas)
 Route::post('/checkout', [PaymentController::class, 'checkout'])->name('checkout');
 Route::get('/obtenerCupon', [PaymentController::class, 'obtenerCupon']);
+Route::get('/obtenerPlan', [PaymentController::class, 'obtenerPlan']);
 Route::get('/success', [PaymentController::class, 'success'])->name('success');
 Route::get('/error', [PaymentController::class, 'error'])->name('error');
 Route::post('/reenviar-correo', [PaymentController::class, 'reenviarCorreo']);
 Route::get('/failure', [PaymentController::class, 'failure'])->name('failure');
 Route::get('/pending', [PaymentController::class, 'pending'])->name('pending');
+
 Route::post('/', [PaymentController::class, 'index'])->name('index');
