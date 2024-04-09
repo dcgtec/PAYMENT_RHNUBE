@@ -240,8 +240,8 @@
                                     <tr>
                                         <td><b class="plan"></b></td>
                                         <td class="quanty">1</td>
-                                        <td class="priceUn">$ </td>
-                                        <td class="subtotal">$
+                                        <td class="priceUn">$ 0.00 </td>
+                                        <td class="subtotal">$ 0.00
 
                                         </td>
                                     </tr>
