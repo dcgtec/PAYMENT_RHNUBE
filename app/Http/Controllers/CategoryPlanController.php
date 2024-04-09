@@ -43,7 +43,7 @@ class CategoryPlanController extends Controller
                 ];
 
 
-                $response = Http::post('https://beta.rhnube.com.pe/api/updateUseCupon', $params);
+                $response = Http::post('https://rhnube.com.pe/api/updateUseCupon', $params);
 
 
 

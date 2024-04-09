@@ -75,7 +75,7 @@ class PaymentController extends Controller
 
             $cupon = $request->input('cupon');
 
-            $response = Http::post('https://beta.rhnube.com.pe/api/obtenerdatosCupon', [
+            $response = Http::post('https://rhnube.com.pe/api/obtenerdatosCupon', [
                 'codigo' => $cupon,
             ]);
 
@@ -98,7 +98,7 @@ class PaymentController extends Controller
             // Configuración de impuestos según el país
             $taxes = [];
             if ($country == "PE") {
-                $taxes = ['txr_1OMyoaCbKz5YJFE3ajJh9S4U'];
+                $taxes = ['txr_1ORzFnCbKz5YJFE3k4IpT5vR'];
             }
 
             $sessionData = [
@@ -381,7 +381,7 @@ class PaymentController extends Controller
             'paquete' => $paquete,
         ];
 
-        $response = Http::post('https://beta.rhnube.com.pe/api/updateUseCupon', $params);
+        $response = Http::post('https://rhnube.com.pe/api/updateUseCupon', $params);
 
         if ($response->successful()) {
             // Obtener los datos de la respuesta
