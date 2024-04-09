@@ -98,7 +98,7 @@ class PaymentController extends Controller
             // Configuración de impuestos según el país
             $taxes = [];
             if ($country == "PE") {
-                $taxes = ['txr_1OMyoaCbKz5YJFE3ajJh9S4U'];
+                $taxes = ['txr_1ORzFnCbKz5YJFE3k4IpT5vR'];
             }
 
             $sessionData = [
