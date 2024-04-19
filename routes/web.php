@@ -4,6 +4,7 @@ use App\Http\Controllers\Automatizacion\AutomatizacionController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\PlanController;
 use App\Http\Controllers\CategoryPlanController;
+use App\Http\Controllers\InfluencerController;
 use App\Http\Controllers\PaymentController;
 use Illuminate\Support\Facades\Auth;
 
@@ -46,3 +47,5 @@ Route::get('/failure', [PaymentController::class, 'failure'])->name('failure');
 Route::get('/pending', [PaymentController::class, 'pending'])->name('pending');
 
 Route::post('/', [PaymentController::class, 'index'])->name('index');
+
+Route::get('/iniciarSesion', [InfluencerController::class, 'index']);
