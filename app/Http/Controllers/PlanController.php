@@ -19,6 +19,9 @@ class PlanController extends Controller
         $planId = $request->input('plan_id');
         $quantity = $request->input('quantity');
         $country = $request->input('country');
+        $descuento = $request->input('descuento');
+
+        $cadDescu =  number_format($descuento, 2, '.', '') . '%';
 
         // Obtener la información del nuevo plan
         $newPlan = Plan::findOrFail($planId);
@@ -28,18 +31,25 @@ class PlanController extends Controller
         $subtotal = number_format($price * $quantity * $numPlan, 2, '.', '');
         // $newtax = number_format($subtotal * $newPlan->tax / 100, 2, '.', '');
 
+        $subDescu = number_format($subtotal * (1 - ($descuento / 100)), 2, '.', '');
+
+
         if ($country == 'PE') {
-            $newtax = number_format($subtotal * 0.18, 2, '.', '');
+            $newtax = number_format(0.18, 2, '.', '');
         } else {
             $newtax = number_format(0.00, 2, '.', '');
         }
 
-        $total = number_format($subtotal  + $newtax, 2, '.', '');
+        $impuesto = number_format($subDescu * $newtax, 2, '.', '');
+
+        $total = number_format($subDescu  + $impuesto, 2, '.', '');
         // Devolver la información actualizada
         return response()->json([
+            'descuento' => $cadDescu,
             'price' => $price,
             'subtotal' => $subtotal,
-            'tax' => $newtax,
+            'subDes' => $subDescu,
+            'impuesto' => $impuesto,
             'total' => $total
         ]);
     }

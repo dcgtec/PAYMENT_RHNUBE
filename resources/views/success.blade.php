@@ -27,8 +27,7 @@ $codigoGenerado = str_pad($valorNumerico, 10, '0', STR_PAD_LEFT);
                         </p> --}}
 
                     </div>
-                    <a data-toggle="modal" data-target="#exampleModal" id="abrirModal"
-                        class="btn btn-secondary m-2">Copiar al correo <i class="ml-2 fa fa-envelope"></i> </a>
+                    <a data-toggle="modal" data-target="#exampleModal" id="abrirModal" class="btn btn-secondary m-2">Copiar al correo <i class="ml-2 fa fa-envelope"></i> </a>
                     <a href="https://www.rhnube.com.pe/start" id="enviarRe" class="btn btn-primary m-2">Continuar</a>
                 </div>
             </div>
@@ -37,8 +36,7 @@ $codigoGenerado = str_pad($valorNumerico, 10, '0', STR_PAD_LEFT);
 </div>
 
 <!-- Modal -->
-<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
-    aria-hidden="true">
+<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog" role="document">
         <form>
             <div class="modal-content">
@@ -52,8 +50,7 @@ $codigoGenerado = str_pad($valorNumerico, 10, '0', STR_PAD_LEFT);
 
                     <div class="form-group">
                         <label for="exampleInputEmail1">Correo electrónico</label>
-                        <input type="email" class="form-control" id="email" required
-                            placeholder="Escriba un correo electrónico válido">
+                        <input type="email" class="form-control" id="email" required placeholder="Escriba un correo electrónico válido">
 
                     </div>
 

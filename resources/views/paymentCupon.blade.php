@@ -112,8 +112,7 @@
                                     <div class="col-sm-4 mx-0 px-0">
                                         <div class="rowAdd m-auto d-flex rounded-pill justify-content-center">
                                             <div class="dismin">-</div>
-                                            <input type="number" name="quanty" min="1" required
-                                                value="1" id="valor">
+                                            <input type="number" name="quanty" min="1" required value="1" id="valor">
                                             <div class="addmin">+</div>
                                         </div>
                                     </div>
@@ -130,17 +129,17 @@
                                         <select class="form-control text-center w-100" required id="idPaquete"
                                             name="idPaquete">
                                             @if (is_array($datos) && !empty($datos['paquetes']))
-                                                @php $primerElemento = true; @endphp
-                                                @foreach ($datos['paquetes'] as $key => $paquete)
-                                                    <option value="{{ $paquete['id_paquete'] }}"
-                                                        @if ($primerElemento) selected @php $primerElemento = false; @endphp @endif>
-                                                        {{ $paquete['paquete'] }}
-                                                    </option>
-                                                @endforeach
+                                            @php $primerElemento = true; @endphp
+                                            @foreach ($datos['paquetes'] as $key => $paquete)
+                                            <option value="{{ $paquete['id_paquete'] }}" @if ($primerElemento) selected
+                                                @php $primerElemento=false; @endphp @endif>
+                                                {{ $paquete['paquete'] }}
+                                            </option>
+                                            @endforeach
                                             @else
-                                                <option value="1" selected>Plus</option>
-                                                <option value="2">Remote</option>
-                                                <option value="3">Route</option>
+                                            <option value="1" selected>Plus</option>
+                                            <option value="2">Remote</option>
+                                            <option value="3">Route</option>
                                             @endif
                                         </select>
 
@@ -159,30 +158,30 @@
                                     <div class="col-sm-8 mx-0 px-0">
                                         <div class="row lisPer">
                                             @if (is_array($datos))
-                                                @foreach ($datos['periodos'] as $key => $periodo)
-                                                    <div class="col-md-6 my-2">
-                                                        <button type="button"
-                                                            value="{{ $periodo['id_tipo_periodo'] }}" name="idPla"
-                                                            class="w-100 btn btn-primary {{ $key === 0 ? 'seleccionado' : '' }}">{{ $periodo['periodo'] }}</button>
-                                                    </div>
-                                                @endforeach
+                                            @foreach ($datos['periodos'] as $key => $periodo)
+                                            <div class="col-md-6 my-2">
+                                                <button type="button" value="{{ $periodo['id_tipo_periodo'] }}"
+                                                    name="idPla"
+                                                    class="w-100 btn btn-primary {{ $key === 0 ? 'seleccionado' : '' }}">{{ $periodo['periodo'] }}</button>
+                                            </div>
+                                            @endforeach
                                             @else
-                                                <div class="col-md-6 my-2 ">
-                                                    <button type="button" value="1" name="idPla"
-                                                        class="w-100 btn btn-primary seleccionado">Mensual</button>
-                                                </div>
-                                                <div class="col-md-6 my-2 ">
-                                                    <button type="button" value="2" name="idPla"
-                                                        class="w-100 btn btn-primary">Trimestral</button>
-                                                </div>
-                                                <div class="col-md-6 my-2 ">
-                                                    <button type="button" value="3" name="idPla"
-                                                        class="w-100 btn btn-primary">Semestral</button>
-                                                </div>
-                                                <div class="col-md-6 my-2 ">
-                                                    <button type="button" value="4" name="idPla"
-                                                        class="w-100 btn btn-primary">Anual</button>
-                                                </div>
+                                            <div class="col-md-6 my-2 ">
+                                                <button type="button" value="1" name="idPla"
+                                                    class="w-100 btn btn-primary seleccionado">Mensual</button>
+                                            </div>
+                                            <div class="col-md-6 my-2 ">
+                                                <button type="button" value="2" name="idPla"
+                                                    class="w-100 btn btn-primary">Trimestral</button>
+                                            </div>
+                                            <div class="col-md-6 my-2 ">
+                                                <button type="button" value="3" name="idPla"
+                                                    class="w-100 btn btn-primary">Semestral</button>
+                                            </div>
+                                            <div class="col-md-6 my-2 ">
+                                                <button type="button" value="4" name="idPla"
+                                                    class="w-100 btn btn-primary">Anual</button>
+                                            </div>
                                         </div>
                                         @endif
                                     </div>
@@ -198,14 +197,13 @@
                                 <div class="col-sm-4 mx-0 px-0">
                                     <div class="rowAdd m-auto d-flex rounded-pill justify-content-center">
                                         @if (is_array($datos))
-                                            <input type="text" value="{{ request('cupon') }}"
-                                                descuento="{{ $datos['descuento'] }}"
-                                                codcupon="{{ $datos['codigo_cupon'] }}" name="cupon" min="1"
-                                                placeholder="------" id="cupon">
+                                        <input type="text" value="{{ request('cupon') }}"
+                                            descuento="{{ $datos['descuento'] }}"
+                                            codcupon="{{ $datos['codigo_cupon'] }}" name="cupon" min="1"
+                                            placeholder="------" id="cupon">
                                         @else
-                                            <input type="text" value="{{ request('cupon') }}" descuento="0.00"
-                                                codcupon="" name="cupon" min="1" placeholder="------"
-                                                id="cupon">
+                                        <input type="text" value="{{ request('cupon') }}" descuento="0.00" codcupon=""
+                                            name="cupon" min="1" placeholder="------" id="cupon">
                                         @endif
 
 
@@ -252,6 +250,24 @@
                                             <td style="text-align: right;">Subtotal</td>
                                             <td class="subtotal">$ </td>
                                         </tr> --}}
+
+                                    <tr>
+                                        <td></td>
+
+                                        <td></td>
+                                        <td style="text-align: right;">Descuento</td>
+                                        <td class="descPor">0.00%</td>
+                                    </tr>
+
+                                    <tr>
+                                        <td></td>
+
+                                        <td></td>
+                                        <td style="text-align: right;">Subtotal</td>
+                                        <td class="subDesc">$ 0.00</td>
+                                    </tr>
+
+
                                     <tr>
                                         <td></td>
 
@@ -259,16 +275,6 @@
                                         <td style="text-align: right;">Impuesto</td>
                                         <td class="tax">$ 0.00</td>
                                     </tr>
-
-
-                                    <tr>
-                                        <td></td>
-
-                                        <td></td>
-                                        <td style="text-align: right;">Descuento</td>
-                                        <td class="desc">$ 0.00</td>
-                                    </tr>
-
 
                                     <tr>
                                         <td class="py-4"></td>
@@ -376,69 +382,69 @@
 </section>
 
 <style>
-    .loader {
-        height: 100px;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        position: relative;
+.loader {
+    height: 100px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+}
+
+.circle {
+    position: absolute;
+    width: 0px;
+    height: 0px;
+    border-radius: 100%;
+    background: rgba(31, 113, 240, 1);
+    animation: radar 3s ease-out infinite;
+    box-shadow: 0px 0px 10px rgba(31, 113, 240, .5);
+    /*   box-shadow:0px 0px 10px rgba(0,0,0,.5); */
+    /*   border:1px solid rgba(255,255,255,.2); */
+}
+
+.circle:nth-of-type(1) {
+    animation-delay: 0.2s;
+}
+
+.circle:nth-of-type(2) {
+    animation-delay: 0.6s;
+}
+
+.circle:nth-of-type(3) {
+    animation-delay: 1s;
+}
+
+.circle:nth-of-type(4) {
+    animation-delay: 1.4s;
+}
+
+.circle:nth-of-type(5) {
+    animation-delay: 1.8s;
+}
+
+@keyframes radar {
+    0% {}
+
+    30% {
+        width: 50px;
+        height: 50px;
     }
 
-    .circle {
-        position: absolute;
-        width: 0px;
-        height: 0px;
-        border-radius: 100%;
-        background: rgba(31, 113, 240, 1);
-        animation: radar 3s ease-out infinite;
-        box-shadow: 0px 0px 10px rgba(31, 113, 240, .5);
-        /*   box-shadow:0px 0px 10px rgba(0,0,0,.5); */
-        /*   border:1px solid rgba(255,255,255,.2); */
+    100% {
+        width: 50px;
+        height: 50px;
+        opacity: 0;
     }
-
-    .circle:nth-of-type(1) {
-        animation-delay: 0.2s;
-    }
-
-    .circle:nth-of-type(2) {
-        animation-delay: 0.6s;
-    }
-
-    .circle:nth-of-type(3) {
-        animation-delay: 1s;
-    }
-
-    .circle:nth-of-type(4) {
-        animation-delay: 1.4s;
-    }
-
-    .circle:nth-of-type(5) {
-        animation-delay: 1.8s;
-    }
-
-    @keyframes radar {
-        0% {}
-
-        30% {
-            width: 50px;
-            height: 50px;
-        }
-
-        100% {
-            width: 50px;
-            height: 50px;
-            opacity: 0;
-        }
-    }
+}
 </style>
 @if (!is_array($datos))
-    <script>
-        Swal.fire({
-            title: "¡Cupón no válido!",
-            text: '',
-            icon: "error",
-        });
-    </script>
+<script>
+Swal.fire({
+    title: "¡Cupón no válido!",
+    text: '',
+    icon: "error",
+});
+</script>
 @endif
 <script src="{{ asset('js/paymentCupon.js') }}"></script>
 

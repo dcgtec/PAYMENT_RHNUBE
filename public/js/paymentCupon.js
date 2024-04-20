@@ -237,6 +237,7 @@ function changePer(descuento) {
                 quantity: quantity,
                 plan_id: valorPer,
                 country: country,
+                descuento: descuento,
             },
             success: function (response) {
                 updatePrices(response, descuento);
@@ -250,15 +251,11 @@ function changePer(descuento) {
 }
 
 function updatePrices(response, descuento) {
-    var calcudes = (descuento * parseFloat(response.subtotal)) / 100;
-    var totaldes = parseFloat(response.total) - calcudes;
-    // Redondear los valores a dos decimales
-    calcudes = calcudes.toFixed(2);
-    totaldes = totaldes.toFixed(2);
-    $("td.tax").text("$ " + parseFloat(response.tax).toFixed(2));
-    $("td.subtotal").text("$ " + parseFloat(response.subtotal).toFixed(2));
-    $("td.priceUn").text("$ " + parseFloat(response.price).toFixed(2));
-    $("td.quanty").text($("#valor").val());
-    $("td.desc").text("$ " + calcudes);
-    $("td.total b").text("$ " + totaldes);
+    $("td.priceUn").text("$ " + response.price);
+    $("td.subtotal").text("$ " + response.subtotal);
+
+    $("td.descPor").text(response.descuento);
+    $("td.subDesc").text("$ " + response.subDes);
+    $("td.tax").text("$ " + response.impuesto);
+    $("td.total b").text("$ " + response.total);
 }

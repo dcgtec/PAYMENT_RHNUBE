@@ -61,6 +61,8 @@ class PaymentController extends Controller
             $country = $request->input('idCountry');
 
 
+
+
             // Validación de entrada
             if (!is_numeric($quanty) || !is_numeric($idplan) || !in_array($country, ['PE', 'otro_pais_valido'])) {
                 throw new \InvalidArgumentException('Entrada inválida. Verifica los valores proporcionados.');
@@ -75,7 +77,7 @@ class PaymentController extends Controller
 
             $cupon = $request->input('cupon');
 
-            $response = Http::post('https://rhnube.com.pe/api/obtenerdatosCupon', [
+            $response = Http::post('https://beta.rhnube.com.pe/api/obtenerdatosCupon', [
                 'codigo' => $cupon,
             ]);
 
@@ -93,12 +95,14 @@ class PaymentController extends Controller
 
 
 
+
+
             \Stripe\Stripe::setApiKey(config('services.stripe.secret'));
 
             // Configuración de impuestos según el país
             $taxes = [];
             if ($country == "PE") {
-                $taxes = ['txr_1ORzFnCbKz5YJFE3k4IpT5vR'];
+                $taxes = ['txr_1OMyoaCbKz5YJFE3ajJh9S4U'];
             }
 
             $sessionData = [
@@ -113,12 +117,17 @@ class PaymentController extends Controller
                 'cancel_url' => route('index'),
             ];
 
+
+
+
             // Include discounts parameter only if $codCupn is not empty
             if (!empty($codCupn)) {
                 $sessionData['discounts'] = [[
                     'coupon' => $codCupn,
                 ]];
             }
+
+
 
             $session = \Stripe\Checkout\Session::create($sessionData);
             // Guardar la ID de la sesión de Stripe en la sesión de Laravel
@@ -351,9 +360,6 @@ class PaymentController extends Controller
             'paquete' => 'required',
         ]);
 
-
-
-
         if ($validator->fails()) {
             return response()->json(['error' => $validator->errors()->first()], 400);
         }
@@ -362,26 +368,26 @@ class PaymentController extends Controller
         $paquete = $request->input('paquete');
 
 
+        // if ($paquete == 'rhnube-plus') {
+        //     $paquete = 1;
+        // }
 
+        // if ($paquete == 'rhnube-remote') {
+        //     $paquete = 2;
+        // }
 
-        if ($paquete == 'rhnube-plus') {
-            $paquete = 1;
-        }
-
-        if ($paquete == 'rhnube-remote') {
-            $paquete = 2;
-        }
-
-        if ($paquete == 'rhnube-route') {
-            $paquete = 3;
-        }
+        // if ($paquete == 'rhnube-route') {
+        //     $paquete = 3;
+        // }
 
         $params = [
             'codigo' => $codigo,
             'paquete' => $paquete,
         ];
 
-        $response = Http::post('https://rhnube.com.pe/api/updateUseCupon', $params);
+        $response = Http::post('https://beta.rhnube.com.pe/api/updateUseCupon', $params);
+
+
 
         if ($response->successful()) {
             // Obtener los datos de la respuesta

@@ -34,7 +34,7 @@ class CategoryPlanController extends Controller
             }
 
 
-            if (!$slug) {
+            // if (!$slug) {
 
                 $cupon = $request->input('cupon');
                 $params = [
@@ -43,9 +43,7 @@ class CategoryPlanController extends Controller
                 ];
 
 
-                $response = Http::post('https://rhnube.com.pe/api/updateUseCupon', $params);
-
-
+                $response = Http::post('https://beta.rhnube.com.pe/api/updateUseCupon', $params);
 
                 if ($response->successful()) {
 
@@ -64,32 +62,32 @@ class CategoryPlanController extends Controller
                     // En caso de error en la solicitud, devolver un mensaje de error
                     return response()->json(['error' => 'Error al consumir la API'], $response->status());
                 }
-            } else {
-                // Realizar acciones cuando hay un slug proporcionado
-                $categoryPlan = CategoryPlan::where('slug', $slug)->firstOrFail();
+            // } else {
+            //     // Realizar acciones cuando hay un slug proporcionado
+            //     $categoryPlan = CategoryPlan::where('slug', $slug)->firstOrFail();
 
-                // Verificar si el recurso no se encuentra
-                if (!$categoryPlan) {
-                    abort(404);
-                }
+            //     // Verificar si el recurso no se encuentra
+            //     if (!$categoryPlan) {
+            //         abort(404);
+            //     }
 
-                $periodoPago = Plan::where('id_plan', $categoryPlan->id)->get();
+            //     $periodoPago = Plan::where('id_plan', $categoryPlan->id)->get();
 
-                // Si se proporciona un período, filtra los planes según el período
-                if ($request->has('periodo')) {
-                    $plans = Plan::where('id_plan', $categoryPlan->id)->where('n_periodo', $periodo)->get();
-                } else {
-                    // Si no se proporciona un período, obtén todos los planes asociados con el plan de categoría
-                    $plans = Plan::where('id_plan', $categoryPlan->id)->get();
-                }
+            //     // Si se proporciona un período, filtra los planes según el período
+            //     if ($request->has('periodo')) {
+            //         $plans = Plan::where('id_plan', $categoryPlan->id)->where('n_periodo', $periodo)->get();
+            //     } else {
+            //         // Si no se proporciona un período, obtén todos los planes asociados con el plan de categoría
+            //         $plans = Plan::where('id_plan', $categoryPlan->id)->get();
+            //     }
 
-                // Verificar si no hay planes encontrados
-                if ($plans->isEmpty()) {
-                    abort(404);
-                }
+            //     // Verificar si no hay planes encontrados
+            //     if ($plans->isEmpty()) {
+            //         abort(404);
+            //     }
 
-                return view('payment', compact('categoryPlan', 'plans', 'periodo', 'periodoPago'));
-            }
+            //     return view('payment', compact('categoryPlan', 'plans', 'periodo', 'periodoPago'));
+            // }
         } catch (\Illuminate\Validation\ValidationException $e) {
             // Manejar la excepción de validación
             abort(404);

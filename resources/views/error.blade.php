@@ -1,5 +1,5 @@
 @include('layouts.header')
-
+{{$message}}
 <div class="container my-5">
     <div class="row">
         <div class="col-md-8 offset-md-2">

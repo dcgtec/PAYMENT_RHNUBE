@@ -77,8 +77,7 @@
                 <div class="card">
                     <div class="card-body text-center">
                         <h2 class="success-message">Pago exitoso</h2>
-                        <img src="https://uxwing.com/wp-content/themes/uxwing/download/checkmark-cross/success-green-check-mark-icon.png"
-                            alt="Paso 4" />
+                        <img src="https://uxwing.com/wp-content/themes/uxwing/download/checkmark-cross/success-green-check-mark-icon.png" alt="Paso 4" />
                         <i class="fas fa-check-circle icon-check mb-4"></i>
                         <p class="p-0 m-0 text-center">Hola {{ $customerName }}, tu compra se ha realizado con éxito.
                         </p>
