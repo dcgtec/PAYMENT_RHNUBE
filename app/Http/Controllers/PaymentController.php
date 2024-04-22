@@ -252,7 +252,11 @@ class PaymentController extends Controller
         $monto = $stripeSession->amount_total / 100;
 
         $jsonCompra = [
-            'codCupn' => $codCupn, 'namePlan' => $name, 'cantEmpleados' => $cantEmpleados, 'categorySlug' => $categorySlug, 'customerName' => $customerName,
+            'codCupn' => $codCupn,
+            'namePlan' => $name,
+            'cantEmpleados' => $cantEmpleados,
+            'categorySlug' => $categorySlug,
+            'customerName' => $customerName,
         ];
 
         $jsonDetalleCompra = json_encode($jsonCompra);

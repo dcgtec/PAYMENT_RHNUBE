@@ -12,4 +12,22 @@ class InfluencerController extends Controller
 
         return view('influencers.index');
     }
+
+    public function perfil()
+    {
+
+        return view('influencers.perfil');
+    }
+
+    public function referidos()
+    {
+
+        return view('influencers.referidos');
+    }
+
+    public function retiros()
+    {
+
+        return view('influencers.retiros');
+    }
 }

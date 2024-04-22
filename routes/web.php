@@ -48,4 +48,9 @@ Route::get('/pending', [PaymentController::class, 'pending'])->name('pending');
 
 Route::post('/', [PaymentController::class, 'index'])->name('index');
 
+
+//Influencer
 Route::get('/iniciarSesion', [InfluencerController::class, 'index']);
+Route::get('/perfil', [InfluencerController::class, 'perfil']);
+Route::get('/referidos', [InfluencerController::class, 'referidos']);
+Route::get('/retiros', [InfluencerController::class, 'retiros']);
