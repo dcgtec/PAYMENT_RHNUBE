@@ -6,15 +6,15 @@
     --header-height: 100px;
 
     /*===== Colores =====*/
-    --first-color: #3664F4;
-    --dark-color: #070D1F;
-    --dark-color-alt: #282B3A;
-    --white-color: #E6E7E9;
+    --first-color: #3664f4;
+    --dark-color: #070d1f;
+    --dark-color-alt: #282b3a;
+    --white-color: #e6e7e9;
 
     /*===== Fuente y tipografia =====*/
-    --body-font: 'Poppins', sans-serif;
-    --normal-font-size: .938rem;
-    --small-font-size: .813rem;
+    --body-font: "Poppins", sans-serif;
+    --normal-font-size: 0.938rem;
+    --small-font-size: 0.813rem;
 
     /*===== z index =====*/
     --z-fixed: 100;
@@ -23,7 +23,7 @@
 @media screen and (min-width: 768px) {
     :root {
         --normal-font-size: 1rem;
-        --small-font-size: .875rem;
+        --small-font-size: 0.875rem;
     }
 }
 
@@ -37,7 +37,7 @@
 
 body,
 html {
-    font-family: 'Poppins';
+    font-family: "Poppins";
     font-family: var(--body-font);
     font-size: var(--normal-font-size);
     font-weight: 500;
@@ -84,9 +84,14 @@ img {
     -ms-flex-align: center;
     align-items: center;
 
-    -webkit-box-shadow: -4px 4px 13px 0px rgba(0, 0, 0, 0.75);
-    -moz-box-shadow: -4px 4px 13px 0px rgba(0, 0, 0, 0.75);
-    box-shadow: -4px 4px 13px 0px rgba(0, 0, 0, 0.75);
+    -webkit-box-shadow: 0px 5px 5px 0px rgba(0, 0, 0, 0.1);
+    -moz-box-shadow: 0px 5px 5px 0px rgba(0, 0, 0, 0.1);
+    box-shadow: 0px 5px 5px 0px rgba(0, 0, 0, 0.1);
+}
+
+.perfilPort img:hover,
+.perfilPhoto img:hover {
+    cursor: pointer;
 }
 
 .header__logo {
@@ -111,8 +116,8 @@ img {
         height: 100vh;
         padding: 1.5rem 0;
         z-index: var(--z-fixed);
-        -webkit-transition: .5s;
-        transition: .5s;
+        -webkit-transition: 0.5s;
+        transition: 0.5s;
     }
 }
 
@@ -128,7 +133,7 @@ img {
     position: absolute;
     right: 1.5rem;
     font-size: 1.3rem;
-    padding: .25rem;
+    padding: 0.25rem;
     background-color: var(--dark-color-alt);
     border-radius: 50%;
     cursor: pointer;
@@ -141,8 +146,8 @@ img {
     -webkit-box-pack: center;
     -ms-flex-pack: center;
     justify-content: center;
-    padding-top: .25rem;
-    margin-bottom: .8rem;
+    padding-top: 0.25rem;
+    margin-bottom: 0.8rem;
     width: 56px;
     height: 56px;
     background-color: var(--first-color);
@@ -178,7 +183,7 @@ img {
 }
 
 .nav__social {
-    padding-top: .5rem;
+    padding-top: 0.5rem;
 }
 
 .nav__social-icon {
@@ -221,7 +226,7 @@ img {
     }
 
     .nav__content {
-        -ms-grid-columns: (max-content)[3];
+        -ms-grid-columns: (max-content) [3];
         grid-template-columns: repeat(3, -webkit-max-content);
         grid-template-columns: repeat(3, max-content);
         -ms-grid-rows: 1fr;
@@ -250,7 +255,7 @@ img {
     .nav__img {
         width: 32px;
         height: 32px;
-        margin-right: .5rem;
+        margin-right: 0.5rem;
         margin-bottom: 0;
         -webkit-box-align: center;
         -ms-flex-align: center;
@@ -268,12 +273,12 @@ img {
     }
 
     .nav__item {
-        margin: 0 .25rem;
+        margin: 0 0.25rem;
     }
 
     .nav__link {
-        padding: .5rem .8rem;
-        border-radius: .25rem;
+        padding: 0.5rem 0.8rem;
+        border-radius: 0.25rem;
     }
 
     .nav__link:hover {
@@ -295,13 +300,12 @@ img {
 
 body,
 html {
-    background: #F8FAFC;
+    background: #f8fafc;
 }
-
 
 .perfilPort {
     height: 300px;
-    background: #8D4380;
+    background: #8d4380;
     border-radius: 10px;
 }
 
@@ -309,6 +313,19 @@ html {
     position: absolute;
     bottom: 25px;
     right: 25px;
+}
+
+.perfilMenus button.active i,
+.perfilMenus a:hover button i {
+    color: #fff;
+    font-size: 18px;
+}
+
+.perfilMenus button i {
+    color: #464b50;
+    font-size: 18px;
+    width: 20px;
+    text-align: center;
 }
 
 .perfilPhoto img {
@@ -325,7 +342,7 @@ html {
     width: 200px;
     height: 200px;
     margin: 0 auto;
-    background-image: url('../../influencers/images/imgDefault.png');
+    background-image: url("../../influencers/images/imgDefault.png");
     border-radius: 10px;
     margin-top: -100px;
 }
@@ -334,42 +351,40 @@ html {
     padding-top: 17px;
     padding-bottom: 17px;
     border-radius: 10px;
-    background: #F0F2F5;
+    background: #f0f2f5;
     border: none;
 }
 
 .perfilName h3 {
     font-weight: bold;
-    color: #464B50;
+    color: #464b50;
     font-size: 25px;
     padding-top: 20px;
     padding-bottom: 10px;
 }
 
 .perfilRedesSociales ul li {
-    color: #464B50;
+    color: #464b50;
     font-size: 12px;
     font-weight: 500;
 }
 
 .perfilMenus button span {
     font-size: 16px;
-    color: #464B50;
+    color: #464b50;
     font-weight: 600;
 }
 
 .perfilMenus button.active,
 .perfilMenus a:hover button {
-    background: #1F71F0;
+    background: #1f71f0;
     cursor: pointer;
 }
-
 
 .perfilMenus button.active span,
 .perfilMenus a:hover span {
     color: #fff;
 }
-
 
 a:hover {
     text-decoration: none;
