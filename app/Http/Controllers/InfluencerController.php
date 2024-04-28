@@ -38,12 +38,72 @@ class InfluencerController extends Controller
     public function referidos()
     {
 
-        return view('influencers.referidos');
+        $response = $this->obtenerCompras();
+        $responseData = $response->getContent();
+        return view('influencers.referidos', compact('responseData'));
+    }
+
+    public function micupon()
+    {
+
+        return view('influencers.micupon');
     }
 
     public function retiros()
     {
         return view('influencers.retiros');
+    }
+
+
+    public function obtenerCompras()
+    {
+        $logeado = session()->get('logeado');
+        if (!$logeado) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Usuario no autenticado',
+            ], 401); // Código 401 para no autorizado
+        }
+
+        try {
+
+            $cupon = 'PRACTICAR';
+            $obtenerComprasPorCupon = Http::post('https://beta.rhnube.com.pe/api/obtenerComprasPorCupon', [
+                'cupon' => $cupon
+            ]);
+
+
+            if ($obtenerComprasPorCupon->successful()) {
+                // Si la solicitud es exitosa, obtener el cuerpo de la respuesta
+                $data = $obtenerComprasPorCupon->json(); // Asumimos que la respuesta es JSON
+
+                return response()->json([
+                    'success' => true,
+                    'compras' => $data,
+                ], 200); // Código 200 para éxito
+            } else {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Error en la solicitud externa',
+                ], 502); // Código 502 para error de gateway
+            }
+        } catch (RequestException $e) {
+            // Manejar errores de solicitud
+            Log::error('Error al conectar con la API externa: ' . $e->getMessage());
+            return response()->json([
+                'success' => false,
+                'message' => 'Error al conectar con la API externa.',
+                'details' => $e->getMessage(),
+            ], 500); // Código 500 para error interno
+        } catch (\Exception $e) {
+            // Manejar otros errores inesperados
+            Log::error('Error inesperado en obtenerPropietario: ' . $e->getMessage());
+            return response()->json([
+                'success' => false,
+                'message' => 'Error inesperado.',
+                'details' => $e->getMessage(),
+            ], 500); // Código 500 para error interno
+        }
     }
 
 

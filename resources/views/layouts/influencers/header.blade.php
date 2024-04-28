@@ -12,6 +12,11 @@ $menus = [
         'icon' => 'fas fa-users', // Icono para la sección "Acerca de"
     ],
     [
+        'name' => 'Mi cupón',
+        'link' => 'micupon', // El enlace a la página de "Acerca de"
+        'icon' => 'fas fa-gift', // Icono para la sección "Acerca de"
+    ],
+    [
         'name' => 'Mis retiros',
         'link' => 'retiros', // El enlace a la página de habilidades
         'icon' => 'fas fa-wallet', // Icono para la sección de habilidades

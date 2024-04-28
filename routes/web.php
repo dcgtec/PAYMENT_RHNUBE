@@ -56,6 +56,7 @@ Route::post('/logear', [InfluencerController::class, 'login']);
 Route::middleware(['AuthSession'])->group(function () {
     Route::get('/perfil', [InfluencerController::class, 'perfil']);
     Route::get('/referidos', [InfluencerController::class, 'referidos']);
+    Route::get('/micupon', [InfluencerController::class, 'micupon']);
     Route::get('/retiros', [InfluencerController::class, 'retiros']);
     Route::post('/actualizarPerfil', [InfluencerController::class, 'actualizarPerfil']);
 });

@@ -93,10 +93,6 @@ class PaymentController extends Controller
                 $cant_usada =  $data["message"]["cant_usada"];
             }
 
-
-
-
-
             \Stripe\Stripe::setApiKey(config('services.stripe.secret'));
 
             // Configuración de impuestos según el país
@@ -117,17 +113,12 @@ class PaymentController extends Controller
                 'cancel_url' => route('index'),
             ];
 
-
-
-
             // Include discounts parameter only if $codCupn is not empty
             if (!empty($codCupn)) {
                 $sessionData['discounts'] = [[
                     'coupon' => $codCupn,
                 ]];
             }
-
-
 
             $session = \Stripe\Checkout\Session::create($sessionData);
             // Guardar la ID de la sesión de Stripe en la sesión de Laravel
@@ -247,9 +238,33 @@ class PaymentController extends Controller
         $name = $plan->name;
         $cantEmpleados = $cantEmpleados; // Supongo que ya tienes este valor definido
         $categorySlug = $category->slug;
-        $customerName = explode(' ', $stripeSession->customer_details->name)[0];
+        $customerName = $stripeSession->customer_details->name;
         $fecha = \Carbon\Carbon::parse($stripeSession->created)->format('Y-m-d H:i:s');
         $monto = $stripeSession->amount_total / 100;
+
+
+        $ganancia = 0;
+        $porGanancia = 0;
+        $params = [
+            'codigo' => $codCupn,
+            'paquete' => '0',
+        ];
+
+        $respoCupon = Http::post('https://beta.rhnube.com.pe/api/updateUseCupon', $params);
+
+        if ($respoCupon->successful()) {
+
+            $responseData = $respoCupon->json();
+
+            // Verificar si el mensaje está vacío
+            if (!empty($responseData['message'])) {
+                // Si hay datos en el mensaje, continuar con el procesamiento
+                $datos = $responseData["message"][0];
+                $porGanancia = round($datos["ganancia"], 2);
+                $ganancia = round($monto * $porGanancia / 100, 2);
+            }
+        }
+
 
         $jsonCompra = [
             'codCupn' => $codCupn,
@@ -257,6 +272,9 @@ class PaymentController extends Controller
             'cantEmpleados' => $cantEmpleados,
             'categorySlug' => $categorySlug,
             'customerName' => $customerName,
+            'total' => $monto,
+            'porGanancia' => $porGanancia,
+            'ganancia' => $ganancia
         ];
 
         $jsonDetalleCompra = json_encode($jsonCompra);
@@ -295,7 +313,7 @@ class PaymentController extends Controller
     }
 
 
-    function actualizarCodigo($cupon)
+    public function actualizarCodigo($cupon)
     {
         $valorCupon = $cupon;
         $cupon = cupon::where('name_cupon', $cupon)->first();
@@ -329,7 +347,7 @@ class PaymentController extends Controller
         }
     }
 
-    function obtenerdatosCupon($cupon)
+    public function obtenerdatosCupon($cupon)
     {
         $cupon = Cupon::where('name_cupon', $cupon)->first();
         if (!$cupon) {
@@ -356,7 +374,7 @@ class PaymentController extends Controller
         }
     }
 
-    function obtenerCupon(Request $request)
+    public function obtenerCupon(Request $request)
     {
 
         $validator = Validator::make($request->all(), [

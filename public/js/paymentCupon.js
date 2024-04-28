@@ -40,8 +40,16 @@ $(document).ready(function () {
         changePer(descuento);
     });
 
+    $valor.on("change", function () {
+        var valor = parseInt($valor.val()) || 1;
+        $valor.val(valor);
+        changePer(descuento);
+    });
+
+
     var cuponAnti = $cupon.val();
     $cupon.blur(function () {
+        console.log("asdasd");
         var cuponVal = $cupon.val();
         var obPlan = obtenerPlan();
         if (cuponVal && cuponAnti != cuponVal) {

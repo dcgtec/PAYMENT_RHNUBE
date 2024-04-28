@@ -4,10 +4,36 @@
     <h1>Mis retiros</h1>
     <div class="card mt-4">
         <div class="card-body">
-            <div class="table-responsive">
+            <div class="row">
+                <div class="col-md-12">
+                    <h4 class="tiltCard">Mi cartera</h4>
+                </div>
+            </div>
+
+            <div class="row "> <!-- Espaciado adicional para claridad -->
+                <div class="col-md-6 mt-3">
+                    <form id="formRetiro">
+                        <div class="input-group"> <!-- Grupo de entrada para alinear elementos -->
+                            <input type="text" id="cantReti" class="form-control text-center"
+                                placeholder="Cant. a retirar">
+                            <!-- Campo de entrada -->
+                            <button type="submit" class="ml-3 btn btn-primary">Programar a retirar</button>
+                            <!-- Botón Submit -->
+                        </div>
+                    </form>
+                </div>
+                <div class="col-md-6 mt-3">
+                    <div class="form-group"> <!-- Clase para agrupar inputs con sus etiquetas -->
+                        <label for="input1" class="tiltCard">Medios de retiro:</label>
+                        <!-- Etiqueta para el primer input -->
+                        <img class="mt-sm-0 mt-2" src="{{ asset('influencers/images/metodoPago.png') }}" alt="">
+                    </div>
+                </div>
             </div>
         </div>
     </div>
+
+
 
 
     <h1 class="mt-5">Mis movimientos</h1>
@@ -17,26 +43,46 @@
                 <table id="myTable" class="table table-striped table-bordered">
                     <thead>
                         <tr>
-                            <th>Nombre</th>
-                            <th>Apellido</th>
-                            <th>Email</th>
+                            <th>Nro. de operación</th>
+                            <th>Monto</th>
+                            <th>Destino</th>
+                            <th>Fecha</th>
+                            <th>Hora</th>
+                            <th>Estado</th>
                         </tr>
                     </thead>
                     <tbody>
                         <tr>
-                            <td>Juan</td>
-                            <td>Pérez</td>
-                            <td>juan.perez@example.com</td>
+                            <td>15229841</td>
+                            <td>$ 15.00</td>
+                            <td>BCP</td>
+                            <td>20/03/24</td>
+                            <td>06:24</td>
+                            <td>Pendiente</td>
                         </tr>
                         <tr>
-                            <td>Maria</td>
-                            <td>Gomez</td>
-                            <td>maria.gomez@example.com</td>
+                            <td>15229841</td>
+                            <td>$ 15.00</td>
+                            <td>BCP</td>
+                            <td>20/03/24</td>
+                            <td>06:24</td>
+                            <td>Pendiente</td>
                         </tr>
                         <tr>
-                            <td>Maria</td>
-                            <td>Gomez</td>
-                            <td>maria.gomez@example.com</td>
+                            <td>15229841</td>
+                            <td>$ 15.00</td>
+                            <td>BCP</td>
+                            <td>20/03/24</td>
+                            <td>06:24</td>
+                            <td>Pendiente</td>
+                        </tr>
+                        <tr>
+                            <td>15229841</td>
+                            <td>$ 15.00</td>
+                            <td>BCP</td>
+                            <td>20/03/24</td>
+                            <td>06:24</td>
+                            <td>Pendiente</td>
                         </tr>
                         <!-- Agrega más filas si es necesario -->
                     </tbody>
@@ -51,6 +97,39 @@
         color: #464B50;
         font-weight: bold;
         font-size: 25px;
+    }
+
+    .tiltCard {
+        margin: 0;
+        color: #AAB4C3;
+        font-size: 14px;
+    }
+
+    input#cantReti::placeholder {
+        font-size: 12px;
+        color: #AAB4C3;
+    }
+
+    button.btn.btn-primary {
+        background: #08D7D4;
+        border: none;
+        border-radius: 10px;
+        padding-top: 0;
+        padding-bottom: 0;
+        height: 40px;
+        color: #fff;
+        font-size: 16px;
+        width: 180px;
+    }
+
+    input#cantReti {
+        height: 40px;
+        border-radius: 10px;
+        font-size: 20px;
+        padding-top: 0;
+        font-weight: bold;
+        padding-bottom: 0;
+        color: #464B50;
     }
 
     .card.mt-4 {
@@ -132,6 +211,36 @@
                 }
             }
         }); // Inicializa DataTables
+
+
+        $('#cantReti').on('focus', function() {
+            var currentValue = $(this).val(); // Obtén el valor actual
+
+            // Si el valor está vacío, comienza con "$ "
+            if (currentValue.trim() === '') {
+                $(this).val('$ '); // Agrega el símbolo al comienzo
+            } else if (!currentValue.startsWith('$')) {
+                // Si el símbolo no está presente, agrégalo
+                $(this).val('$ ' + currentValue); // Añade el símbolo al principio
+            }
+
+            // Elimina el placeholder para facilitar la entrada
+            $(this).attr('placeholder', '');
+        });
+
+        $('#cantReti').on('blur', function() {
+            var currentValue = $(this).val().replace('$', '').trim(); // Elimina el símbolo y espacios
+
+            if (currentValue !== '') {
+                // Convierte a número y formatea a dos decimales
+                var numericValue = parseFloat(currentValue).toFixed(2); // Asegura dos decimales
+                $(this).val('$ ' + numericValue); // Vuelve a añadir el símbolo
+            } else {
+                $(this).attr('placeholder',
+                'Cant. a retirar'); // Restablece el placeholder si está vacío
+            }
+        });
+
     });
 </script>
 
