@@ -57,3 +57,95 @@ const getPos = function (current, active) {
 
     return diff;
 };
+
+//**VALIDAR FORM */
+
+$("#loginForm").validate({
+    rules: {
+        user: {
+            required: true,
+            email: true,
+        },
+        passwordInput: {
+            required: true,
+        },
+    },
+    messages: {
+        user: {
+            required: "Por favor, ingrese su correo electrónico.",
+            email: "Por favor, ingrese un correo electrónico válido.",
+        },
+        passwordInput: {
+            required: "Por favor, ingrese su contraseña.",
+        },
+    },
+    errorPlacement: function (error, element) {
+        error.appendTo(element.closest(".form-group"));
+    },
+    highlight: function (element) {
+        $(element).addClass("is-invalid"); // Clase para indicar error
+    },
+    unhighlight: function (element) {
+        $(element).removeClass("is-invalid"); // Remueve clase cuando es válido
+    },
+    submitHandler: function (form) {
+        var user = $("#user").val();
+        var passowrd = $("#passwordInput").val();
+
+        // Enviar datos por AJAX a tu controlador
+        $.ajax({
+            type: "post",
+            url: "/logear", // Asegúrate de que este sea el endpoint correcto
+            data: {
+                user: user,
+                password: passowrd,
+                recaptcha: grecaptcha.getResponse(),
+            },
+            headers: {
+                "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr("content"), // Para evitar ataques CSRF
+            },
+            success: function (response) {
+                console.log(response);
+                // Si la respuesta es exitosa, comprobar si hubo errores de validación
+                if (response.success) {
+                    Swal.fire({
+                        title: "¡Éxito!",
+                        text: "Login exitoso.",
+                        icon: "success",
+                    }).then(() => {
+                        window.location.href = "/perfil"; // Redirigir si el login fue exitoso
+                    });
+                } else {
+                    // Verificar si hay errores de validación
+                    if (response.errors) {
+                        var errorMessages = "";
+                        for (var key in response.errors) {
+                            errorMessages += response.errors[key].join("\n");
+                        }
+
+                        Swal.fire({
+                            title: "¡Errores de validación!",
+                            text: errorMessages,
+                            icon: "error",
+                        });
+                    } else {
+                        Swal.fire({
+                            title: "¡Error!",
+                            text: response.message || "Ocurrió un error.",
+                            icon: "error",
+                        });
+                    }
+                }
+            },
+            error: function (xhr, status, error) {
+                // Acciones si ocurre un error
+                console.error("Error: " + xhr.responseText);
+            },
+        });
+    },
+});
+
+// $("#loginForm").on("submit", function (e) {
+//     e.preventDefault(); // Evitar el comportamiento normal del formulario
+
+// });

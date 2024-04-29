@@ -23,7 +23,9 @@ $menus = [
     ],
 ];
 
-// Ahora, recorre el array de menús y crea el HTML correspondiente
+$propietarios = session()->get('detalleUusario');
+$nombrePro = $propietarios['nombres'];
+$nombre = explode(' ', $propietarios['nombres'])[0];
 
 ?>
 <!DOCTYPE html>
@@ -43,9 +45,12 @@ $menus = [
     <title>Menu responsive</title>
 </head>
 
+
+
 <body cz-shortcut-listen="true">
     <header class="header">
-        <a href="#" class="header__logo"> <img src="{{ asset('influencers/images/logoRhnube.png') }}" alt=""></a>
+        <a href="#" class="header__logo"> <img src="{{ asset('influencers/images/logoRhnube.png') }}"
+                alt=""></a>
 
         <ion-icon name="menu-outline" class="header__toggle" id="nav-toggle"></ion-icon>
 
@@ -101,7 +106,7 @@ $menus = [
                             </div>
 
                             <div class="perfilName">
-                                <h3>David Rodriguez</h3>
+                                <h3>{{ $nombre }} {{ $propietarios['apellido_paterno'] }}</h3>
                             </div>
 
                             <div class="perfilRedesSociales">
@@ -118,16 +123,17 @@ $menus = [
                             </div>
                             <div class="perfilMenus mt-4">
                                 @foreach ($menus as $menu)
-                                {{-- Verifica si el enlace del menú coincide con la URL actual --}}
-                                <a href="{{ url($menu['link']) }}">
-                                    <button class="mb-4 align-items-center btn w-100 opciones d-flex
+                                    {{-- Verifica si el enlace del menú coincide con la URL actual --}}
+                                    <a href="{{ url($menu['link']) }}">
+                                        <button
+                                            class="mb-4 align-items-center btn w-100 opciones d-flex
                                         @if (request()->path() == $menu['link']) active @endif">
-                                        {{-- Agrega la clase 'active' si es el menú activo --}}
+                                            {{-- Agrega la clase 'active' si es el menú activo --}}
 
-                                        <i class="ml-3 mr-2 {{ $menu['icon'] }}"></i>
-                                        <span class="ml-1">{{ $menu['name'] }}</span>
-                                    </button>
-                                </a>
+                                            <i class="ml-3 mr-2 {{ $menu['icon'] }}"></i>
+                                            <span class="ml-1">{{ $menu['name'] }}</span>
+                                        </button>
+                                    </a>
                                 @endforeach
                             </div>
                         </div>

@@ -197,11 +197,17 @@ a:hover {
 }
 
 input[type='text'],
-input[type='password'] {
+input[type='password'],
+input[type='email']
+{
     border: none;
     outline: none;
     box-shadow: none;
     width: 100%
+}
+
+body.swal2-height-auto {
+    height: inherit !important;
 }
 
 .fa-eye-slash.btn {
@@ -240,6 +246,12 @@ button:focus {
     left: 33%;
     background-color: #fff;
     padding: 0px 8px
+}
+
+label.error {
+    color: red;
+    font-weight: bold;
+    font-size: 12px;
 }
 
 @media(max-width: 360px) {

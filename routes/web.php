@@ -51,6 +51,12 @@ Route::post('/', [PaymentController::class, 'index'])->name('index');
 
 //Influencer
 Route::get('/iniciarSesion', [InfluencerController::class, 'index']);
-Route::get('/perfil', [InfluencerController::class, 'perfil']);
-Route::get('/referidos', [InfluencerController::class, 'referidos']);
-Route::get('/retiros', [InfluencerController::class, 'retiros']);
+Route::post('/logear', [InfluencerController::class, 'login']);
+
+Route::middleware(['AuthSession'])->group(function () {
+    Route::get('/perfil', [InfluencerController::class, 'perfil']);
+    Route::get('/referidos', [InfluencerController::class, 'referidos']);
+    Route::get('/retiros', [InfluencerController::class, 'retiros']);
+});
+
+Route::get('logs', [\Rap2hpoutre\LaravelLogViewer\LogViewerController::class, 'index']);
