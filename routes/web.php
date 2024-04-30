@@ -59,6 +59,7 @@ Route::middleware(['AuthSession'])->group(function () {
     Route::get('/micupon', [InfluencerController::class, 'micupon']);
     Route::get('/retiros', [InfluencerController::class, 'retiros']);
     Route::post('/actualizarPerfil', [InfluencerController::class, 'actualizarPerfil']);
+    Route::post('/upload-image', [InfluencerController::class, 'uploadImage']);
 });
 
 Route::get('logs', [\Rap2hpoutre\LaravelLogViewer\LogViewerController::class, 'index']);

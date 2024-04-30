@@ -9,6 +9,9 @@ use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\ValidationException;
 use Symfony\Component\HttpKernel\Exception\HttpException;
+use Intervention\Image\Facades\Image;
+use Exception;
+use Illuminate\Support\Facades\Storage;
 
 class InfluencerController extends Controller
 {
@@ -45,13 +48,107 @@ class InfluencerController extends Controller
 
     public function micupon()
     {
+        $cupon = $this->obtenerCupon();
 
-        return view('influencers.micupon');
+        return view('influencers.micupon', compact('cupon'));
     }
 
     public function retiros()
     {
         return view('influencers.retiros');
+    }
+
+
+    public function uploadImage(Request $request)
+    {
+        // Validar tipo de archivo y tamaño máximo permitido
+        $validator = Validator::make($request->all(), [
+            'image' => 'required|image|mimes:jpeg,png|max:2048', // 2MB máx
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json(['error' => $validator->errors()->first()], 422);
+        }
+
+        try {
+            // Obtener la imagen y crear instancia con Intervention Image para validar dimensiones
+            $file = $request->file('image');
+            $image = Image::make($file);
+
+            if ($image->width() !== $image->height()) {
+                return response()->json(['error' => 'La imagen debe ser cuadrada.'], 422);
+            }
+
+            $filePath = 'influencers/images/imagesPerfil/'; // Ruta relativa en el directorio public
+            $fileName = uniqid() . '.' . $file->getClientOriginalExtension(); // Nombre único para evitar conflictos
+            $destinationPath = public_path($filePath); // Obtener ruta absoluta de public
+
+            // Asegurarse de que el directorio exista
+            if (!file_exists($destinationPath)) {
+                mkdir($destinationPath, 0777, true); // Crear con permisos 0777
+            }
+
+            // Mover el archivo al directorio deseado
+            $file->move($destinationPath, $fileName);
+
+            // Generar URL para acceder a la imagen desde el frontend
+            $imageUrl = url("/$filePath$fileName");
+
+            return response()->json(['image_url' => $imageUrl], 200);
+        } catch (Exception $e) {
+            return response()->json(['error' => 'Error al guardar la imagen.'], 500);
+        }
+    }
+
+    public function obtenerCupon()
+    {
+        $logeado = session()->get('logeado');
+        if (!$logeado) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Usuario no autenticado',
+            ], 401); // Código 401 para no autorizado
+        }
+
+
+        try {
+
+            $obtenerCupon = Http::post('https://beta.rhnube.com.pe/api/cuponInfluencer', [
+                'email' => $logeado
+            ]);
+
+
+            if ($obtenerCupon->successful()) {
+                // Si la solicitud es exitosa, obtener el cuerpo de la respuesta
+                $data = $obtenerCupon->json(); // Asumimos que la respuesta es JSON
+                $cupon = $data["cupon"]["name_cupon"];
+                return response()->json([
+                    'success' => true,
+                    'cupon' => $cupon,
+                ], 200); // Código 200 para éxito
+            } else {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Error en la solicitud externa',
+                ], 502); // Código 502 para error de gateway
+            }
+        } catch (RequestException $e) {
+            // Manejar errores de solicitud
+            Log::error('Error al conectar con la API externa: ' . $e->getMessage());
+            return response()->json([
+                'success' => false,
+                'message' => 'Error al conectar con la API externa.',
+                'details' => $e->getMessage(),
+            ], 500); // Código 500 para error interno
+        } catch (\Exception $e) {
+            // Manejar otros errores inesperados
+            Log::error('Error inesperado en obtenerPropietario: ' . $e->getMessage());
+            return response()->json([
+                'success' => false,
+                'message' => 'Error inesperado.',
+                'details' => $e->getMessage(),
+            ], 500); // Código 500 para error interno
+        }
     }
 
 
@@ -67,7 +164,10 @@ class InfluencerController extends Controller
 
         try {
 
-            $cupon = 'PRACTICAR';
+            $cupon = $this->obtenerCupon();
+            $responseData = json_decode($cupon->getContent(), true);
+            $cupon = $responseData["cupon"];
+
             $obtenerComprasPorCupon = Http::post('https://beta.rhnube.com.pe/api/obtenerComprasPorCupon', [
                 'cupon' => $cupon
             ]);

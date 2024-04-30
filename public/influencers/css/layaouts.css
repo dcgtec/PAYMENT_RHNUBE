@@ -349,6 +349,10 @@ html {
     right: 53px;
 }
 
+img.upImg {
+    top: 20px;
+}
+
 .perfilInf {
     background: #fff;
 }
@@ -360,7 +364,7 @@ html {
     background-image: url("../../influencers/images/imgDefault.png");
     border-radius: 10px;
     margin-top: -100px;
-    background-size: contain;
+    background-size: cover;
     background-position: 50% 50%;
     background-repeat: no-repeat;
     background-color: #f0f2f5;

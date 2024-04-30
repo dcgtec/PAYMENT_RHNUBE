@@ -147,19 +147,21 @@ $nombre = explode(' ', $propietarios['nombres'])[0];
                         <div class="col-md-9">
 
                             <script>
+                            let selectedFile = null;
+                            let isImageValid = false;
                             $("#changeImgPerfil").on("click", function() {
                                 // Activa el campo de entrada para archivos (abre el diálogo de selección de archivos)
                                 $("#inputFile").click();
                             });
 
                             $("#inputFile").on("change", function() {
-                                const file = this.files[0];
-                                if (file) {
-                                    // Verificar el tipo de archivo
+                                selectedFile = this.files[0];
+                                if (selectedFile) {
                                     const allowedExtensions = ["image/png", "image/jpeg"];
-                                    if (!allowedExtensions.includes(file.type)) {
+                                    if (!allowedExtensions.includes(selectedFile.type)) {
                                         alert("Por favor, selecciona solo archivos PNG, JPG, o JPEG.");
                                         this.value = ''; // Restablecer el campo de entrada
+                                        isImageValid = false; // Estado de imagen no válida
                                         return;
                                     }
 
@@ -168,24 +170,79 @@ $nombre = explode(' ', $propietarios['nombres'])[0];
                                         const img = new Image();
                                         img.src = e.target.result;
 
-                                        // Verificar que la imagen tenga dimensiones cuadradas
                                         img.onload = function() {
                                             if (img.width !== img.height) {
-                                                alert(
-                                                    "La imagen debe ser cuadrada (mismo ancho y alto)."
-                                                );
+                                                Swal.fire({
+                                                    title: "¡Errores de dimensiones!",
+                                                    text: "La imagen debe ser cuadrada (mismo ancho y alto).",
+                                                    icon: "error",
+                                                });
                                                 $("#inputFile").val(
                                                     ''); // Restablecer el campo de entrada
+                                                isImageValid = false; // Estado de imagen no válida
                                                 return;
                                             }
 
                                             // Si la imagen es válida, establecer la imagen de fondo
                                             $(".perfilPhoto").css("background-image",
                                                 `url(${e.target.result})`);
+                                            $("img#changeImgPerfil").addClass("upImg");
+                                            $("img#savemgPerfil").attr("style",
+                                                "display:block!important");
 
+                                            isImageValid = true; // Imagen válida
                                         };
                                     };
-                                    reader.readAsDataURL(file); // Leer el archivo como datos URL
+                                    reader.readAsDataURL(selectedFile); // Leer el archivo como datos URL
+                                }
+                            });
+
+                            $("img#savemgPerfil").on("click", function() {
+                                if (!isImageValid) {
+                                    Swal.fire({
+                                        title: "Imagen no válida",
+                                        text: "Por favor, selecciona una imagen cuadrada y de tipo PNG o JPEG.",
+                                        icon: "error",
+                                    });
+                                } else {
+                                    Swal.fire({
+                                        title: "Confirmar cambio de imagen",
+                                        text: "¿Estás seguro de que deseas cambiar la imagen de perfil?",
+                                        icon: "question",
+                                        showCancelButton: true,
+                                        confirmButtonText: "Sí, cambiar",
+                                        cancelButtonText: "No",
+                                    }).then((result) => {
+                                        if (result.isConfirmed) {
+                                            const formData = new FormData();
+                                            formData.append("image", selectedFile);
+                                            var csrfToken = $('meta[name="csrf-token"]').attr(
+                                            "content");
+                                            $.ajax({
+                                                url: '/upload-image', // Ruta al controlador en Laravel
+                                                type: 'POST',
+                                                data: formData,
+                                                headers: {
+                                                    "X-CSRF-TOKEN": csrfToken,
+                                                },
+                                                contentType: false, // Necesario para archivos
+                                                processData: false, // No procesar datos como string
+                                                success: function(response) {
+                                                    Swal.fire("Éxito",
+                                                        "La imagen se ha subido correctamente.",
+                                                        "success");
+                                                    $(".perfilPhoto").css(
+                                                        "background-image",
+                                                        `url(${response.image_url})`);
+                                                },
+                                                error: function() {
+                                                    Swal.fire("Error",
+                                                        "Hubo un problema al subir la imagen.",
+                                                        "error");
+                                                }
+                                            });
+                                        }
+                                    });
                                 }
                             });
                             </script>
