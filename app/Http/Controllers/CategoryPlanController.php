@@ -36,32 +36,31 @@ class CategoryPlanController extends Controller
 
             // if (!$slug) {
 
-                $cupon = $request->input('cupon');
-                $params = [
-                    'codigo' => $cupon,
-                    'paquete' => '0',
-                ];
+            $cupon = $request->input('cupon');
+            $params = [
+                'codigo' => $cupon,
+                'paquete' => '0',
+            ];
 
+            $response = Http::post('https://beta.rhnube.com.pe/api/updateUseCupon', $params);
 
-                $response = Http::post('https://beta.rhnube.com.pe/api/updateUseCupon', $params);
+            if ($response->successful()) {
 
-                if ($response->successful()) {
+                $responseData = $response->json();
 
-                    $responseData = $response->json();
-
-                    // Verificar si el mensaje está vacío
-                    if (!empty($responseData['message'])) {
-                        // Si hay datos en el mensaje, continuar con el procesamiento
-                        $datos = $responseData["message"][0];
-                        return view('paymentCupon', compact('datos'));
-                    } else {
-                        $datos = null;
-                        return view('paymentCupon', compact('datos'));
-                    }
+                // Verificar si el mensaje está vacío
+                if (!empty($responseData['message'])) {
+                    // Si hay datos en el mensaje, continuar con el procesamiento
+                    $datos = $responseData["message"][0];
+                    return view('paymentCupon', compact('datos'));
                 } else {
-                    // En caso de error en la solicitud, devolver un mensaje de error
-                    return response()->json(['error' => 'Error al consumir la API'], $response->status());
+                    $datos = null;
+                    return view('paymentCupon', compact('datos'));
                 }
+            } else {
+                // En caso de error en la solicitud, devolver un mensaje de error
+                return response()->json(['error' => 'Error al consumir la API'], $response->status());
+            }
             // } else {
             //     // Realizar acciones cuando hay un slug proporcionado
             //     $categoryPlan = CategoryPlan::where('slug', $slug)->firstOrFail();

@@ -7,6 +7,8 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Validation\ValidationException;
+use Symfony\Component\HttpKernel\Exception\HttpException;
 
 class InfluencerController extends Controller
 {
@@ -57,6 +59,7 @@ class InfluencerController extends Controller
             ], 401); // Código 401 para no autorizado
         }
 
+
         try {
             // Realizar la solicitud a la API externa
             $response = Http::post('https://beta.rhnube.com.pe/api/obtenerPropietario', [
@@ -66,6 +69,11 @@ class InfluencerController extends Controller
             if ($response->successful()) {
                 // Si la solicitud es exitosa, obtener el cuerpo de la respuesta
                 $data = $response->json(); // Asumimos que la respuesta es JSON
+
+                if (session()->has('detalleUusario')) {
+                    // Reemplazar el valor de 'detalleUsuario' con un nuevo valor
+                    session()->put('detalleUusario', $data["propietario"][0]);
+                }
 
                 return response()->json([
                     'success' => true,
@@ -95,7 +103,6 @@ class InfluencerController extends Controller
             ], 500); // Código 500 para error interno
         }
     }
-
 
     public function login(Request $request)
     {
@@ -164,6 +171,86 @@ class InfluencerController extends Controller
             ], 500);
         } catch (\Exception $e) {
             // Manejar otros errores
+            return response()->json([
+                'success' => false,
+                'message' => 'Ocurrió un error inesperado: ' . $e->getMessage(),
+            ], 500);
+        }
+    }
+
+    public function actualizarPerfil(Request $request)
+    {
+
+        try {
+            // Obtener el valor de email desde la sesión
+            $logeado = session()->get('logeado');
+
+
+
+
+            // Verificar si el valor de 'logeado' está presente
+            if (empty($logeado)) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'No se encontró información de inicio de sesión.',
+                ], 400);
+            }
+
+            // Validar datos de entrada (sin el campo 'email' ya que proviene de la sesión)
+            $validatedData = $request->validate([
+                'codigo' => 'nullable',
+                'nombres' => 'required',
+                'razon_social' => 'nullable',
+                'apellido_paterno' => 'required',
+                'apellido_materno' => 'required',
+                'numero_movil' => 'nullable',
+                'password' => 'required',
+                'cargo' => 'nullable',
+                'email' => 'required',
+                'redes_sociales' => 'nullable',
+            ]);
+
+            $faceboook = $request->input('facebook');
+            $linkedIn = $request->input('linkedIn');
+            $instagram = $request->input('instagram');
+            $tiktok = $request->input('tiktok');
+            $actualizarCorreo =  $request->input('email');
+
+            $redesSociales = "{'facebook': '$faceboook', 'linkedIn': '$linkedIn', 'instagram': '$instagram', 'tiktok': '$tiktok'}";
+
+
+            // Fusionar datos validados con el email desde la sesión
+            $dataToSend = array_merge($validatedData, ['email' => $logeado, 'actualizarCorreo' =>  $actualizarCorreo, 'redes_sociales' => $redesSociales]);
+
+
+
+
+
+            // Enviar datos a la API externa
+            $response = Http::post('https://beta.rhnube.com.pe/api/editarPerfil', $dataToSend);
+
+
+            // Verificar si la solicitud fue exitosa
+            if ($response->failed()) {
+                throw new HttpException(500, "La solicitud a la API externa falló: " . $response->body());
+            }
+
+            if (session()->has('logeado')) {
+                // Reemplazar el valor de 'detalleUsuario' con un nuevo valor
+                session()->put('logeado', $actualizarCorreo);
+            }
+            return $this->obtenerPropietario();
+        } catch (ValidationException $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Datos inválidos: ' . json_encode($e->errors()),
+            ], 400);
+        } catch (RequestException $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Error al conectar con la API externa: ' . $e->getMessage(),
+            ], 500);
+        } catch (\Exception $e) {
             return response()->json([
                 'success' => false,
                 'message' => 'Ocurrió un error inesperado: ' . $e->getMessage(),

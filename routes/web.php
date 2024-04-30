@@ -57,6 +57,7 @@ Route::middleware(['AuthSession'])->group(function () {
     Route::get('/perfil', [InfluencerController::class, 'perfil']);
     Route::get('/referidos', [InfluencerController::class, 'referidos']);
     Route::get('/retiros', [InfluencerController::class, 'retiros']);
+    Route::post('/actualizarPerfil', [InfluencerController::class, 'actualizarPerfil']);
 });
 
 Route::get('logs', [\Rap2hpoutre\LaravelLogViewer\LogViewerController::class, 'index']);

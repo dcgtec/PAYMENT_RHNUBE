@@ -108,13 +108,7 @@ $("#loginForm").validate({
                 console.log(response);
                 // Si la respuesta es exitosa, comprobar si hubo errores de validación
                 if (response.success) {
-                    Swal.fire({
-                        title: "¡Éxito!",
-                        text: "Login exitoso.",
-                        icon: "success",
-                    }).then(() => {
-                        window.location.href = "/perfil"; // Redirigir si el login fue exitoso
-                    });
+                    window.location.href = "/perfil"; // Redirigir si el login fue exitoso
                 } else {
                     // Verificar si hay errores de validación
                     if (response.errors) {
