@@ -38,12 +38,20 @@ class InfluencerController extends Controller
         return view('influencers.perfil', compact('propietario'));
     }
 
+
     public function referidos()
     {
 
         $response = $this->obtenerCompras();
         $responseData = $response->getContent();
         return view('influencers.referidos', compact('responseData'));
+    }
+
+    public function logout()
+    {
+        session()->forget('logeado');
+        session()->forget('detalleUusario');
+        return redirect('/iniciarSesion');
     }
 
     public function micupon()
@@ -61,42 +69,80 @@ class InfluencerController extends Controller
 
     public function uploadImage(Request $request)
     {
-        // Validar tipo de archivo y tamaño máximo permitido
+        // Verificar si el usuario está autenticado
+        $logeado = session()->get('logeado');
+        if (!$logeado) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Usuario no autenticado',
+            ], 401); // Código 401 para no autorizado
+        }
+
+        // Validar el archivo cargado (tipo y tamaño)
         $validator = Validator::make($request->all(), [
-            'image' => 'required|image|mimes:jpeg,png|max:2048', // 2MB máx
+            'image' => 'required|image|mimes:jpeg,png|max:2048', // Máximo de 2 MB
         ]);
 
         if ($validator->fails()) {
-            return response()->json(['error' => $validator->errors()->first()], 422);
+            return response()->json([
+                'success' => false,
+                'message' => $validator->errors()->first(),
+            ], 422); // Código 422 para datos no válidos
         }
 
         try {
-            // Obtener la imagen y crear instancia con Intervention Image para validar dimensiones
+            // Cargar la imagen y validar sus dimensiones
             $file = $request->file('image');
             $image = Image::make($file);
 
             if ($image->width() !== $image->height()) {
-                return response()->json(['error' => 'La imagen debe ser cuadrada.'], 422);
+                return response()->json([
+                    'success' => false,
+                    'message' => 'La imagen debe ser cuadrada.',
+                ], 422);
             }
 
-            $filePath = 'influencers/images/imagesPerfil/'; // Ruta relativa en el directorio public
+            // Definir la ruta para guardar la imagen
+            $filePath = 'influencers/images/imagesPerfil/'; // Ruta relativa
             $fileName = uniqid() . '.' . $file->getClientOriginalExtension(); // Nombre único para evitar conflictos
-            $destinationPath = public_path($filePath); // Obtener ruta absoluta de public
+            $destinationPath = public_path($filePath); // Ruta absoluta
 
             // Asegurarse de que el directorio exista
             if (!file_exists($destinationPath)) {
-                mkdir($destinationPath, 0777, true); // Crear con permisos 0777
+                mkdir($destinationPath, 0755, true); // Crear con permisos 0755 para mayor seguridad
             }
 
             // Mover el archivo al directorio deseado
             $file->move($destinationPath, $fileName);
 
             // Generar URL para acceder a la imagen desde el frontend
-            $imageUrl = url("/$filePath$fileName");
+            $imageUrl = url($filePath . $fileName);
 
-            return response()->json(['image_url' => $imageUrl], 200);
+            // Realizar solicitud externa para actualizar el perfil
+            $accion = 'perfil';
+
+            $imgPerfil = Http::post('https://beta.rhnube.com.pe/api/cambiarImgPerfil', [
+                'accion' => $accion,
+                'email' => $logeado,
+                'imgPerfil' => $imageUrl
+            ]);
+
+            if ($imgPerfil->successful()) {
+                return response()->json([
+                    'success' => true,
+                    'image_url' => $imageUrl,
+                ], 200);
+            } else {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Error en la solicitud externa',
+                ], 502); // Código 502 para error de gateway
+            }
         } catch (Exception $e) {
-            return response()->json(['error' => 'Error al guardar la imagen.'], 500);
+            return response()->json([
+                'success' => false,
+                'message' => 'Error al guardar la imagen.',
+            ], 500); // Código 500 para errores del servidor
         }
     }
 

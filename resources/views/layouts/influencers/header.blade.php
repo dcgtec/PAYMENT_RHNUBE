@@ -23,7 +23,7 @@ $menus = [
     ],
     [
         'name' => 'Cerrar sesión',
-        'link' => '', // El enlace a la página del portafolio
+        'link' => '/logout', // El enlace a la página del portafolio
         'icon' => 'fas fa-sign-out-alt', // Icono para el portafolio
     ],
 ];
@@ -31,6 +31,13 @@ $menus = [
 $propietarios = session()->get('detalleUusario');
 $nombrePro = $propietarios['nombres'];
 $nombre = explode(' ', $propietarios['nombres'])[0];
+
+
+if ($propietarios['foto_perfil']) {
+    $rutaImgPerfil = $propietarios['foto_perfil'];
+} else {
+    $rutaImgPerfil = '../../influencers/images/imgDefault.png';
+}
 
 ?>
 <!DOCTYPE html>
@@ -49,7 +56,7 @@ $nombre = explode(' ', $propietarios['nombres'])[0];
     <script src="https://cdn.datatables.net/1.13.6/js/dataTables.bootstrap4.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.19.5/jquery.validate.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.10.5/dist/sweetalert2.all.min.js"></script>
-    <title>Menu responsive</title>
+    <title>Incluencer - RHNUBE</title>
 </head>
 
 
@@ -107,7 +114,7 @@ $nombre = explode(' ', $propietarios['nombres'])[0];
                 <div class="col-md-12">
                     <div class="row">
                         <div class="col-md-3 perfilInf text-center">
-                            <div class="perfilPhoto">
+                            <div class="perfilPhoto" style="background-image: url('<?php echo $rutaImgPerfil; ?>')">
                                 <input type="file" id="inputFile" accept=".png, .jpg, .jpeg" style="display: none;" />
                                 <img src="{{ asset('influencers/images/editPerfil.png') }}" id="changeImgPerfil"
                                     alt="perfilPhoto">
@@ -217,7 +224,7 @@ $nombre = explode(' ', $propietarios['nombres'])[0];
                                             const formData = new FormData();
                                             formData.append("image", selectedFile);
                                             var csrfToken = $('meta[name="csrf-token"]').attr(
-                                            "content");
+                                                "content");
                                             $.ajax({
                                                 url: '/upload-image', // Ruta al controlador en Laravel
                                                 type: 'POST',
@@ -234,6 +241,11 @@ $nombre = explode(' ', $propietarios['nombres'])[0];
                                                     $(".perfilPhoto").css(
                                                         "background-image",
                                                         `url(${response.image_url})`);
+
+                                                    $("img#changeImgPerfil").removeClass(
+                                                        "upImg");
+                                                    $("img#savemgPerfil").attr("style",
+                                                        "display:none!important");
                                                 },
                                                 error: function() {
                                                     Swal.fire("Error",
@@ -241,6 +253,10 @@ $nombre = explode(' ', $propietarios['nombres'])[0];
                                                         "error");
                                                 }
                                             });
+
+                                            $("img#changeImgPerfil").removeClass("upImg");
+                                            $("img#savemgPerfil").attr("style",
+                                                "display:none!important");
                                         }
                                     });
                                 }
