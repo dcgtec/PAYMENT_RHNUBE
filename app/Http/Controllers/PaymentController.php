@@ -408,7 +408,7 @@ class PaymentController extends Controller
         ];
 
         $response = Http::post('https://beta.rhnube.com.pe/api/updateUseCupon', $params);
-
+        dd( $response);
 
 
         if ($response->successful()) {

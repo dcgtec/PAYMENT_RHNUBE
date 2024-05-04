@@ -67,6 +67,76 @@ class InfluencerController extends Controller
     }
 
 
+    public function uploadImagePort(Request $request)
+    {
+        // Verificar si el usuario está autenticado
+        $logeado = session()->get('logeado');
+        if (!$logeado) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Usuario no autenticado',
+            ], 401); // Código 401 para no autorizado
+        }
+
+        // Validar el archivo cargado (tipo y tamaño)
+        $validator = Validator::make($request->all(), [
+            'image' => 'required|image|mimes:jpeg,png|max:2048', // Máximo de 2 MB
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json([
+                'success' => false,
+                'message' => $validator->errors()->first(),
+            ], 422); // Código 422 para datos no válidos
+        }
+
+        try {
+            // Cargar la imagen y validar sus dimensiones
+            $file = $request->file('image');
+            $image = Image::make($file);
+
+    
+            // Definir la ruta para guardar la imagen
+            $filePath = 'influencers/images/imagesPortada/'; // Ruta relativa
+            $fileName = uniqid() . '.' . $file->getClientOriginalExtension(); // Nombre único para evitar conflictos
+            $destinationPath = public_path($filePath); // Ruta absoluta
+
+            // Asegurarse de que el directorio exista
+            if (!file_exists($destinationPath)) {
+                mkdir($destinationPath, 0755, true); // Crear con permisos 0755 para mayor seguridad
+            }
+
+            // Mover el archivo al directorio deseado
+            $file->move($destinationPath, $fileName);
+
+            // Generar URL para acceder a la imagen desde el frontend
+            $imageUrl = url($filePath . $fileName);
+
+            // Realizar solicitud externa para actualizar el perfil
+            $accion = 'portada';
+
+            $imgPerfil = Http::post('https://beta.rhnube.com.pe/api/cambiarImgPerfil', [
+                'accion' => $accion,
+                'email' => $logeado,
+                'imgPerfil' => $imageUrl
+            ]);
+
+            if ($imgPerfil->successful()) {
+                 return $this->obtenerPropietario();
+            } else {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Error en la solicitud externa',
+                ], 502); // Código 502 para error de gateway
+            }
+        } catch (Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Error al guardar la imagen.',
+            ], 500); // Código 500 para errores del servidor
+        }
+    }
+
     public function uploadImage(Request $request)
     {
         // Verificar si el usuario está autenticado
@@ -128,10 +198,7 @@ class InfluencerController extends Controller
             ]);
 
             if ($imgPerfil->successful()) {
-                return response()->json([
-                    'success' => true,
-                    'image_url' => $imageUrl,
-                ], 200);
+                 return $this->obtenerPropietario();
             } else {
                 return response()->json([
                     'success' => false,
