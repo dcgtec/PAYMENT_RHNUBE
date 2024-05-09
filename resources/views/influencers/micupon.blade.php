@@ -11,7 +11,7 @@ $cuponCode = $jsonData->cupon; // Obtiene el valor de la propiedad "cupon"
         <div class="card-body">
             <div class="row mostrarQR" bis_skin_checked="1">
                 <div class="col-md-12 text-center mb-3" bis_skin_checked="1">
-                    <h1 class="mb-4">Mi cupón</h1>
+                    <h1 class="mb-4">{{$cuponCode}}</h1>
                     <img data-cupon="{{$cuponCode}}" src="https://api.qrserver.com/v1/create-qr-code/?data=https://payment.rhnube.com.pe/payment?cupon={{$cuponCode}}&amp;size=150x150" alt="QR Code"><br><button class="mt-3 btn btn-primary  mx-1 btn-download" data-url="https://payment.rhnube.com.pe/payment?cupon=PRACTICAR"><i class="fa fa-download "></i></button><button class="mt-3  mx-1 btn btn-secondary btn-copy" data-url="https://payment.rhnube.com.pe/payment?cupon=PRACTICAR"><i class="fa fa-copy"></i></button>
                 </div>
             </div>

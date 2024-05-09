@@ -30,11 +30,19 @@ class InfluencerController extends Controller
         ]);
 
 
+
         // Si la API responde con 1, permitir el acceso
         if ($response->json() === 1) {
             $this->logout();
+            session()->put('tokenRegistro', $cid);
             return view('influencers.registrosNuevos', compact('cid'));
         }
+
+
+        // if (session()->has('tokenRegistro')) {
+        //     // Reemplazar el valor de 'detalleUsuario' con un nuevo valor
+        //     session()->forget('tokenRegistro');
+        // }
 
         abort(404);
     }
@@ -90,7 +98,7 @@ class InfluencerController extends Controller
     }
 
 
-    public function uploadImagePort(Request $request)
+    public function deletePthoPerfil(Request $request)
     {
         // Verificar si el usuario está autenticado
         $logeado = session()->get('logeado');
@@ -101,48 +109,19 @@ class InfluencerController extends Controller
             ], 401); // Código 401 para no autorizado
         }
 
-        // Validar el archivo cargado (tipo y tamaño)
-        $validator = Validator::make($request->all(), [
-            'image' => 'required|image|mimes:jpeg,png|max:2048', // Máximo de 2 MB
-        ]);
-
-        if ($validator->fails()) {
-            return response()->json([
-                'success' => false,
-                'message' => $validator->errors()->first(),
-            ], 422); // Código 422 para datos no válidos
-        }
 
         try {
-            // Cargar la imagen y validar sus dimensiones
-            $file = $request->file('image');
-            $image = Image::make($file);
 
+            $imageUrl='http://127.0.0.1:8000/influencers/images/imgDefault.png';
 
-            // Definir la ruta para guardar la imagen
-            $filePath = 'influencers/images/imagesPortada/'; // Ruta relativa
-            $fileName = uniqid() . '.' . $file->getClientOriginalExtension(); // Nombre único para evitar conflictos
-            $destinationPath = public_path($filePath); // Ruta absoluta
-
-            // Asegurarse de que el directorio exista
-            if (!file_exists($destinationPath)) {
-                mkdir($destinationPath, 0755, true); // Crear con permisos 0755 para mayor seguridad
-            }
-
-            // Mover el archivo al directorio deseado
-            $file->move($destinationPath, $fileName);
-
-            // Generar URL para acceder a la imagen desde el frontend
-            $imageUrl = url($filePath . $fileName);
-
-            // Realizar solicitud externa para actualizar el perfil
-            $accion = 'portada';
+            $accion = 'perfil';
 
             $imgPerfil = Http::post('https://beta.rhnube.com.pe/api/cambiarImgPerfil', [
                 'accion' => $accion,
                 'email' => $logeado,
                 'imgPerfil' => $imageUrl
             ]);
+
 
             if ($imgPerfil->successful()) {
                 return $this->obtenerPropietario();
@@ -478,20 +457,146 @@ class InfluencerController extends Controller
     {
         try {
 
-            $validatedData = $request->validate([
-                'codigo' => 'required',
-                'nombres' => 'required',
-                'razon_social' => 'required',
-                'apellido_paterno' => 'required',
-                'apellido_materno' => 'required',
-                'numero_movil' => 'required',
-                'password' => 'required',
-                'cargo' => 'nullable',
-                'email' => 'required',
-                'redes_sociales' => 'nullable',
+
+            $token = session()->get('tokenRegistro');
+
+
+            $response = Http::post('https://beta.rhnube.com.pe/api/validarToken', [
+                'token' =>  $token
             ]);
 
-            dd($validatedData);
+
+
+
+
+            // Si la API responde con 1, permitir el acceso
+            if ($response->json() === 1) {
+                $this->logout();
+
+
+                // Validar la solicitud
+                $validatedData = $request->validate([
+                    'codigo' => 'required|string',
+                    'nombres' => 'required|string',
+                    'razon_social' => 'string',
+                    'apellido_paterno' => 'required|string',
+                    'apellido_materno' => 'required|string',
+                    'numero_movil' => 'required|string',
+                    'password' => 'required|string',
+                    'cargo' => 'nullable|string',
+                    'email' => 'required|email',
+                    'redes_sociales' => 'nullable|string',
+                ]);
+
+                $faceboook = $request->input('facebook');
+                $linkedIn = $request->input('linkedIn');
+                $instagram = $request->input('instagram');
+                $tiktok = $request->input('tiktok');
+
+                $redesSociales = "{'facebook': '$faceboook', 'linkedIn': '$linkedIn', 'instagram': '$instagram', 'tiktok': '$tiktok'}";
+
+                // Enviar una solicitud POST a la API externa para guardar perfil
+                $response = Http::post('https://beta.rhnube.com.pe/api/guardarPerfil', [
+                    'codigo' => $validatedData['codigo'],
+                    'nombres' => $validatedData['nombres'],
+                    'apellido_paterno' => $validatedData['apellido_paterno'],
+                    'apellido_materno' => $validatedData['apellido_materno'],
+                    'redes_sociales' => $redesSociales,
+                    'email' => $validatedData['email'],
+                    'password' => $validatedData['password'],
+                    'numero_movil' => $validatedData['numero_movil'],
+                    'razon_social' => $validatedData['razon_social'],
+                    'cargo' => $validatedData['cargo'] ?? null, // Opcional
+                ]);
+
+
+
+                if ($response->successful()) {
+                    $responseData = $response->json();
+
+                    // Verificar la estructura de la respuesta antes de acceder a las claves
+                    if (isset($responseData['success']) && isset($responseData['message'])) {
+                        if ($responseData['success']) {
+                            $mensaje = $responseData['message'];
+
+                            // Obtener propietario por correo electrónico
+                            $obtePro = Http::post('https://beta.rhnube.com.pe/api/obtenerPropietario', [
+                                'email' => $validatedData['email']
+                            ]);
+
+                            if ($obtePro->successful()) {
+                                $data = $obtePro->json();
+
+                                // Verificar si la clave existe y tiene datos
+                                if (isset($data['propietario'][0]['id_propietario'])) {
+
+                                    $idPropietario = $data['propietario'][0]['id_propietario'];
+                                    // Valor por defecto si no existe
+                                    $propietario = $data["propietario"]["0"];
+                                    // Crear cupón con los datos obtenidos
+                                    $crearCupon = Http::post('https://beta.rhnube.com.pe/api/crearCupon', [
+                                        'propietario' => $idPropietario,
+                                        'token' => $token
+                                    ]);
+
+                                    if ($crearCupon->successful()) {
+                                        $cuponData = $crearCupon->json();
+
+                                        if (isset($cuponData['success']) && $cuponData['success']) {
+                                            session()->put('logeado', $validatedData['email']);
+                                            session()->put('detalleUusario', $propietario);
+                                            return response()->json([
+                                                'success' => true,
+                                                'message' => $mensaje,
+                                            ], 200);
+                                        } else {
+                                            return response()->json([
+                                                'success' => false,
+                                                'message' => 'No se pudo crear el cupón',
+                                            ], 500);
+                                        }
+                                    } else {
+                                        return response()->json([
+                                            'success' => false,
+                                            'message' => 'Error al crear el cupón',
+                                        ], 500);
+                                    }
+                                } else {
+                                    return response()->json([
+                                        'success' => false,
+                                        'message' => $data["mensaje"],
+                                    ], 200);
+                                }
+                            } else {
+                                return response()->json([
+                                    'success' => false,
+                                    'message' => 'Error al obtener el propietario',
+                                ], 500);
+                            }
+                        } else {
+                            return response()->json([
+                                'success' => false,
+                                'message' =>  $responseData['message'],
+                            ], 200);
+                        }
+                    } else {
+                        return response()->json([
+                            'success' => false,
+                            'message' =>  'Error al obtener el propietario',
+                        ], 500);
+                    }
+                } else {
+                    return response()->json([
+                        'success' => false,
+                        'message' => 'Error al guardar el perfil: ' . $response->body(),
+                    ], 500);
+                }
+            } else {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Token Caducado',
+                ], 200);
+            }
         } catch (ValidationException $e) {
             return response()->json([
                 'success' => false,
@@ -547,12 +652,8 @@ class InfluencerController extends Controller
 
             $redesSociales = "{'facebook': '$faceboook', 'linkedIn': '$linkedIn', 'instagram': '$instagram', 'tiktok': '$tiktok'}";
 
-
             // Fusionar datos validados con el email desde la sesión
             $dataToSend = array_merge($validatedData, ['email' => $logeado, 'actualizarCorreo' =>  $actualizarCorreo, 'redes_sociales' => $redesSociales]);
-
-
-
 
 
             // Enviar datos a la API externa
@@ -564,10 +665,10 @@ class InfluencerController extends Controller
                 throw new HttpException(500, "La solicitud a la API externa falló: " . $response->body());
             }
 
-            if (session()->has('logeado')) {
-                // Reemplazar el valor de 'detalleUsuario' con un nuevo valor
-                session()->put('logeado', $actualizarCorreo);
-            }
+            // if (session()->has('logeado')) {
+            //     // Reemplazar el valor de 'detalleUsuario' con un nuevo valor
+            //     session()->put('logeado', $actualizarCorreo);
+            // }
             return $this->obtenerPropietario();
         } catch (ValidationException $e) {
             return response()->json([

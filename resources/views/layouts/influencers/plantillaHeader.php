@@ -117,7 +117,10 @@ if ($propietarios['foto_portada']) {
         <div class="container">
             <div class="row">
                 <div class="col-md-12 mt-5 perfilPort" style="background-image: url('<?php echo $rutaImgPortada; ?>')">
-
+                    <img src="{{ asset('influencers/images/editPortada.png') }}" id="imgPort" alt="imgPort">
+                    <input type="file" id="inputFilePortada" accept=".png, .jpg, .jpeg" style="display: none;" />
+                    <img src="{{ asset('influencers/images/savePerfil.png') }}" id="savemgPerfilPortada"
+                        alt="savePhoto">
                 </div>
 
                 <div class="col-md-12">
@@ -176,39 +179,6 @@ if ($propietarios['foto_portada']) {
                                     $("#inputFile").click();
                                 });
 
-                                $("img#savemgPerfil").on("click", function() {
-                                    var csrfToken = $('meta[name="csrf-token"]').attr(
-                                        "content");
-                                    $.ajax({
-                                        url: '/deletePthoPerfil', // Ruta al controlador en Laravel
-                                        type: 'get',
-                                        headers: {
-                                            "X-CSRF-TOKEN": csrfToken,
-                                        },
-                                        contentType: false, // Necesario para archivos
-                                        processData: false, // No procesar datos como string
-                                        success: function(response) {
-                                            $(".perfilPhoto").css('background-image',
-                                                'url(../../influencers/images/imgDefault.png)');
-
-                                            $("a.nav__social-icon img").attr("src", "../../influencers/images/imgDefault.png");
-                                            $("img#changeImgPerfil").removeClass("upImg");
-                                            $("img#savemgPerfil").attr("style",
-                                                "display:none!important");
-                                        },
-                                        error: function() {
-                                            Swal.fire("Error",
-                                                "Hubo un problema al subir la imagen.",
-                                                "error");
-
-
-                                            $("img#changeImgPerfil").addClass(
-                                                "upImg");
-                                            $("img#savemgPerfil").attr("style",
-                                                "display:block!important");
-                                        }
-                                    });
-                                });
 
                                 $("#inputFile").on("change", function() {
                                     selectedFile = this.files[0];
@@ -260,26 +230,48 @@ if ($propietarios['foto_portada']) {
                                                     contentType: false, // Necesario para archivos
                                                     processData: false, // No procesar datos como string
                                                     success: function(response) {
-                                                        //location.reload();
-                                                        $("img#changeImgPerfil").addClass(
+                                                        location.reload();
+                                                        $("img#changeImgPerfil").removeClass(
                                                             "upImg");
                                                         $("img#savemgPerfil").attr("style",
-                                                            "display:block!important");
+                                                            "display:none!important");
                                                     },
                                                     error: function() {
                                                         Swal.fire("Error",
                                                             "Hubo un problema al subir la imagen.",
                                                             "error");
-                                                        $("img#changeImgPerfil").removeClass("upImg");
-                                                        $("img#savemgPerfil").attr("style",
-                                                            "display:none!important");
                                                     }
                                                 });
 
-
+                                                $("img#changeImgPerfil").removeClass("upImg");
+                                                $("img#savemgPerfil").attr("style",
+                                                    "display:none!important");
                                             };
                                         };
                                         reader.readAsDataURL(selectedFile); // Leer el archivo como datos URL
+                                    }
+                                });
+
+                                $("img#savemgPerfil").on("click", function() {
+                                    if (!isImageValid) {
+                                        Swal.fire({
+                                            title: "Imagen no válida",
+                                            text: "Por favor, selecciona una imagen cuadrada y de tipo PNG o JPEG.",
+                                            icon: "error",
+                                        });
+                                    } else {
+                                        Swal.fire({
+                                            title: "Confirmar cambio de imagen",
+                                            text: "¿Estás seguro de que deseas cambiar la imagen de perfil?",
+                                            icon: "question",
+                                            showCancelButton: true,
+                                            confirmButtonText: "Sí, cambiar",
+                                            cancelButtonText: "No",
+                                        }).then((result) => {
+                                            if (result.isConfirmed) {
+
+                                            }
+                                        });
                                     }
                                 });
                             </script>
