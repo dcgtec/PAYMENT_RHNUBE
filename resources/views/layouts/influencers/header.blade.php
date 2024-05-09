@@ -66,15 +66,14 @@ if ($propietarios['foto_portada']) {
     <script src="https://cdn.datatables.net/1.13.6/js/dataTables.bootstrap4.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.19.5/jquery.validate.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.10.5/dist/sweetalert2.all.min.js"></script>
-    <title>Incluencer - RHNUBE</title>
+    <title>Influencer - RHNUBE</title>
 </head>
 
 
 
 <body cz-shortcut-listen="true">
     <header class="header">
-        <a href="#" class="header__logo"> <img src="{{ asset('influencers/images/logoRhnube.png') }}"
-                alt=""></a>
+        <a href="#" class="header__logo"> <img src="{{ asset('influencers/images/logoRhnube.png') }}" alt=""></a>
 
         <ion-icon name="menu-outline" class="header__toggle" id="nav-toggle"></ion-icon>
 
@@ -93,19 +92,17 @@ if ($propietarios['foto_portada']) {
                     <ul class="nav__list">
 
                         @foreach ($menus as $menu)
-                            @if ($menu['estado'] == 1)
-                                <li class="nav__item"><a href="{{ url($menu['link']) }}"
-                                        class="nav__link @if (request()->path() == $menu['link']) active @endif">{{ $menu['name'] }}</a>
-                                </li>
-                            @endif
+                        @if ($menu['estado'] == 1)
+                        <li class="nav__item"><a href="{{ url($menu['link']) }}" class="nav__link @if (request()->path() == $menu['link']) active @endif">{{ $menu['name'] }}</a>
+                        </li>
+                        @endif
                         @endforeach
                     </ul>
                 </div>
 
                 <div class="nav__social">
 
-                    <a href="#" class="nav__social-icon"><img src="{{ $rutaImgPerfil }}" alt=""> <label
-                            for="" class="nombrePer">{{ $nombre }}</label></a>
+                    <a href="#" class="nav__social-icon"><img src="{{ $rutaImgPerfil }}" alt=""> <label for="" class="nombrePer">{{ $nombre }}</label></a>
                 </div>
             </div>
         </nav>
@@ -119,20 +116,16 @@ if ($propietarios['foto_portada']) {
                 <div class="col-md-12 mt-5 perfilPort" style="background-image: url('<?php echo $rutaImgPortada; ?>')">
                     <img src="{{ asset('influencers/images/editPortada.png') }}" id="imgPort" alt="imgPort">
                     <input type="file" id="inputFilePortada" accept=".png, .jpg, .jpeg" style="display: none;" />
-                    <img src="{{ asset('influencers/images/savePerfil.png') }}" id="savemgPerfilPortada"
-                        alt="savePhoto">
+                    <img src="{{ asset('influencers/images/savePerfil.png') }}" id="savemgPerfilPortada" alt="savePhoto">
                 </div>
 
                 <div class="col-md-12">
                     <div class="row">
                         <div class="col-md-3 perfilInf text-center">
                             <div class="perfilPhoto" style="background-image: url('<?php echo $rutaImgPerfil; ?>')">
-                                <input type="file" id="inputFile" accept=".png, .jpg, .jpeg"
-                                    style="display: none;" />
-                                <img src="{{ asset('influencers/images/editPerfil.png') }}" id="changeImgPerfil"
-                                    alt="perfilPhoto">
-                                <img src="{{ asset('influencers/images/savePerfil.png') }}" id="savemgPerfil"
-                                    alt="savePhoto">
+                                <input type="file" id="inputFile" accept=".png, .jpg, .jpeg" style="display: none;" />
+                                <img src="{{ asset('influencers/images/editPerfil.png') }}" id="changeImgPerfil" alt="perfilPhoto">
+                                <img src="{{ asset('influencers/images/savePerfil.png') }}" id="savemgPerfil" alt="savePhoto">
                             </div>
 
                             <div class="perfilName">
@@ -150,17 +143,16 @@ if ($propietarios['foto_portada']) {
                             </div> -->
                             <div class="perfilMenus mt-4">
                                 @foreach ($menus as $menu)
-                                    {{-- Verifica si el enlace del menú coincide con la URL actual --}}
-                                    <a href="{{ url($menu['link']) }}">
-                                        <button
-                                            class="mb-4 align-items-center btn w-100 opciones d-flex
+                                {{-- Verifica si el enlace del menú coincide con la URL actual --}}
+                                <a href="{{ url($menu['link']) }}">
+                                    <button class="mb-4 align-items-center btn w-100 opciones d-flex
                                         @if (request()->path() == $menu['link']) active @endif">
-                                            {{-- Agrega la clase 'active' si es el menú activo --}}
+                                        {{-- Agrega la clase 'active' si es el menú activo --}}
 
-                                            <i class="ml-3 mr-2 {{ $menu['icon'] }}"></i>
-                                            <span class="ml-1">{{ $menu['name'] }}</span>
-                                        </button>
-                                    </a>
+                                        <i class="ml-3 mr-2 {{ $menu['icon'] }}"></i>
+                                        <span class="ml-1">{{ $menu['name'] }}</span>
+                                    </button>
+                                </a>
                                 @endforeach
                             </div>
                         </div>

@@ -16,6 +16,29 @@ use Illuminate\Support\Facades\Storage;
 class InfluencerController extends Controller
 {
 
+    public function show(Request $request)
+    {
+        $cid = $request->query('cid'); // Obteniendo el parámetro 'cid' de la URL
+
+        if (!$cid) {
+            // Si 'cid' no está presente, devolver una respuesta de error o redirigir
+            abort(404);
+        }
+
+        $response = Http::post('https://beta.rhnube.com.pe/api/validarToken', [
+            'token' => $cid
+        ]);
+
+
+        // Si la API responde con 1, permitir el acceso
+        if ($response->json() === 1) {
+            $this->logout();
+            return view('influencers.registrosNuevos', compact('cid'));
+        }
+
+        abort(404);
+    }
+
     public function index()
     {
         return view('influencers.index');
@@ -95,7 +118,7 @@ class InfluencerController extends Controller
             $file = $request->file('image');
             $image = Image::make($file);
 
-    
+
             // Definir la ruta para guardar la imagen
             $filePath = 'influencers/images/imagesPortada/'; // Ruta relativa
             $fileName = uniqid() . '.' . $file->getClientOriginalExtension(); // Nombre único para evitar conflictos
@@ -122,7 +145,7 @@ class InfluencerController extends Controller
             ]);
 
             if ($imgPerfil->successful()) {
-                 return $this->obtenerPropietario();
+                return $this->obtenerPropietario();
             } else {
                 return response()->json([
                     'success' => false,
@@ -198,7 +221,7 @@ class InfluencerController extends Controller
             ]);
 
             if ($imgPerfil->successful()) {
-                 return $this->obtenerPropietario();
+                return $this->obtenerPropietario();
             } else {
                 return response()->json([
                     'success' => false,
@@ -451,15 +474,48 @@ class InfluencerController extends Controller
         }
     }
 
+    public function registrarNuevo(Request $request)
+    {
+        try {
+
+            $validatedData = $request->validate([
+                'codigo' => 'required',
+                'nombres' => 'required',
+                'razon_social' => 'required',
+                'apellido_paterno' => 'required',
+                'apellido_materno' => 'required',
+                'numero_movil' => 'required',
+                'password' => 'required',
+                'cargo' => 'nullable',
+                'email' => 'required',
+                'redes_sociales' => 'nullable',
+            ]);
+
+            dd($validatedData);
+        } catch (ValidationException $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Datos inválidos: ' . json_encode($e->errors()),
+            ], 400);
+        } catch (RequestException $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Error al conectar con la API externa: ' . $e->getMessage(),
+            ], 500);
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Ocurrió un error inesperado: ' . $e->getMessage(),
+            ], 500);
+        }
+    }
+
     public function actualizarPerfil(Request $request)
     {
 
         try {
             // Obtener el valor de email desde la sesión
             $logeado = session()->get('logeado');
-
-
-
 
             // Verificar si el valor de 'logeado' está presente
             if (empty($logeado)) {
