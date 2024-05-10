@@ -11,6 +11,7 @@ use Illuminate\Validation\ValidationException;
 use Symfony\Component\HttpKernel\Exception\HttpException;
 use Intervention\Image\Facades\Image;
 use Exception;
+use Carbon\Carbon;
 use Illuminate\Support\Facades\Storage;
 
 class InfluencerController extends Controller
@@ -112,7 +113,7 @@ class InfluencerController extends Controller
 
         try {
 
-            $imageUrl='http://127.0.0.1:8000/influencers/images/imgDefault.png';
+            $imageUrl = 'http://127.0.0.1:8000/influencers/images/imgDefault.png';
 
             $accion = 'perfil';
 

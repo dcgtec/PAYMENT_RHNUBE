@@ -100,7 +100,8 @@ img {
     box-shadow: 0px 5px 5px 0px rgba(0, 0, 0, 0.1);
 }
 
-#savemgPerfil,#savemgPerfilPortada {
+#savemgPerfil,
+#savemgPerfilPortada {
     display: none;
 }
 
@@ -199,7 +200,7 @@ a.nav__social-icon img {
 }
 
 .nav__link {
-    color: #464B50;
+    color: #464b50;
     font-weight: 400;
     font-size: 15px;
     text-transform: uppercase;
@@ -207,7 +208,7 @@ a.nav__social-icon img {
 
 label.nombrePer {
     font-weight: 500;
-    color: #464B50;
+    color: #464b50;
     font-size: 15px;
 }
 
@@ -373,6 +374,10 @@ img.upImgPort {
     background: #fff;
 }
 
+li.paginate_button.page-item.active {
+    padding: 0;
+}
+
 .perfilPhoto {
     width: 200px;
     height: 200px;
@@ -392,6 +397,11 @@ img.upImgPort {
     border-radius: 10px;
     background: #f0f2f5;
     border: none;
+}
+
+table.table-bordered.dataTable tbody th,
+table.table-bordered.dataTable tbody td {
+    vertical-align: middle;
 }
 
 .perfilName h3 {

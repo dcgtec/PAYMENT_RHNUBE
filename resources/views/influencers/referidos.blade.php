@@ -2,8 +2,8 @@
 
 
 @php
-    $datosUsuario = json_decode($responseData, true);
-    $compras = $datosUsuario['compras']['compras'];
+$datosUsuario = json_decode($responseData, true);
+$compras = $datosUsuario['compras']['compras'];
 @endphp
 
 <div class="container infoContenido pt-5 pl-md-4 pr-md-4 pb-5">
@@ -18,24 +18,49 @@
                             <th>Email</th>
                             <th>Ganancia</th>
                             <th>Fecha</th>
+                            <th>Estado</th>
                         </tr>
                     </thead>
                     <tbody>
 
                         @foreach ($compras as $compra)
-                            @php
-                                $datosUsuario = json_decode($compra['dato_usuario'], true);
-                                $nombre = $datosUsuario['customerName'];
-                                $email = $compra['correo'];
-                                $ganancia = $datosUsuario['ganancia'];
-                                $fecha = $compra['fecha_compra'];
-                            @endphp
-                            <tr>
-                                <td>{{ $nombre }}</td>
-                                <td>{{ $email }}</td>
-                                <td>$ {{ $ganancia }}</td>
-                                <td>{{ $fecha }}</td>
-                            </tr>
+                        @php
+                        $datosUsuario = json_decode($compra['dato_usuario'], true);
+                        $nombre = $datosUsuario['customerName'];
+                        $email = $compra['correo'];
+                        $ganancia = $datosUsuario['ganancia'];
+                        $fecha = \Carbon\Carbon::parse($compra['fecha_compra']);
+                        $stado = $compra['estado_transacion'];
+
+                        $fecha_mas_30 = $fecha->copy()->addDays(30); // 30 días después de la fecha de compra
+                        $today = \Carbon\Carbon::now(); // Fecha actual
+                        $dias_restantes = $today->diffInDays($fecha_mas_30, false); // Diferencia de días
+                        @endphp
+
+                        @php
+                        // Determinar el mensaje del estado basándose en el campo estado_transacion y días restantes
+                        if ($stado == 0) {
+                        $status_trans = '<span class="badge badge-warning py-1 mr-2"><i class="fa fa-clock-o" aria-hidden="true"></i> Por confirmar, dentro de ' . $dias_restantes . ' días</span>';
+                        } elseif ($stado == 1) {
+                        $status_trans = '<span class="badge badge-primary py-1 mr-2">Confirmado</span>';
+                        } elseif ($stado == 2) {
+                        $status_trans = '<span class="badge badge-info py-1 mr-2">Por cobrar</span>';
+                        } elseif ($stado == 3) {
+                        $status_trans = '<span class="badge badge-danger py-1 mr-2">Rechazado</span>';
+                        } elseif ($stado == 4) {
+                        $status_trans = '<span class="badge badge-success py-1 mr-2">Pagado</span>';
+                        } else {
+                        $status_trans = '<span class="badge badge-secondary py-1 mr-2">Desconocido</span>';
+                        }
+                        @endphp
+
+                        <tr>
+                            <td>{{ $nombre }}</td>
+                            <td>{{ $email }}</td>
+                            <td>$ {{ $ganancia }}</td>
+                            <td>{{ $fecha }}</td>
+                            <td>{!! $status_trans !!}</td>
+                        </tr>
                         @endforeach
                         <!-- Agrega más filas si es necesario -->
                     </tbody>
