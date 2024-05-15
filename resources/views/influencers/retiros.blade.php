@@ -34,8 +34,6 @@
     </div>
 
 
-
-
     <h1 class="mt-5">Mis movimientos</h1>
     <div class="card mt-4">
         <div class="card-body">
@@ -237,7 +235,7 @@
                 $(this).val('$ ' + numericValue); // Vuelve a añadir el símbolo
             } else {
                 $(this).attr('placeholder',
-                'Cant. a retirar'); // Restablece el placeholder si está vacío
+                    'Cant. a retirar'); // Restablece el placeholder si está vacío
             }
         });
 

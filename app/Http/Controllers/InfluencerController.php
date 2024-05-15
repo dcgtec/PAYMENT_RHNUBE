@@ -95,9 +95,23 @@ class InfluencerController extends Controller
 
     public function retiros()
     {
-        return view('influencers.retiros');
-    }
+        $comprasProcesadas = $this->obtenerCompras();
+        $compraDeco = json_decode($comprasProcesadas->getContent(), true);
+        $mensagge =  $compraDeco["success"];
 
+        $comprasFiltradas = []; // Inicializar como un array vacío por defecto
+
+        if ($mensagge && isset($compraDeco["compras"]["compras"])) {
+            $compras = $compraDeco["compras"]["compras"];
+            foreach ($compras as $compra) {
+                if ($compra["estado_transacion"] != 0) {
+                    $comprasFiltradas[] = $compra;
+                }
+            }
+        }
+
+        return view('influencers.retiros', ['comprasFiltradas' => $comprasFiltradas]);
+    }
 
     public function deletePthoPerfil(Request $request)
     {
