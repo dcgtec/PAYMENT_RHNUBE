@@ -191,8 +191,22 @@ class PaymentController extends Controller
             $correoDestino = filter_var($correoElectronico, FILTER_VALIDATE_EMAIL);
 
             if ($correoDestino) {
-                Mail::to($correoDestino)->send(new CompraExitosa($codigoGenerado, $customerName, $fecha, $monto));
-                return response()->json(['success' => true, 'message' => 'Correo electrónico reenviado exitosamente']);
+
+                $data = [
+                    'codigoGenerado' => $codigoGenerado,
+                    'customerName' => $customerName,
+                    'fecha' => $fecha,
+                    'monto' => $monto,
+                    'correoDestino' => $correoDestino,
+                ];
+
+                $response = Http::post('https://beta.rhnube/api/correoCompraExitosa', $data);
+
+                if ($response->successful()) {
+                    return response()->json(['success' => true, 'message' => 'Correo electrónico reenviado exitosamente']);
+                } else {
+                    return response()->json(['success' => false, 'message' => 'Error al reenviar el correo electrónico: ' . $response->body()]);
+                }
             } else {
                 throw new \Exception('La dirección de correo electrónico no es válida');
             }
@@ -293,12 +307,13 @@ class PaymentController extends Controller
                 'codigo_compra' => $codigoGenerado,
                 'dato_usuario' =>  $jsonDetalleCompra,
                 'code_stripe' => $stripeSession->id,
+                'fecha' => $fecha,
                 'correo' => $stripeSession->customer_details->email,
             ];
 
             $responseNew = Http::post('https://beta.rhnube.com.pe/api/saveCode', $newParams);
             $responseCu = $this->actualizarCodigo($codCupn);
-            Mail::to($stripeSession->customer_details->email)->send(new CompraExitosa($codigoGenerado, $customerName, $fecha, $monto));
+            //Mail::to($stripeSession->customer_details->email)->send(new CompraExitosa($codigoGenerado, $customerName, $fecha, $monto));
         }
 
 
@@ -408,7 +423,7 @@ class PaymentController extends Controller
         ];
 
         $response = Http::post('https://beta.rhnube.com.pe/api/updateUseCupon', $params);
-        dd( $response);
+        dd($response);
 
 
         if ($response->successful()) {
