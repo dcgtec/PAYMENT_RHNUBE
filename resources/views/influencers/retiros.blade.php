@@ -1,5 +1,13 @@
 @include('layouts.influencers.header')
 
+@php
+
+    $usuario = session()->get('detalleUusario');
+    $banco = '------';
+    if ($usuario['banco']) {
+        $banco = $usuario['banco'];
+    }
+@endphp
 <div class="container infoContenido pt-5 pl-md-4 pr-md-4 pb-5">
     <h1>Mis retiros</h1>
     <div class="card mt-4">
@@ -38,6 +46,9 @@
     <div class="card mt-4">
         <div class="card-body">
             <div class="table-responsive">
+
+
+
                 <table id="myTable" class="table table-striped table-bordered">
                     <thead>
                         <tr>
@@ -50,39 +61,23 @@
                         </tr>
                     </thead>
                     <tbody>
-                        <tr>
-                            <td>15229841</td>
-                            <td>$ 15.00</td>
-                            <td>BCP</td>
-                            <td>20/03/24</td>
-                            <td>06:24</td>
-                            <td>Pendiente</td>
-                        </tr>
-                        <tr>
-                            <td>15229841</td>
-                            <td>$ 15.00</td>
-                            <td>BCP</td>
-                            <td>20/03/24</td>
-                            <td>06:24</td>
-                            <td>Pendiente</td>
-                        </tr>
-                        <tr>
-                            <td>15229841</td>
-                            <td>$ 15.00</td>
-                            <td>BCP</td>
-                            <td>20/03/24</td>
-                            <td>06:24</td>
-                            <td>Pendiente</td>
-                        </tr>
-                        <tr>
-                            <td>15229841</td>
-                            <td>$ 15.00</td>
-                            <td>BCP</td>
-                            <td>20/03/24</td>
-                            <td>06:24</td>
-                            <td>Pendiente</td>
-                        </tr>
-                        <!-- Agrega más filas si es necesario -->
+
+                        @foreach ($comprasFiltradas as $comprasFiltrada)
+                            @php
+                                $datoUsuario = json_decode($comprasFiltrada['dato_usuario'], true);
+                                $ganancia = $datoUsuario['ganancia'];
+                                //dd($datoUsuario);
+                            @endphp
+                            <tr>
+                                <td>------------</td>
+                                <td>$ {{ $ganancia }}</td>
+                                <td>{{ $banco }}</td>
+                                <td>------------</td>
+                                <td>------------</td>
+                                <td>------------</td>
+                            </tr>
+                        @endforeach
+
                     </tbody>
                 </table>
             </div>
