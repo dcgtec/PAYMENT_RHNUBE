@@ -200,7 +200,7 @@ class PaymentController extends Controller
                     'correoDestino' => $correoDestino,
                 ];
 
-                $response = Http::post('https://beta.rhnube/api/correoCompraExitosa', $data);
+                $response = Http::post('https://beta.rhnube.com.pe/api/correoCompraExitosa', $data);
 
                 if ($response->successful()) {
                     return response()->json(['success' => true, 'message' => 'Correo electrónico reenviado exitosamente']);
@@ -423,8 +423,6 @@ class PaymentController extends Controller
         ];
 
         $response = Http::post('https://beta.rhnube.com.pe/api/updateUseCupon', $params);
-        dd($response);
-
 
         if ($response->successful()) {
             // Obtener los datos de la respuesta

@@ -240,7 +240,6 @@ class InfluencerController extends Controller
             ], 401); // Código 401 para no autorizado
         }
 
-
         try {
 
             $obtenerCupon = Http::post('https://beta.rhnube.com.pe/api/cuponInfluencer', [
