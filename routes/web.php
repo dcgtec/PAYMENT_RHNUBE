@@ -65,6 +65,7 @@ Route::middleware(['AuthSession'])->group(function () {
     Route::post('/actualizarPerfil', [InfluencerController::class, 'actualizarPerfil']);
     Route::post('/upload-image', [InfluencerController::class, 'uploadImage']);
     Route::get('/deletePthoPerfil', [InfluencerController::class, 'deletePthoPerfil']);
+    Route::get('/cambiarEstadoPorCobrar', [InfluencerController::class, 'cambiarEstadoPorCobrar']);
 });
 
 Route::get('logs', [\Rap2hpoutre\LaravelLogViewer\LogViewerController::class, 'index']);
