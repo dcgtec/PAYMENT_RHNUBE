@@ -230,7 +230,6 @@
             }
         }); // Inicializa DataTables
 
-
         $('#cantReti').on('focus', function() {
             var currentValue = $(this).val(); // Obtén el valor actual
 
@@ -280,12 +279,13 @@
         });
 
         $('#formRetiro').submit(function(event) {
+            event.preventDefault(); // Evita el envío del formulario por defecto
+
             // Obtener el valor del campo de entrada
             const monto = parseFloat($('#cantReti').val().replace('$', '').trim());
-            event.preventDefault();
+
             // Verificar si el monto es mayor a 1.00
             if (monto <= 1.00) {
-
                 Swal.fire({
                     title: "¡Error!",
                     text: "El monto a retirar debe ser mayor a $1.00.",
@@ -305,31 +305,59 @@
                             idCompra: ids,
                         },
                         success: function(response) {
-                            console.log(response);
-                            var gananciaS = response.totalGanancia;
+                            var ganancia = response.totalGanancia;
 
                             Swal.fire({
                                 title: "Confirmación",
-                                text: "¿Estás seguro de retirar el monto de " +
-                                    gananciaS + "?",
+                                text: "¿Estás seguro de retirar el monto de $" +
+                                    ganancia + "?",
                                 icon: "question",
                                 showCancelButton: true,
                                 confirmButtonText: "Sí",
                                 cancelButtonText: "No",
                             }).then((result) => {
                                 if (result.isConfirmed) {
-                                    Swal.fire({
-                                        title: "Éxito",
-                                        text: "El monto de $" +
-                                            'sadasd' +
-                                            " ha sido retirado correctamente.",
-                                        icon: "success",
+                                    $.ajax({
+                                        url: '/retirarDinero',
+                                        type: 'GET', // Cambiado a POST
+                                        data: {
+                                            idCompra: ids,
+                                        },
+                                        success: function(data) {
+                                            console.log(data);
+                                            Swal.fire({
+                                                title: "Éxito",
+                                                text: "El monto de $" +
+                                                    data
+                                                    .totalGanancia +
+                                                    " ha sido retirado correctamente.",
+                                                icon: "success",
+                                            });
+                                        },
+                                        error: function(xhr) {
+                                            console.log(xhr.responseJSON
+                                                .error);
+                                            Swal.fire({
+                                                title: "¡Error!",
+                                                text: xhr
+                                                    .responseJSON
+                                                    .error ||
+                                                    'Ocurrió un error inesperado.',
+                                                icon: "error",
+                                            });
+                                        }
                                     });
+
                                 }
                             });
                         },
                         error: function(xhr) {
-                            console.error(xhr.responseText);
+                            Swal.fire({
+                                title: "¡Error!",
+                                text: xhr.error,
+                                icon: "error",
+                            });
+                            console.error(xhr.responseText.error);
                             // Aquí puedes manejar el error
                         }
                     });
@@ -342,7 +370,6 @@
                 }
             }
         });
-
     });
 </script>
 

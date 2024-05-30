@@ -93,6 +93,49 @@ class InfluencerController extends Controller
         return view('influencers.micupon', compact('cupon'));
     }
 
+    public function retirarDinero(Request $request)
+    {
+        try {
+            $logeado = session()->get('logeado');
+            if (!$logeado) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Usuario no autenticado',
+                ], 401); // Código 401 para no autorizado
+            }
+
+            $request->validate([
+                'idCompra' => 'required|array'
+            ]);
+
+            $data = [
+                'email' => $logeado,
+                'idCompra' => $request->input('idCompra')
+            ];
+
+            $response = Http::post('https://beta.rhnube.com.pe/api/changeStatusCobrado', $data);
+
+            if ($response->successful()) {
+                // Decodifica la respuesta JSON
+                $responseData = $response->json();
+                // Retorna la respuesta decodificada (puedes personalizar esto según tus necesidades)
+                return response()->json($responseData, 200);
+            } else {
+                dd($response);
+                // Maneja el error si la solicitud no fue exitosa
+                return response()->json(['error' => '' . $response], $response->status());
+            }
+        } catch (\Exception $e) {
+            // Manejar otros errores inesperados
+            Log::error('Error inesperado en retirarDinero: ' . $e->getMessage());
+            return response()->json([
+                'success' => false,
+                'message' => 'Error inesperado.',
+                'details' => $e->getMessage(),
+            ], 500); // Código 500 para error interno
+        }
+    }
+
     public function cambiarEstadoPorCobrar(Request $request)
     {
         try {
