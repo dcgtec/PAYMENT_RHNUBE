@@ -31,7 +31,6 @@ class InfluencerController extends Controller
         ]);
 
 
-
         // Si la API responde con 1, permitir el acceso
         if ($response->json() === 1) {
             $this->logout();
@@ -121,13 +120,12 @@ class InfluencerController extends Controller
                 // Retorna la respuesta decodificada (puedes personalizar esto según tus necesidades)
                 return response()->json($responseData, 200);
             } else {
-                dd($response);
                 // Maneja el error si la solicitud no fue exitosa
-                return response()->json(['error' => '' . $response], $response->status());
+                return response()->json(['error' => '' . $response["error"]], $response->status());
             }
         } catch (\Exception $e) {
             // Manejar otros errores inesperados
-            Log::error('Error inesperado en retirarDinero: ' . $e->getMessage());
+            Log::error('Error inesperado en retarDinero: ' . $e->getMessage());
             return response()->json([
                 'success' => false,
                 'message' => 'Error inesperado.',
@@ -196,18 +194,15 @@ class InfluencerController extends Controller
         $compraDeco = json_decode($comprasProcesadas->getContent(), true);
         $mensagge =  $compraDeco["success"];
 
-        $comprasFiltradas = []; // Inicializar como un array vacío por defecto
-
+        $compras = [];
         if ($mensagge && isset($compraDeco["compras"]["compras"])) {
             $compras = $compraDeco["compras"]["compras"];
-            foreach ($compras as $compra) {
-                if ($compra["estado_transacion"] != 0) {
-                    $comprasFiltradas[] = $compra;
-                }
-            }
         }
 
-        return view('influencers.retiros', ['comprasFiltradas' => $comprasFiltradas]);
+
+        return view('influencers.retiros', [
+            'compras' => $compras
+        ]);
     }
 
     public function deletePthoPerfil(Request $request)
@@ -568,7 +563,6 @@ class InfluencerController extends Controller
     {
         try {
 
-
             $token = session()->get('tokenRegistro');
 
 
@@ -578,12 +572,10 @@ class InfluencerController extends Controller
 
 
 
-
-
             // Si la API responde con 1, permitir el acceso
             if ($response->json() === 1) {
-                $this->logout();
 
+                $this->logout();
 
                 // Validar la solicitud
                 $validatedData = $request->validate([
@@ -656,6 +648,13 @@ class InfluencerController extends Controller
                                         if (isset($cuponData['success']) && $cuponData['success']) {
                                             session()->put('logeado', $validatedData['email']);
                                             session()->put('detalleUusario', $propietario);
+
+
+                                            $emailCupon = Http::post('https://beta.rhnube.com.pe/api/emailCupon', [
+                                                'correo' => $validatedData['email'],
+                                                'nombre' => $validatedData['nombres']
+                                            ]);
+
                                             return response()->json([
                                                 'success' => true,
                                                 'message' => $mensaje,
@@ -753,18 +752,38 @@ class InfluencerController extends Controller
                 'cargo' => 'nullable',
                 'email' => 'required',
                 'redes_sociales' => 'nullable',
+                'banco' => 'required',
+                'tipo_de_cuenta' => 'required',
+                'cci' => 'required',
+                'numero_de_cuenta' => 'required',
             ]);
 
             $faceboook = $request->input('facebook');
             $linkedIn = $request->input('linkedIn');
             $instagram = $request->input('instagram');
             $tiktok = $request->input('tiktok');
+            $password = $request->input('password');
             $actualizarCorreo =  $request->input('email');
+
+            $banco = $request->input('banco');
+            $tipo_de_cuenta = $request->input('tipo_de_cuenta');
+            $cci = $request->input('cci');
+            $numero_de_cuenta = $request->input('numero_de_cuenta');
 
             $redesSociales = "{'facebook': '$faceboook', 'linkedIn': '$linkedIn', 'instagram': '$instagram', 'tiktok': '$tiktok'}";
 
             // Fusionar datos validados con el email desde la sesión
-            $dataToSend = array_merge($validatedData, ['email' => $logeado, 'actualizarCorreo' =>  $actualizarCorreo, 'redes_sociales' => $redesSociales]);
+            $dataToSend = array_merge($validatedData, [
+                'email' => $logeado,
+                'actualizarCorreo' =>  $actualizarCorreo,
+                'password' => $password,
+                'banco' => $banco,
+                'tipo_de_cuenta' => $tipo_de_cuenta,
+                'cci' => $cci,
+                'numero_de_cuenta' => $numero_de_cuenta,
+                'redes_sociales' => $redesSociales
+            ]);
+
 
 
             // Enviar datos a la API externa

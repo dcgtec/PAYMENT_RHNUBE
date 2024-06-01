@@ -130,19 +130,24 @@
         text-align: center;
     }
 
-    div#myTable_paginate,
-    div#myTable_info,
-    div#myTable_length,
+
+
+    div#misRetiros_paginate,
+    div#misRetiros_info,
+    div#misRetiros_length,
+    div#porRetirar_paginate,
+    div#porRetirar_info,
+    div#porRetirar_length,
     div.dataTables_wrapper div.dataTables_length select,
     div.dataTables_wrapper div.dataTables_filter label,
     div.dataTables_wrapper div.dataTables_filter input {
-        font-size: 12px;
+        font-size: 12px!important;
     }
 </style>
 
 <script>
     $(document).ready(function() {
-        $('#myTable').DataTable({
+        $('#misRetiros').DataTable({
             "ordering": false,
             "language": {
                 "lengthMenu": "Mostrar _MENU_ registros por página",

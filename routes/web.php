@@ -54,7 +54,7 @@ Route::get('/iniciarSesion', [InfluencerController::class, 'index']);
 Route::post('/logear', [InfluencerController::class, 'login']);
 // Ruta para el enlace con 'pl' y 'cid'
 Route::get('/pl', [InfluencerController::class, 'show'])->name('pl.show');
-Route::post('/registrarNuevo', [InfluencerController::class, 'registrarNuevo']);
+Route::get('/registrarNuevo', [InfluencerController::class, 'registrarNuevo']);
 
 Route::middleware(['AuthSession'])->group(function () {
     Route::get('/perfil', [InfluencerController::class, 'perfil']);
@@ -62,7 +62,7 @@ Route::middleware(['AuthSession'])->group(function () {
     Route::get('/micupon', [InfluencerController::class, 'micupon']);
     Route::get('/retiros', [InfluencerController::class, 'retiros']);
     Route::get('/logout', [InfluencerController::class, 'logout']);
-    Route::post('/actualizarPerfil', [InfluencerController::class, 'actualizarPerfil']);
+    Route::get('/actualizarPerfil', [InfluencerController::class, 'actualizarPerfil']);
     Route::post('/upload-image', [InfluencerController::class, 'uploadImage']);
     Route::get('/deletePthoPerfil', [InfluencerController::class, 'deletePthoPerfil']);
     Route::get('/cambiarEstadoPorCobrar', [InfluencerController::class, 'cambiarEstadoPorCobrar']);

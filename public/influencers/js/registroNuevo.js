@@ -1,11 +1,25 @@
 $(document).ready(function () {
+    $("#togglePassword").click(function () {
+        // Obtener el tipo de entrada actual de la contraseña
+        var tipoInput = $("#password").attr("type");
 
-    window.onpageshow = function(event) {
-        if (event.persisted) { // Si la página fue almacenada en caché
+        // Alternar entre 'password' y 'text' para mostrar u ocultar la contraseña
+        if (tipoInput === "password") {
+            $("#password").attr("type", "text");
+        } else {
+            $("#password").attr("type", "password");
+        }
+
+        // Cambiar el icono del ojo para reflejar el estado actual de la contraseña
+        $(this).toggleClass("fa-eye fa-eye-slash");
+    });
+
+    window.onpageshow = function (event) {
+        if (event.persisted) {
+            // Si la página fue almacenada en caché
             window.location.reload(); // Recargar la página
         }
     };
-
 
     var csrfToken = $('meta[name="csrf-token"]').attr("content");
     $.validator.addMethod(
@@ -24,6 +38,15 @@ $(document).ready(function () {
         });
         $(this).val(capitalized);
     });
+
+    // Método de validación personalizado para validar el CCI (Código de Cuenta Interbancario)
+    $.validator.addMethod(
+        "validarCCI",
+        function (value, element) {
+            return this.optional(element) || /^[0-9]{20}$/.test(value);
+        },
+        "Ingrese un CCI válido de 20 dígitos"
+    );
 
     // Configuración del validador
     $("#editarPerfil").validate({
@@ -75,6 +98,22 @@ $(document).ready(function () {
             tiktok: {
                 url: true, // Debe ser una URL válida si está presente
             },
+            banco: {
+                required: true,
+            },
+            tipCuenta: {
+                required: true,
+            },
+            nroCuenta: {
+                required: true,
+                number: true,
+                minlength: 10, // Dependiendo de la longitud esperada para el número de cuenta
+                maxlength: 18, // Dependiendo de la longitud esperada para el número de cuenta
+            },
+            cci: {
+                required: true,
+                validarCCI: true,
+            },
         },
         messages: {
             codigo: {
@@ -122,6 +161,22 @@ $(document).ready(function () {
             },
             tiktok: {
                 url: "Ingrese una URL válida para TikTok",
+            },
+            banco: {
+                required: "Seleccione una identidad bancaria",
+            },
+            tipCuenta: {
+                required: "Seleccione un tipo de cuenta",
+            },
+            nroCuenta: {
+                required: "Por favor, ingrese el número de cuenta",
+                number: "Debe ser un número",
+                minlength: "El número de cuenta debe tener al menos 10 dígitos",
+                maxlength: "El número de cuenta no debe exceder 18 dígitos",
+            },
+            cci: {
+                required: "Por favor, ingrese el CCI",
+                validarCCI: "Ingrese un CCI válido de 20 dígitos",
             },
         },
         errorPlacement: function (error, element) {
@@ -175,7 +230,7 @@ $(document).ready(function () {
                     instagram: instagram,
                     tiktok: tiktok,
                 },
-                method: "POST",
+                method: "get",
                 success: function (response) {
                     console.log(response);
                     if (response.success) {

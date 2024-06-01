@@ -52,14 +52,15 @@
                 </div>
             </div>
 
-
-
             <div class="col-md-4 my-1">
-                <div class="form-group">
-
+                <div class="form-group input-group">
                     <input type="password" class="form-control" value="" id="password" name="password"
                         aria-describedby="emailHelp" placeholder="Cambiar contraseña">
-
+                    <div class="input-group-append cambioPassword">
+                        <span class="input-group-text">
+                            <i class="fas fa-eye" id="togglePassword"></i>
+                        </span>
+                    </div>
                 </div>
             </div>
 
@@ -190,6 +191,92 @@
                 </div>
             </div>
 
+            <div class="col-md-6 my-1">
+                <div class="form-group">
+                    <select name="banco" id="banco" class="banco form-control">
+                        <option value="">-- Seleccione un banco --</option>
+                        <option value="BancoDeCredito">Banco de
+                            Crédito (BCP)</option>
+                        <option value="BBVAContinental">BBVA
+                            Continental</option>
+                        <option value="Interbank">Interbank</option>
+                        <option value="Scotiabank">Scotiabank</option>
+                        <option value="Banbif">Banbif</option>
+                        <option value="BancoPichincha">Banco
+                            Pichincha</option>
+                        <option value="BancoFalabella">Banco
+                            Falabella</option>
+                        <option value="BancoRipley">Banco Ripley
+                        </option>
+                        <option value="BancoGNB">Banco GNB</option>
+                        <option value="BancoDeLaNacion">Banco de
+                            la Nación</option>
+                        <option value="BancoAzteca">Banco Azteca
+                        </option>
+                        <option value="BancoDeComercio">Banco de
+                            Comercio</option>
+                        <option value="BancoCencosud">Banco Cencosud
+                        </option>
+                        <option value="MiBanco">Mi Banco</option>
+                        <option value="CajaArequipa">Caja Arequipa
+                        </option>
+                        <option value="Caja Huancayo">Caja Huancayo
+                        </option>
+                        <option value="CajaPiura">Caja Piura</option>
+                        <option value="CajaSullana">Caja Sullana
+                        </option>
+                        <option value="CajaCusco">Caja Cusco</option>
+                        <option value="CajaTrujillo">Caja Trujillo
+                        </option>
+                        <option value="CajaIca">Caja Ica</option>
+                        <option value="CajaTacna">Caja Tacna</option>
+                        <option value="CajaMaynas">Caja Maynas</option>
+                        <option value="CompartamosFinanciera">Compartamos Financiera</option>
+                        <option value="CajaMetropolitana">Caja
+                            Metropolitana</option>
+                        <option value="BancoSantander">Banco
+                            Santander</option>
+                        <option value="Citibank">Citibank</option>
+                        <option value="IcbcPeruBank">ICBC PERU BANK
+                        </option>
+                        <option value="IcbcPeruBank">ICBC PERU BANK
+                        </option>
+                    </select>
+
+                </div>
+            </div>
+
+
+            <div class="col-md-6 my-1">
+                <div class="form-group">
+                    <select class="form-control" id="tipCuenta" name="tipCuenta">
+                        <option value="">-- Seleccione tipo de
+                            cuenta --</option>
+                        <option value="Cuenta de Ahorro">Cuenta de Ahorro</option>
+                        <option value="Cuenta Corriente">Cuenta Corriente</option>
+                    </select>
+                </div>
+            </div>
+
+
+            <div class="col-md-6 my-1">
+                <div class="form-group">
+
+                    <input type="text" class="form-control" id="nroCuenta" name="nroCuenta"
+                        aria-describedby="emailHelp" placeholder="Número de cuenta">
+
+                </div>
+            </div>
+
+            <div class="col-md-6 my-1">
+                <div class="form-group">
+
+                    <input type="text" class="form-control" id="cci" name="cci"
+                        aria-describedby="emailHelp" placeholder="Código de Cuenta Interbancaria">
+
+                </div>
+            </div>
+
             <div class="col-md-12 my-1 text-right">
                 <button type="submit" class="mt-3 btn btn-primary enviarForm">Guardar cambios</button>
             </div>
@@ -209,8 +296,9 @@
     }
 
     .infoContenido .form-control {
+        width: 100%;
         background: #fff;
-        border-radius: 10px;
+        border-radius: 10px !important;
         border: none;
         padding-top: 7px !important;
         height: 50px !important;
@@ -245,6 +333,18 @@
         -moz-box-shadow: 0px 5px 5px 0px rgba(0, 0, 0, 0.1);
     }
 
+    .cambioPassword {
+        position: absolute;
+        height: 50px;
+        right: -1px;
+        z-index: 999999 !important;
+    }
+
+    .cambioPassword span {
+        background: none;
+        border: none;
+    }
+
     *:focus {
         outline: none;
         border-color: inherit;
@@ -254,6 +354,10 @@
 
     input:focus {
         outline: none !important;
+    }
+
+    i#togglePassword:hover {
+        cursor: pointer;
     }
 
 

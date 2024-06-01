@@ -13,7 +13,10 @@
     $razon_social = $propietario['razon_social'];
     // Campos opcionales con valores por defecto
     $cargo = $propietario['cargo'] ?? ''; // Si no existe, se asigna una cadena vacía
-
+    $banco = $propietario['banco'] ?? '';
+    $tipo_de_cuenta = $propietario['tipo_de_cuenta'] ?? '';
+    $cci = $propietario['cci'] ?? '';
+    $nroCuenta = $propietario['numero_de_cuenta'];
     // Decodificación de redes sociales si existen
     $redesSocialArray = [];
     if (isset($propietario['redes_sociales'])) {
@@ -41,8 +44,8 @@
             <div class="col-md-4 my-1">
                 <div class="form-group">
 
-                    <input type="number" disabled class="form-control" value="{{ $codigo }}" id="codigo" name="codigo"
-                        aria-describedby="emailHelp" placeholder="DNI / Carnet Extranjeria / RUC">
+                    <input type="number" disabled class="form-control" value="{{ $codigo }}" id="codigo"
+                        name="codigo" aria-describedby="emailHelp" placeholder="DNI / Carnet Extranjeria / RUC">
 
                 </div>
             </div>
@@ -50,8 +53,8 @@
             <div class="col-md-4 my-1">
                 <div class="form-group">
 
-                    <input type="text" class="form-control" disabled value="{{ $nombrePro }}" id="nombres" name="nombres"
-                        aria-describedby="emailHelp" placeholder="Nombres">
+                    <input type="text" class="form-control" disabled value="{{ $nombrePro }}" id="nombres"
+                        name="nombres" aria-describedby="emailHelp" placeholder="Nombres">
 
                 </div>
             </div>
@@ -59,7 +62,7 @@
             <div class="col-md-4 my-1">
                 <div class="form-group">
 
-                    <input type="text" value="{{ $apellidosPa }}"  disabled class="form-control" id="apPaterno"
+                    <input type="text" value="{{ $apellidosPa }}" disabled class="form-control" id="apPaterno"
                         name="apPaterno" aria-describedby="emailHelp" placeholder="Apellidos Paterno">
 
                 </div>
@@ -77,8 +80,8 @@
             <div class="col-md-4 my-1">
                 <div class="form-group">
 
-                    <input type="email" disabled value="{{ $email }}" class="form-control" id="email" name="email"
-                        aria-describedby="emailHelp" placeholder="Correo">
+                    <input type="email" disabled value="{{ $email }}" class="form-control" id="email"
+                        name="email" aria-describedby="emailHelp" placeholder="Correo">
 
                 </div>
             </div>
@@ -86,19 +89,24 @@
 
 
             <div class="col-md-4 my-1">
-                <div class="form-group">
-
-                    <input type="password" class="form-control" value="{{ $password }}" id="password"
-                        name="password" aria-describedby="emailHelp" placeholder="Cambiar contraseña">
-
+                <div class="form-group input-group">
+                    <input type="password" class="form-control valid" value="S@caxdjosejoel99" id="password"
+                        name="password" aria-describedby="emailHelp" placeholder="Cambiar contraseña"
+                        aria-invalid="false">
+                    <div class="input-group-append cambioPassword">
+                        <span class="input-group-text">
+                            <i class="fas fa-eye" id="togglePassword"></i>
+                        </span>
+                    </div>
                 </div>
             </div>
+
 
             <div class="col-md-4 my-1">
                 <div class="form-group">
 
-                    <input type="tel" disabled value="{{ $telefono }}" class="form-control" id="telfono" name="telfono"
-                        aria-describedby="emailHelp" placeholder="Número de teléfono">
+                    <input type="tel" disabled value="{{ $telefono }}" class="form-control" id="telfono"
+                        name="telfono" aria-describedby="emailHelp" placeholder="Número de teléfono">
                     <span id="telfono-error" style="color: red; display: none;">Número de teléfono no válido</span>
                 </div>
             </div>
@@ -107,8 +115,7 @@
                 <div class="form-group">
 
                     <input type="text" class="form-control" id="razon_social" value="{{ $razon_social }}"
-                        name="razon_social" value="{{ $cargo }}" aria-describedby="emailHelp"
-                        placeholder="Razón Social">
+                        name="razon_social" aria-describedby="emailHelp" placeholder="Razón Social">
 
                 </div>
             </div>
@@ -222,6 +229,97 @@
                 </div>
             </div>
 
+            <div class="col-md-6 my-1">
+                <div class="form-group">
+                    <select name="banco" id="banco" class="banco form-control">
+                        <option value="" {{ $banco == '' ? 'selected' : '' }}>-- Seleccione un banco --</option>
+                        <option value="BancoDeCredito" {{ $banco == 'BancoDeCredito' ? 'selected' : '' }}>Banco de
+                            Crédito (BCP)</option>
+                        <option value="BBVAContinental" {{ $banco == 'BBVAContinental' ? 'selected' : '' }}>BBVA
+                            Continental</option>
+                        <option value="Interbank" {{ $banco == 'Interbank' ? 'selected' : '' }}>Interbank</option>
+                        <option value="Scotiabank" {{ $banco == 'Scotiabank' ? 'selected' : '' }}>Scotiabank</option>
+                        <option value="Banbif" {{ $banco == 'Banbif' ? 'selected' : '' }}>Banbif</option>
+                        <option value="BancoPichincha" {{ $banco == 'BancoPichincha' ? 'selected' : '' }}>Banco
+                            Pichincha</option>
+                        <option value="BancoFalabella" {{ $banco == 'BancoFalabella' ? 'selected' : '' }}>Banco
+                            Falabella</option>
+                        <option value="BancoRipley" {{ $banco == 'BancoRipley' ? 'selected' : '' }}>Banco Ripley
+                        </option>
+                        <option value="BancoGNB" {{ $banco == 'BancoGNB' ? 'selected' : '' }}>Banco GNB</option>
+                        <option value="BancoDeLaNacion" {{ $banco == 'BancoDeLaNacion' ? 'selected' : '' }}>Banco de
+                            la Nación</option>
+                        <option value="BancoAzteca" {{ $banco == 'BancoAzteca' ? 'selected' : '' }}>Banco Azteca
+                        </option>
+                        <option value="BancoDeComercio" {{ $banco == 'BancoDeComercio' ? 'selected' : '' }}>Banco de
+                            Comercio</option>
+                        <option value="BancoCencosud" {{ $banco == 'BancoCencosud' ? 'selected' : '' }}>Banco Cencosud
+                        </option>
+                        <option value="MiBanco" {{ $banco == 'MiBanco' ? 'selected' : '' }}>Mi Banco</option>
+                        <option value="CajaArequipa" {{ $banco == 'CajaArequipa' ? 'selected' : '' }}>Caja Arequipa
+                        </option>
+                        <option value="Caja Huancayo" {{ $banco == 'Caja Huancayo' ? 'selected' : '' }}>Caja Huancayo
+                        </option>
+                        <option value="CajaPiura" {{ $banco == 'CajaPiura' ? 'selected' : '' }}>Caja Piura</option>
+                        <option value="CajaSullana" {{ $banco == 'CajaSullana' ? 'selected' : '' }}>Caja Sullana
+                        </option>
+                        <option value="CajaCusco" {{ $banco == 'CajaCusco' ? 'selected' : '' }}>Caja Cusco</option>
+                        <option value="CajaTrujillo" {{ $banco == 'CajaTrujillo' ? 'selected' : '' }}>Caja Trujillo
+                        </option>
+                        <option value="CajaIca" {{ $banco == 'CajaIca' ? 'selected' : '' }}>Caja Ica</option>
+                        <option value="CajaTacna" {{ $banco == 'CajaTacna' ? 'selected' : '' }}>Caja Tacna</option>
+                        <option value="CajaMaynas" {{ $banco == 'CajaMaynas' ? 'selected' : '' }}>Caja Maynas</option>
+                        <option value="CompartamosFinanciera"
+                            {{ $banco == 'CompartamosFinanciera' ? 'selected' : '' }}>Compartamos Financiera</option>
+                        <option value="CajaMetropolitana" {{ $banco == 'CajaMetropolitana' ? 'selected' : '' }}>Caja
+                            Metropolitana</option>
+                        <option value="BancoSantander" {{ $banco == 'BancoSantander' ? 'selected' : '' }}>Banco
+                            Santander</option>
+                        <option value="Citibank" {{ $banco == 'Citibank' ? 'selected' : '' }}>Citibank</option>
+                        <option value="IcbcPeruBank" {{ $banco == 'IcbcPeruBank' ? 'selected' : '' }}>ICBC PERU BANK
+                        </option>
+                        <option value="IcbcPeruBank" {{ $banco == 'IcbcPeruBank' ? 'selected' : '' }}>ICBC PERU BANK
+                        </option>
+                    </select>
+
+                </div>
+            </div>
+
+
+            <div class="col-md-6 my-1">
+                <div class="form-group">
+                    <select class="form-control" id="tipCuenta" name="tipCuenta">
+                        <option value="" {{ $tipo_de_cuenta == '' ? 'selected' : '' }}>-- Seleccione tipo de
+                            cuenta --</option>
+                        <option value="Cuenta de Ahorro"
+                            {{ $tipo_de_cuenta == 'Cuenta de Ahorro' ? 'selected' : '' }}>Cuenta de Ahorro</option>
+                        <option value="Cuenta Corriente"
+                            {{ $tipo_de_cuenta == 'Cuenta Corriente' ? 'selected' : '' }}>Cuenta Corriente</option>
+                    </select>
+                </div>
+            </div>
+
+
+            <div class="col-md-6 my-1">
+                <div class="form-group">
+
+                    <input type="text" class="form-control" id="nroCuenta" value="{{ $nroCuenta }}"
+                        name="nroCuenta" value="{{ $nroCuenta }}" aria-describedby="emailHelp"
+                        placeholder="Número de cuenta">
+
+                </div>
+            </div>
+
+            <div class="col-md-6 my-1">
+                <div class="form-group">
+
+                    <input type="text" class="form-control" id="cci" value="{{ $cci }}"
+                        name="cci" value="{{ $cci }}" aria-describedby="emailHelp"
+                        placeholder="Código de Cuenta Interbancaria">
+
+                </div>
+            </div>
+
             <div class="col-md-12 my-1 text-right">
                 <button type="submit" class="mt-3 btn btn-primary enviarForm">Guardar cambios</button>
             </div>
@@ -241,8 +339,9 @@
     }
 
     .infoContenido .form-control {
+        width: 100%;
         background: #fff;
-        border-radius: 10px;
+        border-radius: 10px !important;
         border: none;
         padding-top: 7px !important;
         height: 50px !important;
@@ -260,6 +359,18 @@
         -moz-box-shadow: unset;
     }
 
+
+    .cambioPassword {
+        position: absolute;
+        height: 50px;
+        right: -1px;
+        z-index: 999999 !important;
+    }
+
+    .cambioPassword span {
+        background: none;
+        border: none;
+    }
 
     ::placeholder {
         /* Edge 12-18 */
@@ -312,6 +423,10 @@
         padding-top: 13px;
         padding-bottom: 13px;
         width: 200px;
+    }
+
+    i#togglePassword:hover {
+        cursor: pointer;
     }
 </style>
 
