@@ -9,7 +9,7 @@
     <link rel="stylesheet" href="{{ asset('influencers/css/bootstrap.min.css') }}">
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css">
     <script src="{{ asset('influencers/js/jquery.min.js') }}"></script>
-    <script src="{{ asset('influencers/js/bootstrap.min.js') }}"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/js/bootstrap.bundle.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.19.5/jquery.validate.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.10.5/dist/sweetalert2.all.min.js"></script>
     <link rel="stylesheet" href="{{ asset('influencers/css/login.css') }}">
@@ -65,7 +65,8 @@
                             </div>
 
                             <div class="form-inline">
-                                <a href="#" id="forgot" class="font-weight-bold">¿Olvidaste tu Contraseña?</a>
+                                <a href="#" data-target="#exampleModal" id="forgot"
+                                    class="font-weight-bold">¿Olvidaste tu Contraseña?</a>
                             </div>
                             <div class="row py-1 mt-4 mv-3 px-3 justify-content-center text-center">
                                 {!! htmlFormSnippet() !!} @error('g-recaptcha-response')
@@ -77,6 +78,27 @@
                             <button class="btn btn-primary btn-block mt-3" type="submit">Ingresar</button>
                         </form>
                     </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal -->
+    <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Modal title</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    ...
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-primary">Save changes</button>
                 </div>
             </div>
         </div>

@@ -63,6 +63,7 @@ Route::middleware(['AuthSession'])->group(function () {
     Route::get('/retiros', [InfluencerController::class, 'retiros']);
     Route::get('/logout', [InfluencerController::class, 'logout']);
     Route::get('/actualizarPerfil', [InfluencerController::class, 'actualizarPerfil']);
+    Route::get('/changeEmail', [InfluencerController::class, 'changeEmailToken']);
     Route::post('/upload-image', [InfluencerController::class, 'uploadImage']);
     Route::get('/deletePthoPerfil', [InfluencerController::class, 'deletePthoPerfil']);
     Route::get('/cambiarEstadoPorCobrar', [InfluencerController::class, 'cambiarEstadoPorCobrar']);

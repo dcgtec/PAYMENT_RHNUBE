@@ -725,6 +725,54 @@ class InfluencerController extends Controller
         }
     }
 
+
+    public function changeEmailToken(Request $request)
+    {
+        try {
+            // Obtener el valor de email desde la sesión
+            $logeado = session()->get('logeado');
+
+            // Verificar si el valor de 'logeado' está presente
+            if (empty($logeado)) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'No se encontró información de inicio de sesión.',
+                ], 400);
+            }
+
+            $detalleUsuario = session()->get('detalleUusario');
+
+            $idPropietario = $detalleUsuario["id_propietario"];
+            $status = 'change-email';
+            $title = 'correo electrónico';
+
+            // Hacer la solicitud HTTP a la API externa utilizando la fachada Http
+            $response = Http::post('http://beta.rhnube.com.pe/api/statusChangeToken', [
+                'idPropietario' => $idPropietario,
+                'status' => $status,
+                'title' => $title,
+            ]);
+
+            // Obtener y devolver la respuesta de la API externa
+            return $response->json();
+        } catch (ValidationException $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Datos inválidos: ' . json_encode($e->errors()),
+            ], 400);
+        } catch (RequestException $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Error al conectar con la API externa changeToken: ' . $e->getMessage(),
+            ], 500);
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Ocurrió un error inesperado changeToken: ' . $e->getMessage(),
+            ], 500);
+        }
+    }
+
     public function actualizarPerfil(Request $request)
     {
 

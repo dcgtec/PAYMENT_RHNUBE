@@ -78,11 +78,15 @@
             </div>
 
             <div class="col-md-4 my-1">
-                <div class="form-group">
+                <div class="form-group input-group">
 
                     <input type="email" disabled value="{{ $email }}" class="form-control" id="email"
                         name="email" aria-describedby="emailHelp" placeholder="Correo">
-
+                    <div class="input-group-append cambioPassword">
+                        <span class="input-group-text">
+                            <i class="fas fa-sync" id="changeEmail"></i>
+                        </span>
+                    </div>
                 </div>
             </div>
 
@@ -425,7 +429,17 @@
         width: 200px;
     }
 
-    i#togglePassword:hover {
+    .swal2-container.swal2-center.swal2-backdrop-show {
+        z-index: 999999;
+    }
+
+    i#togglePassword,
+    i#changeEmail {
+        color: #1F71F0;
+    }
+
+    i#togglePassword:hover,
+    i#changeEmail:hover {
         cursor: pointer;
     }
 </style>

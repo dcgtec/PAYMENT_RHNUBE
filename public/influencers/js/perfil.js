@@ -245,4 +245,13 @@ $(document).ready(function () {
             });
         },
     });
+
+    $("i#changeEmail").click(function () {
+        $(this).addClass("disabled");
+        Swal.fire({
+            title: "¡Correcto!",
+            text: "Revise su bandeja de entrada.",
+            icon: "success",
+        });
+    });
 });
