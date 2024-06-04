@@ -2,7 +2,7 @@
 <html lang="en">
 
 <head>
-    <title>Cambiar contraseña</title>
+    <title>Cambiar de correo electrónico</title>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="shortcut icon" href="{{ asset('images/iconoLogoRhNubeActual.png') }}">
@@ -118,7 +118,7 @@
     <main class="container my-5">
         <div class="card mx-auto" style="max-width: 500px;">
             <div class="card-header text-center">
-                <h4>Cambiar Contraseña</h4>
+                <h4>Cambiar Correo</h4>
             </div>
             <div class="card-body">
                 <form id="change-password-form">
@@ -128,32 +128,8 @@
                             name="token" required>
                     </div>
                     <div class="form-group">
-                        <label for="email">Correo Electrónico</label>
+                        <label for="email">Nuevo Correo Electrónico</label>
                         <input type="email" class="form-control" id="email" name="email" required>
-                    </div>
-                    <div class="form-group">
-                        <label for="password">Nueva Contraseña</label>
-                        <div class="input-group">
-                            <input type="password" class="form-control" id="password" name="password" required>
-                            <div class="input-group-append">
-                                <span class="input-group-text" onclick="togglePasswordVisibility('#password', this)">
-                                    <i class="fas fa-eye"></i>
-                                </span>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <label for="confirm-password">Confirmar Nueva Contraseña</label>
-                        <div class="input-group">
-                            <input type="password" class="form-control" id="confirm-password" name="confirm_password"
-                                required>
-                            <div class="input-group-append">
-                                <span class="input-group-text"
-                                    onclick="togglePasswordVisibility('#confirm-password', this)">
-                                    <i class="fas fa-eye"></i>
-                                </span>
-                            </div>
-                        </div>
                     </div>
                     <div class="form-group">
                         <label for="codigo-validacion">Código de Validación</label>
@@ -172,7 +148,7 @@
             <p class="mb-0">© 2024 Tu Compañía. Todos los derechos reservados.</p>
         </div>
     </footer>
-    <script src="{{ asset('influencers/js/changePassword.js') }}"></script>
+    <script src="{{ asset('influencers/js/changeEmail.js') }}"></script>
 </body>
 
 </html>

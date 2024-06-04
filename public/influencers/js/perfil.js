@@ -183,12 +183,6 @@ $(document).ready(function () {
             const nroCuenta = $("#nroCuenta").val();
             const cci = $("#cci").val();
 
-            $.ajaxSetup({
-                headers: {
-                    "X-CSRF-TOKEN": csrfToken,
-                },
-            });
-
             $.ajax({
                 url: "/actualizarPerfil",
                 data: {

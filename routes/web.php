@@ -72,7 +72,9 @@ Route::middleware(['AuthSession'])->group(function () {
 });
 
 Route::get('/changeEmail', [InfluencerController::class, 'changeEmailToken']);
-
 Route::get('/pass-change', [ChangeModuloController::class, 'showPassword']);
+Route::get('/email-change', [ChangeModuloController::class, 'showEmail']);
+Route::post('/changePasswords', [ChangeModuloController::class, 'changePasswords']);
+Route::post('/changeEmail', [ChangeModuloController::class, 'changeEmail']);
 
 Route::get('logs', [\Rap2hpoutre\LaravelLogViewer\LogViewerController::class, 'index']);
