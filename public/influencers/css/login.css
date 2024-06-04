@@ -2,8 +2,8 @@ html,
 body {
     padding: 0;
     margin: 0;
-    background-color: #F8FAFC;
-    font-family: 'Poppins', sans-serif
+    background-color: #f8fafc;
+    font-family: "Poppins", sans-serif;
 }
 
 html {
@@ -25,7 +25,6 @@ input:focus:-webkit-autofill {
     outline: none;
     /* Quita el contorno */
 }
-
 
 body {
     height: 100vh;
@@ -141,17 +140,20 @@ body {
 
 .cardEfe {
     background: rgb(86, 84, 230);
-    background: linear-gradient(90deg, rgba(86, 84, 230, 0.25) 0%, rgba(253, 203, 103, 0.25) 100%);
+    background: linear-gradient(
+        90deg,
+        rgba(86, 84, 230, 0.25) 0%,
+        rgba(253, 203, 103, 0.25) 100%
+    );
     margin: 0 !important;
     padding: 0 !important;
 }
 
-@import url('https://fonts.googleapis.com/css2?family=Poppins&display=swap');
-
+@import url("https://fonts.googleapis.com/css2?family=Poppins&display=swap");
 
 .panel-heading {
     text-align: center;
-    margin-bottom: 10px
+    margin-bottom: 10px;
 }
 
 #forgot {
@@ -162,7 +164,7 @@ body {
 }
 
 a:hover {
-    text-decoration: none
+    text-decoration: none;
 }
 
 .form-inline label {
@@ -175,7 +177,7 @@ a:hover {
 .btn.btn-primary {
     margin-top: 20px;
     border-radius: 10px;
-    background-color: #1F71F0;
+    background-color: #1f71f0;
     padding-top: 12px;
     padding-bottom: 12px;
 }
@@ -183,7 +185,7 @@ a:hover {
 .panel {
     min-height: 380px;
     box-shadow: 20px 20px 80px rgb(218, 218, 218);
-    border-radius: 12px
+    border-radius: 12px;
 }
 
 .input-field {
@@ -192,18 +194,17 @@ a:hover {
     display: flex;
     align-items: center;
     cursor: pointer;
-    border: 1px solid #1F71F0;
-    color: #AAB4C3
+    border: 1px solid #1f71f0;
+    color: #aab4c3;
 }
 
-input[type='text'],
-input[type='password'],
-input[type='email']
-{
+input[type="text"],
+input[type="password"],
+input[type="email"] {
     border: none;
     outline: none;
     box-shadow: none;
-    width: 100%
+    width: 100%;
 }
 
 body.swal2-height-auto {
@@ -213,7 +214,7 @@ body.swal2-height-auto {
 .fa-eye-slash.btn {
     border: none;
     outline: none;
-    box-shadow: none
+    box-shadow: none;
 }
 
 img {
@@ -221,12 +222,12 @@ img {
     height: 40px;
     object-fit: cover;
     border-radius: 50%;
-    position: relative
+    position: relative;
 }
 
-a[target='_blank'] {
+a[target="_blank"] {
     position: relative;
-    transition: all 0.1s ease-in-out
+    transition: all 0.1s ease-in-out;
 }
 
 button:focus {
@@ -236,7 +237,7 @@ button:focus {
 
 .bordert {
     border-top: 1px solid #aaa;
-    position: relative
+    position: relative;
 }
 
 .bordert:after {
@@ -245,7 +246,7 @@ button:focus {
     top: -13px;
     left: 33%;
     background-color: #fff;
-    padding: 0px 8px
+    padding: 0px 8px;
 }
 
 label.error {
@@ -254,22 +255,42 @@ label.error {
     font-size: 12px;
 }
 
-@media(max-width: 360px) {
+.modal-header {
+    background: #1f71f0;
+    color: #fff;
+    text-transform: uppercase;
+}
+
+.modal-footer {
+    border: none;
+    padding-top: 0;
+}
+
+.modal-body {
+    padding-bottom: 0;
+}
+
+.close {
+    color: #fff;
+    opacity: 1;
+}
+
+@media (max-width: 360px) {
     #forgot {
         margin-left: 0;
-        padding-top: 10px
+        padding-top: 10px;
     }
 
     body {
-        height: 100%
+        height: 100%;
     }
 
     .container {
-        margin: 30px 0
+        margin: 30px 0;
     }
 
     .bordert:after {
-        left: 25%
+        left: 25%;
     }
 }
 

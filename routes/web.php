@@ -4,6 +4,7 @@ use App\Http\Controllers\Automatizacion\AutomatizacionController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\PlanController;
 use App\Http\Controllers\CategoryPlanController;
+use App\Http\Controllers\ChangeModuloController;
 use App\Http\Controllers\InfluencerController;
 use App\Http\Controllers\PaymentController;
 use Illuminate\Support\Facades\Auth;
@@ -63,11 +64,15 @@ Route::middleware(['AuthSession'])->group(function () {
     Route::get('/retiros', [InfluencerController::class, 'retiros']);
     Route::get('/logout', [InfluencerController::class, 'logout']);
     Route::get('/actualizarPerfil', [InfluencerController::class, 'actualizarPerfil']);
-    Route::get('/changeEmail', [InfluencerController::class, 'changeEmailToken']);
+
     Route::post('/upload-image', [InfluencerController::class, 'uploadImage']);
     Route::get('/deletePthoPerfil', [InfluencerController::class, 'deletePthoPerfil']);
     Route::get('/cambiarEstadoPorCobrar', [InfluencerController::class, 'cambiarEstadoPorCobrar']);
     Route::get('/retirarDinero', [InfluencerController::class, 'retirarDinero']);
 });
+
+Route::get('/changeEmail', [InfluencerController::class, 'changeEmailToken']);
+
+Route::get('/pass-change', [ChangeModuloController::class, 'showPassword']);
 
 Route::get('logs', [\Rap2hpoutre\LaravelLogViewer\LogViewerController::class, 'index']);

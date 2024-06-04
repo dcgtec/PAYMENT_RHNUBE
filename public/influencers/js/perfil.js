@@ -247,11 +247,32 @@ $(document).ready(function () {
     });
 
     $("i#changeEmail").click(function () {
-        $(this).addClass("disabled");
-        Swal.fire({
-            title: "¡Correcto!",
-            text: "Revise su bandeja de entrada.",
-            icon: "success",
+        $.ajax({
+            url: "/changeEmail",
+            method: "GET",
+            success: function (response) {
+                if (response.success) {
+                    Swal.fire({
+                        title: "¡Correcto!",
+                        text: response.message,
+                        icon: "success",
+                    });
+                } else {
+                    Swal.fire({
+                        title: "¡Error!",
+                        text: response.message,
+                        icon: "error",
+                    });
+                }
+            },
+            error: function (xhr) {
+                console.log();
+                Swal.fire({
+                    title: "Error",
+                    text: "Hubo un problema al cambiar el correo electrónico.",
+                    icon: "error",
+                });
+            },
         });
     });
 });

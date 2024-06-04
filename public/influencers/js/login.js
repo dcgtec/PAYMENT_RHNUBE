@@ -139,6 +139,80 @@ $("#loginForm").validate({
     },
 });
 
+$("a#forgot").click(function (event) {
+    event.preventDefault(); // Prevent the default anchor behavior
+    $("#forgotPassword").modal("show"); // Show the modal
+});
+
+var $forgotPasswordForm = $("#forgotPasswordForm");
+
+$forgotPasswordForm.validate({
+    rules: {
+        emailCorreo: {
+            required: true,
+            email: true,
+        },
+    },
+    messages: {
+        emailCorreo: {
+            required: "Por favor, ingrese su correo electrónico.",
+            email: "Por favor, ingrese un correo electrónico válido.",
+        },
+    },
+    errorPlacement: function (error, element) {
+        error.appendTo(element.closest(".form-group"));
+    },
+    highlight: function (element) {
+        $(element).addClass("is-invalid"); // Clase para indicar error
+    },
+    unhighlight: function (element) {
+        $(element).removeClass("is-invalid"); // Remueve clase cuando es válido
+    },
+    submitHandler: function (form) {
+        var emailCorreo = $("#emailCorreo").val();
+        var $submitButton = $(form).find("button[type='submit']");
+        $submitButton.prop("disabled", true);
+        $.ajax({
+            url: "/changeEmail",
+            method: "GET", // Adjust method if necessary, POST is usually preferred for such actions
+            data: {
+                user: emailCorreo,
+            },
+            success: function (response) {
+                console.log(response);
+                if (response.success) {
+                    Swal.fire({
+                        title: "¡Correcto!",
+                        text: response.message,
+                        icon: "success",
+                    });
+                    $("#emailCorreo").val("");
+                } else {
+                    Swal.fire({
+                        title: "¡Error!",
+                        text: response.message,
+                        icon: "error",
+                    });
+                }
+
+                $submitButton.prop("disabled", false);
+            },
+            error: function (xhr) {
+                var errorMessage = xhr.responseJSON
+                    ? xhr.responseJSON.message
+                    : "Hubo un problema al cambiar el correo electrónico.";
+                Swal.fire({
+                    title: "Error",
+                    text: errorMessage,
+                    icon: "error",
+                });
+
+                $submitButton.prop("disabled", false);
+            },
+        });
+    },
+});
+
 // $("#loginForm").on("submit", function (e) {
 //     e.preventDefault(); // Evitar el comportamiento normal del formulario
 

@@ -65,14 +65,14 @@
                             </div>
 
                             <div class="form-inline">
-                                <a href="#" data-target="#exampleModal" id="forgot"
+                                <a href="#" data-target="#forgotPassword" id="forgot"
                                     class="font-weight-bold">¿Olvidaste tu Contraseña?</a>
                             </div>
                             <div class="row py-1 mt-4 mv-3 px-3 justify-content-center text-center">
                                 {!! htmlFormSnippet() !!} @error('g-recaptcha-response')
-                                    <span class="invalid-feedback" style="display: block !important;" role="alert">
-                                        <strong>{{ $message }}</strong>
-                                    </span>
+                                <span class="invalid-feedback" style="display: block !important;" role="alert">
+                                    <strong>{{ $message }}</strong>
+                                </span>
                                 @enderror
                             </div>
                             <button class="btn btn-primary btn-block mt-3" type="submit">Ingresar</button>
@@ -84,21 +84,29 @@
     </div>
 
     <!-- Modal -->
-    <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal fade" id="forgotPassword" tabindex="-1" aria-labelledby="forgotPasswordLabel" aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalLabel">Modal title</h5>
+                    <h5 class="modal-title" id="forgotPasswordLabel">Cambiar Contraseña</h5>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
                 </div>
                 <div class="modal-body">
-                    ...
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                    <button type="button" class="btn btn-primary">Save changes</button>
+                    <form id="forgotPasswordForm">
+                        <div class="form-group py-2">
+                            <div class="input-field">
+                                <span class="far fa-user p-2"></span>
+                                <input id="emailCorreo" name="emailCorreo" type="email" required
+                                    placeholder="Ingrese su correo electrónico" autocomplete="anyrandominvalidvalue"
+                                    required="" aria-invalid="false">
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="submit" class="btn btn-primary mt-0">Enviar</button>
+                        </div>
+                    </form>
                 </div>
             </div>
         </div>

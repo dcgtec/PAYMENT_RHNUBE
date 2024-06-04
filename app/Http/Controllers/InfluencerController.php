@@ -729,32 +729,46 @@ class InfluencerController extends Controller
     public function changeEmailToken(Request $request)
     {
         try {
-            // Obtener el valor de email desde la sesión
-            $logeado = session()->get('logeado');
 
-            // Verificar si el valor de 'logeado' está presente
-            if (empty($logeado)) {
+            $idPropietario = null;
+            $status = 'email-change';
+            $title = 'correo electrónico';
+
+            if ($request->user) {
+                $idPropietario = $request->user;
+                $status = 'pass-change';
+                $title = 'contraseña';
+            } elseif (session()->get('logeado')) {
+                $logeado = session()->get('logeado');
+                if (empty($logeado)) {
+                    return response()->json([
+                        'success' => false,
+                        'message' => 'No se encontró información de inicio de sesión.',
+                    ], 400);
+                }
+
+                $detalleUsuario = session()->get('detalleUsuario');
+                $idPropietario = $detalleUsuario["id_propietario"];
+            }
+
+            if (!$idPropietario) {
                 return response()->json([
                     'success' => false,
-                    'message' => 'No se encontró información de inicio de sesión.',
+                    'message' => 'ID del propietario no proporcionado.',
                 ], 400);
             }
 
-            $detalleUsuario = session()->get('detalleUusario');
-
-            $idPropietario = $detalleUsuario["id_propietario"];
-            $status = 'change-email';
-            $title = 'correo electrónico';
-
-            // Hacer la solicitud HTTP a la API externa utilizando la fachada Http
-            $response = Http::post('http://beta.rhnube.com.pe/api/statusChangeToken', [
+            $response = Http::post('https://beta.rhnube.com.pe/api/statusChangeToken', [
                 'idPropietario' => $idPropietario,
                 'status' => $status,
                 'title' => $title,
             ]);
 
-            // Obtener y devolver la respuesta de la API externa
-            return $response->json();
+            $respuesta = $response->json();
+            return response()->json([
+                'success' => $respuesta["success"],
+                'message' => $respuesta["message"],
+            ], 200);
         } catch (ValidationException $e) {
             return response()->json([
                 'success' => false,
