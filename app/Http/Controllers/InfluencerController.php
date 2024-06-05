@@ -26,7 +26,7 @@ class InfluencerController extends Controller
             abort(404);
         }
 
-        $response = Http::post('https://beta.rhnube.com.pe/api/validarToken', [
+        $response = Http::post('https://rhnube.com.pe/api/validarToken', [
             'token' => $cid
         ]);
 
@@ -112,7 +112,7 @@ class InfluencerController extends Controller
                 'idCompra' => $request->input('idCompra')
             ];
 
-            $response = Http::post('https://beta.rhnube.com.pe/api/changeStatusCobrado', $data);
+            $response = Http::post('https://rhnube.com.pe/api/changeStatusCobrado', $data);
 
             if ($response->successful()) {
                 // Decodifica la respuesta JSON
@@ -156,7 +156,7 @@ class InfluencerController extends Controller
                 'idCompra' => $request->input('idCompra')
             ];
 
-            $response = Http::post('https://beta.rhnube.com.pe/api/obtenerSumaRetiro', $data);
+            $response = Http::post('https://rhnube.com.pe/api/obtenerSumaRetiro', $data);
 
             // Verifica si la solicitud fue exitosa
             if ($response->successful()) {
@@ -223,7 +223,7 @@ class InfluencerController extends Controller
 
             $accion = 'perfil';
 
-            $imgPerfil = Http::post('https://beta.rhnube.com.pe/api/cambiarImgPerfil', [
+            $imgPerfil = Http::post('https://rhnube.com.pe/api/cambiarImgPerfil', [
                 'accion' => $accion,
                 'email' => $logeado,
                 'imgPerfil' => $imageUrl
@@ -300,7 +300,7 @@ class InfluencerController extends Controller
             // Realizar solicitud externa para actualizar el perfil
             $accion = 'perfil';
 
-            $imgPerfil = Http::post('https://beta.rhnube.com.pe/api/cambiarImgPerfil', [
+            $imgPerfil = Http::post('https://rhnube.com.pe/api/cambiarImgPerfil', [
                 'accion' => $accion,
                 'email' => $logeado,
                 'imgPerfil' => $imageUrl
@@ -334,7 +334,7 @@ class InfluencerController extends Controller
 
         try {
 
-            $obtenerCupon = Http::post('https://beta.rhnube.com.pe/api/cuponInfluencer', [
+            $obtenerCupon = Http::post('https://rhnube.com.pe/api/cuponInfluencer', [
                 'email' => $logeado
             ]);
 
@@ -389,7 +389,7 @@ class InfluencerController extends Controller
             $responseData = json_decode($cupon->getContent(), true);
             $cupon = $responseData["cupon"];
 
-            $obtenerComprasPorCupon = Http::post('https://beta.rhnube.com.pe/api/obtenerComprasPorCupon', [
+            $obtenerComprasPorCupon = Http::post('https://rhnube.com.pe/api/obtenerComprasPorCupon', [
                 'cupon' => $cupon
             ]);
 
@@ -443,7 +443,7 @@ class InfluencerController extends Controller
 
         try {
             // Realizar la solicitud a la API externa
-            $response = Http::post('https://beta.rhnube.com.pe/api/obtenerPropietario', [
+            $response = Http::post('https://rhnube.com.pe/api/obtenerPropietario', [
                 'email' => $logeado
             ]);
 
@@ -522,7 +522,7 @@ class InfluencerController extends Controller
 
         try {
             // Hacer una solicitud POST a la API externa
-            $response = Http::post('https://beta.rhnube.com.pe/api/logearUser', [
+            $response = Http::post('https://rhnube.com.pe/api/logearUser', [
                 'user' => $user,
                 'password' => $password,
             ]);
@@ -566,7 +566,7 @@ class InfluencerController extends Controller
             $token = session()->get('tokenRegistro');
 
 
-            $response = Http::post('https://beta.rhnube.com.pe/api/validarToken', [
+            $response = Http::post('https://rhnube.com.pe/api/validarToken', [
                 'token' =>  $token
             ]);
 
@@ -599,7 +599,7 @@ class InfluencerController extends Controller
                 $redesSociales = "{'facebook': '$faceboook', 'linkedIn': '$linkedIn', 'instagram': '$instagram', 'tiktok': '$tiktok'}";
 
                 // Enviar una solicitud POST a la API externa para guardar perfil
-                $response = Http::post('https://beta.rhnube.com.pe/api/guardarPerfil', [
+                $response = Http::post('https://rhnube.com.pe/api/guardarPerfil', [
                     'codigo' => $validatedData['codigo'],
                     'nombres' => $validatedData['nombres'],
                     'apellido_paterno' => $validatedData['apellido_paterno'],
@@ -623,7 +623,7 @@ class InfluencerController extends Controller
                             $mensaje = $responseData['message'];
 
                             // Obtener propietario por correo electrónico
-                            $obtePro = Http::post('https://beta.rhnube.com.pe/api/obtenerPropietario', [
+                            $obtePro = Http::post('https://rhnube.com.pe/api/obtenerPropietario', [
                                 'email' => $validatedData['email']
                             ]);
 
@@ -637,7 +637,7 @@ class InfluencerController extends Controller
                                     // Valor por defecto si no existe
                                     $propietario = $data["propietario"]["0"];
                                     // Crear cupón con los datos obtenidos
-                                    $crearCupon = Http::post('https://beta.rhnube.com.pe/api/crearCupon', [
+                                    $crearCupon = Http::post('https://rhnube.com.pe/api/crearCupon', [
                                         'propietario' => $idPropietario,
                                         'token' => $token
                                     ]);
@@ -650,7 +650,7 @@ class InfluencerController extends Controller
                                             session()->put('detalleUusario', $propietario);
 
 
-                                            $emailCupon = Http::post('https://beta.rhnube.com.pe/api/emailCupon', [
+                                            $emailCupon = Http::post('https://rhnube.com.pe/api/emailCupon', [
                                                 'correo' => $validatedData['email'],
                                                 'nombre' => $validatedData['nombres']
                                             ]);
@@ -760,7 +760,7 @@ class InfluencerController extends Controller
                 ], 400);
             }
 
-            $response = Http::post('https://beta.rhnube.com.pe/api/statusChangeToken', [
+            $response = Http::post('https://rhnube.com.pe/api/statusChangeToken', [
                 'idPropietario' => $idPropietario,
                 'status' => $status,
                 'title' => $title,
@@ -851,7 +851,7 @@ class InfluencerController extends Controller
 
 
             // Enviar datos a la API externa
-            $response = Http::post('https://beta.rhnube.com.pe/api/editarPerfil', $dataToSend);
+            $response = Http::post('https://rhnube.com.pe/api/editarPerfil', $dataToSend);
 
 
             // Verificar si la solicitud fue exitosa

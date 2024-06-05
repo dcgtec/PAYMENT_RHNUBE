@@ -19,7 +19,7 @@ class ChangeModuloController extends Controller
             abort(404);
         }
 
-        $response = Http::post('https://beta.rhnube.com.pe/api/validateStatusToken', [
+        $response = Http::post('https://rhnube.com.pe/api/validateStatusToken', [
             'token' => $ce,
             'type_token' => 'pass-change'
         ]);
@@ -44,7 +44,7 @@ class ChangeModuloController extends Controller
             abort(404);
         }
 
-        $response = Http::post('https://beta.rhnube.com.pe/api/validateStatusToken', [
+        $response = Http::post('https://rhnube.com.pe/api/validateStatusToken', [
             'token' => $ce,
             'type_token' => 'email-change'
         ]);
@@ -83,7 +83,7 @@ class ChangeModuloController extends Controller
                 throw new ValidationException($validator);
             }
 
-            $response = Http::post('https://beta.rhnube.com.pe/api/updatePasswprdToken', [
+            $response = Http::post('https://rhnube.com.pe/api/updatePasswprdToken', [
                 'email' => $email,
                 'token' => $token,
                 'password' => $password,
@@ -133,7 +133,7 @@ class ChangeModuloController extends Controller
                 throw new ValidationException($validator);
             }
 
-            $response = Http::post('https://beta.rhnube.com.pe/api/updateCorreoToken', [
+            $response = Http::post('https://rhnube.com.pe/api/updateCorreoToken', [
                 'new_email' => $email,
                 'token' => $token,
                 'codigo_validacion' => $codValidation,

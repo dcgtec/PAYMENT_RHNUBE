@@ -77,7 +77,7 @@ class PaymentController extends Controller
 
             $cupon = $request->input('cupon');
 
-            $response = Http::post('https://beta.rhnube.com.pe/api/obtenerdatosCupon', [
+            $response = Http::post('https://rhnube.com.pe/api/obtenerdatosCupon', [
                 'codigo' => $cupon,
             ]);
 
@@ -98,7 +98,7 @@ class PaymentController extends Controller
             // Configuración de impuestos según el país
             $taxes = [];
             if ($country == "PE") {
-                $taxes = ['txr_1OMyoaCbKz5YJFE3ajJh9S4U'];
+                $taxes = ['txr_1ORzFnCbKz5YJFE3k4IpT5vR'];
             }
 
             $sessionData = [
@@ -200,7 +200,7 @@ class PaymentController extends Controller
                     'correoDestino' => $correoDestino,
                 ];
 
-                $response = Http::post('https://beta.rhnube.com.pe/api/correoCompraExitosa', $data);
+                $response = Http::post('https://rhnube.com.pe/api/correoCompraExitosa', $data);
 
                 if ($response->successful()) {
                     return response()->json(['success' => true, 'message' => 'Correo electrónico reenviado exitosamente']);
@@ -264,7 +264,7 @@ class PaymentController extends Controller
             'paquete' => '0',
         ];
 
-        $respoCupon = Http::post('https://beta.rhnube.com.pe/api/updateUseCupon', $params);
+        $respoCupon = Http::post('https://rhnube.com.pe/api/updateUseCupon', $params);
 
         if ($respoCupon->successful()) {
 
@@ -295,7 +295,7 @@ class PaymentController extends Controller
 
 
         // Consumir la API
-        $response = Http::get('https://beta.rhnube.com.pe/api/verificarSaveCodigo', [
+        $response = Http::get('https://rhnube.com.pe/api/verificarSaveCodigo', [
             'codigo_compra' => $codigoGenerado,
         ]);
 
@@ -311,7 +311,7 @@ class PaymentController extends Controller
                 'correo' => $stripeSession->customer_details->email,
             ];
 
-            $responseNew = Http::post('https://beta.rhnube.com.pe/api/saveCode', $newParams);
+            $responseNew = Http::post('https://rhnube.com.pe/api/saveCode', $newParams);
             $responseCu = $this->actualizarCodigo($codCupn);
             //Mail::to($stripeSession->customer_details->email)->send(new CompraExitosa($codigoGenerado, $customerName, $fecha, $monto));
         }
@@ -422,7 +422,7 @@ class PaymentController extends Controller
             'paquete' => $paquete,
         ];
 
-        $response = Http::post('https://beta.rhnube.com.pe/api/updateUseCupon', $params);
+        $response = Http::post('https://rhnube.com.pe/api/updateUseCupon', $params);
 
         if ($response->successful()) {
             // Obtener los datos de la respuesta
