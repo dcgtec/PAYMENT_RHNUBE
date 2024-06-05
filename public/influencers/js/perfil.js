@@ -41,6 +41,15 @@ $(document).ready(function () {
         $(this).toggleClass("fa-eye fa-eye-slash");
     });
 
+    $.validator.addMethod(
+        "regex",
+        function (value, element, regexp) {
+            var re = new RegExp(regexp);
+            return this.optional(element) || re.test(value);
+        },
+        "Please check your input."
+    );
+
     // Configuración del validador
     $("#editarPerfil").validate({
         rules: {
@@ -69,6 +78,7 @@ $(document).ready(function () {
             password: {
                 required: true,
                 minlength: 6,
+                regex: /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).+$/,
             },
             telfono: {
                 required: false, // Opcional, pero si está presente, se debe validar
@@ -76,7 +86,8 @@ $(document).ready(function () {
             },
             // Reglas para campos opcionales que deben ser URLs si se completan
             facebook: {
-                url: true, // Debe ser una URL válida si está presente
+                url: true, // Debe ser una URL válida si está presente.
+                required: true,
             },
             linkedIn: {
                 url: true, // Debe ser una URL válida si está presente
@@ -106,36 +117,38 @@ $(document).ready(function () {
         },
         messages: {
             codigo: {
-                required: "Por favor, ingrese el código",
+                required: "Ingrese el código",
                 number: "Debe ser un número",
                 minlength: "El código debe tener al menos 8 dígitos",
                 maxlength: "El código no debe exceder 11 dígitos",
             },
             nombres: {
-                required: "Por favor, ingrese sus nombres",
+                required: "Ingrese sus nombres",
                 minlength: "Debe tener al menos 2 caracteres",
             },
             apPaterno: {
-                required: "Por favor, ingrese el apellido paterno",
+                required: "Ingrese el apellido paterno",
                 minlength: "Debe tener al menos 2 caracteres",
             },
             apMaterno: {
-                required: "Por favor, ingrese el apellido materno",
+                required: "Ingrese el apellido materno",
                 minlength: "Debe tener al menos 2 caracteres",
             },
             email: {
-                required: "Por favor, ingrese el correo electrónico",
+                required: "Ingrese el correo electrónico",
                 email: "Ingrese un correo electrónico válido",
             },
             password: {
-                required: "Por favor, ingrese la contraseña",
-                minlength: "La contraseña debe tener al menos 6 caracteres",
+                required: "Ingrese la contraseña",
+                minlength: "Debe tener al menos 6 caracteres",
+                regex: "Debe contener al menos una letra mayúscula, una letra minúscula y un número",
             },
             telfono: {
                 telefonoPeru: "Número de teléfono no válido",
             },
             facebook: {
                 url: "Ingrese una URL válida para Facebook",
+                required: "Ingrese su facebook",
             },
             linkedIn: {
                 url: "Ingrese una URL válida para LinkedIn",
@@ -153,15 +166,27 @@ $(document).ready(function () {
                 required: "Seleccione un tipo de cuenta",
             },
             nroCuenta: {
-                required: "Por favor, ingrese el número de cuenta",
+                required: "Ingrese el número de cuenta",
                 number: "Debe ser un número",
                 minlength: "El número de cuenta debe tener al menos 10 dígitos",
                 maxlength: "El número de cuenta no debe exceder 18 dígitos",
             },
             cci: {
-                required: "Por favor, ingrese el CCI",
+                required: "Ingrese el CCI",
                 validarCCI: "Ingrese un CCI válido de 20 dígitos",
             },
+        },
+        errorPlacement: function (error, element) {
+            if (element.is("input[name='facebook']")) {
+                // Coloca el error después del div que contiene el ícono y el input
+                element.closest(".redSocial").append(error);
+            } else if (element.is("input[name='cargo']")) {
+                // Para cargo, coloca el error en la posición deseada
+                element.closest(".form-group").append(error);
+            } else {
+                // Para otros campos, usa el comportamiento predeterminado
+                error.insertAfter(element);
+            }
         },
         submitHandler: function (form) {
             $("button.enviarForm").attr("disabled", true);
@@ -242,7 +267,7 @@ $(document).ready(function () {
 
     $("i#changeEmail").click(function () {
         $.ajax({
-            url: "/changeEmail",
+            url: "/cambiarEmail",
             method: "GET",
             success: function (response) {
                 if (response.success) {

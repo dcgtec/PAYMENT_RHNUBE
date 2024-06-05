@@ -740,6 +740,7 @@ class InfluencerController extends Controller
                 $title = 'contraseña';
             } elseif (session()->get('logeado')) {
                 $logeado = session()->get('logeado');
+
                 if (empty($logeado)) {
                     return response()->json([
                         'success' => false,
@@ -747,8 +748,9 @@ class InfluencerController extends Controller
                     ], 400);
                 }
 
-                $detalleUsuario = session()->get('detalleUsuario');
-                $idPropietario = $detalleUsuario["id_propietario"];
+                $responseProp = $this->obtenerPropietario();
+                $responseData = json_decode($responseProp->getContent(), true);
+                $idPropietario = $responseData["propietario"]["propietario"]["0"]["id_propietario"];
             }
 
             if (!$idPropietario) {

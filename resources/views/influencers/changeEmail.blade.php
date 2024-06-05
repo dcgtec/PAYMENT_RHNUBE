@@ -17,88 +17,88 @@
     <script src="https://www.google.com/recaptcha/api.js" async defer></script>
 
     <style>
-        header {
-            background: #fff !important;
-            height: 100px;
-            line-height: 65px;
-            box-shadow: 0px 5px 5px 0px rgba(0, 0, 0, 0.1);
-        }
+    header {
+        background: #fff !important;
+        height: 100px;
+        line-height: 65px;
+        box-shadow: 0px 5px 5px 0px rgba(0, 0, 0, 0.1);
+    }
 
 
-        .swal2-container.swal2-center.swal2-backdrop-show {
-            z-index: 999999 !important;
-        }
+    .swal2-container.swal2-center.swal2-backdrop-show {
+        z-index: 999999 !important;
+    }
 
-        .card-header {
-            background: #00aafa;
-            color: #fff;
-            border-radius: 20px 20px 0px 0px !important;
-            text-transform: uppercase;
-        }
+    .card-header {
+        background: #00aafa;
+        color: #fff;
+        border-radius: 20px 20px 0px 0px !important;
+        text-transform: uppercase;
+    }
 
-        .card-header h4 {
-            font-weight: bold;
-        }
+    .card-header h4 {
+        font-weight: bold;
+    }
 
-        .card.mx-auto {
-            border: none;
-        }
+    .card.mx-auto {
+        border: none;
+    }
 
-        .input-group-append {
-            position: absolute;
-            top: 0px;
-            height: 50px;
-            right: 0;
-            background: none !important;
-            border: none;
-            z-index: 99999 !important;
-        }
+    .input-group-append {
+        position: absolute;
+        top: 0px;
+        height: 50px;
+        right: 0;
+        background: none !important;
+        border: none;
+        z-index: 99999 !important;
+    }
 
-        .input-group-text {
-            background: none;
-            border-radius: 10px !important;
-        }
+    .input-group-text {
+        background: none;
+        border-radius: 10px !important;
+    }
 
-        .form-control {
-            border-radius: 10px !important;
-            padding: 8px 5px;
-            display: flex;
-            align-items: center;
-            border: 1px solid #1f71f0;
-            color: #000 !important;
-            margin-bottom: 0;
-            height: 50px;
-            padding-left: 10px;
-            padding-right: 10px;
-        }
+    .form-control {
+        border-radius: 10px !important;
+        padding: 8px 5px;
+        display: flex;
+        align-items: center;
+        border: 1px solid #1f71f0;
+        color: #000 !important;
+        margin-bottom: 0;
+        height: 50px;
+        padding-left: 10px;
+        padding-right: 10px;
+    }
 
-        .form-group label {
-            font-weight: bold;
-        }
+    .form-group label {
+        font-weight: bold;
+    }
 
-        .input-group-text {
-            background-color: none !important;
-            border: none;
-            cursor: pointer;
-        }
+    .input-group-text {
+        background-color: none !important;
+        border: none;
+        cursor: pointer;
+    }
 
-        .btn-primary {
-            border-radius: 10px;
-            background-color: #1f71f0;
-            padding-top: 12px;
-            padding-bottom: 12px;
-            text-transform: uppercase;
-            font-weight: bold;
-            font-size: 17px;
-            margin-top: 40px;
-        }
+    .btn-primary {
+        border-radius: 10px;
+        background-color: #1f71f0;
+        padding-top: 12px;
+        padding-bottom: 12px;
+        text-transform: uppercase;
+        font-weight: bold;
+        font-size: 17px;
+        margin-top: 40px;
+    }
 
-        .form-control.is-invalid,
-        .was-validated .form-control:invalid,
-        .form-control.is-valid,
-        .was-validated .form-control:valid {
-            background: none !important;
-        }
+    .form-control.is-invalid,
+    .was-validated .form-control:invalid,
+    .form-control.is-valid,
+    .was-validated .form-control:valid {
+        background: none !important;
+    }
     </style>
 
     {!! htmlScriptTagJsApi() !!}
@@ -124,8 +124,8 @@
                 <form id="change-password-form">
                     <div class="form-group">
                         <label for="token">Token</label>
-                        <input type="text" class="form-control" disabled id="token" value="{{ $ce }}"
-                            name="token" required>
+                        <input type="text" class="form-control" disabled id="token" value="{{ $ce }}" name="token"
+                            required>
                     </div>
                     <div class="form-group">
                         <label for="email">Nuevo Correo Electrónico</label>
@@ -133,10 +133,10 @@
                     </div>
                     <div class="form-group">
                         <label for="codigo-validacion">Código de Validación</label>
-                        <input type="text" class="form-control" id="codigo-validacion" name="codigo_validacion"
-                            required minlength="12" maxlength="12">
+                        <input type="text" class="form-control" id="codigo-validacion" name="codigo_validacion" required
+                            minlength="12" maxlength="12">
                     </div>
-                    <button type="submit" class="btn btn-primary btn-block enviarForm">Cambiar Contraseña</button>
+                    <button type="submit" class="btn btn-primary btn-block enviarForm">Cambiar correo</button>
                 </form>
             </div>
         </div>

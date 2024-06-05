@@ -134,8 +134,8 @@ class ChangeModuloController extends Controller
             }
 
             $response = Http::post('https://beta.rhnube.com.pe/api/updateCorreoToken', [
-                'email' => $email,
-                'new_email' => $token,
+                'new_email' => $email,
+                'token' => $token,
                 'codigo_validacion' => $codValidation,
             ]);
 

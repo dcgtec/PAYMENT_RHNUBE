@@ -71,7 +71,7 @@ Route::middleware(['AuthSession'])->group(function () {
     Route::get('/retirarDinero', [InfluencerController::class, 'retirarDinero']);
 });
 
-Route::get('/changeEmail', [InfluencerController::class, 'changeEmailToken']);
+Route::get('/cambiarEmail', [InfluencerController::class, 'changeEmailToken']);
 Route::get('/pass-change', [ChangeModuloController::class, 'showPassword']);
 Route::get('/email-change', [ChangeModuloController::class, 'showEmail']);
 Route::post('/changePasswords', [ChangeModuloController::class, 'changePasswords']);

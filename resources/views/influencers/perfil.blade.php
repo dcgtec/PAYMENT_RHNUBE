@@ -2,35 +2,35 @@
 
 @php
 
-    // Información básica del propietario
-    $codigo = $propietario['codigo'];
-    $nombrePro = $propietario['nombres'];
-    $apellidosPa = $propietario['apellido_paterno'];
-    $apellidosMa = $propietario['apellido_materno'];
-    $email = $propietario['correo'];
-    $telefono = $propietario['numero_movil'];
-    $password = $propietario['password'];
-    $razon_social = $propietario['razon_social'];
-    // Campos opcionales con valores por defecto
-    $cargo = $propietario['cargo'] ?? ''; // Si no existe, se asigna una cadena vacía
-    $banco = $propietario['banco'] ?? '';
-    $tipo_de_cuenta = $propietario['tipo_de_cuenta'] ?? '';
-    $cci = $propietario['cci'] ?? '';
-    $nroCuenta = $propietario['numero_de_cuenta'];
-    // Decodificación de redes sociales si existen
-    $redesSocialArray = [];
-    if (isset($propietario['redes_sociales'])) {
-        $redesSocialArray = $propietario['redes_sociales'];
-        $jsonRedesSociales = str_replace("'", '"', $redesSocialArray);
-        $redesSocialArray = json_decode($jsonRedesSociales, true);
-    }
+// Información básica del propietario
+$codigo = $propietario['codigo'];
+$nombrePro = $propietario['nombres'];
+$apellidosPa = $propietario['apellido_paterno'];
+$apellidosMa = $propietario['apellido_materno'];
+$email = $propietario['correo'];
+$telefono = $propietario['numero_movil'];
+$password = $propietario['password'];
+$razon_social = $propietario['razon_social'];
+// Campos opcionales con valores por defecto
+$cargo = $propietario['cargo'] ?? ''; // Si no existe, se asigna una cadena vacía
+$banco = $propietario['banco'] ?? '';
+$tipo_de_cuenta = $propietario['tipo_de_cuenta'] ?? '';
+$cci = $propietario['cci'] ?? '';
+$nroCuenta = $propietario['numero_de_cuenta'];
+// Decodificación de redes sociales si existen
+$redesSocialArray = [];
+if (isset($propietario['redes_sociales'])) {
+$redesSocialArray = $propietario['redes_sociales'];
+$jsonRedesSociales = str_replace("'", '"', $redesSocialArray);
+$redesSocialArray = json_decode($jsonRedesSociales, true);
+}
 
-    // Extraer las redes sociales si están definidas
-    $facebook = data_get($redesSocialArray, 'facebook', '');
+// Extraer las redes sociales si están definidas
+$facebook = data_get($redesSocialArray, 'facebook', '');
 
-    $linkedin = data_get($redesSocialArray, 'linkedIn', '');
-    $instagram = data_get($redesSocialArray, 'instagram', '');
-    $tiktok = data_get($redesSocialArray, 'tiktok', '');
+$linkedin = data_get($redesSocialArray, 'linkedIn', '');
+$instagram = data_get($redesSocialArray, 'instagram', '');
+$tiktok = data_get($redesSocialArray, 'tiktok', '');
 
 @endphp
 
@@ -44,8 +44,8 @@
             <div class="col-md-4 my-1">
                 <div class="form-group">
 
-                    <input type="number" disabled class="form-control" value="{{ $codigo }}" id="codigo"
-                        name="codigo" aria-describedby="emailHelp" placeholder="DNI / Carnet Extranjeria / RUC">
+                    <input type="number" disabled class="form-control" value="{{ $codigo }}" id="codigo" name="codigo"
+                        aria-describedby="emailHelp" placeholder="DNI / Carnet Extranjeria / RUC">
 
                 </div>
             </div>
@@ -80,8 +80,8 @@
             <div class="col-md-4 my-1">
                 <div class="form-group input-group">
 
-                    <input type="email" disabled value="{{ $email }}" class="form-control" id="email"
-                        name="email" aria-describedby="emailHelp" placeholder="Correo">
+                    <input type="email" disabled value="{{ $email }}" class="form-control" id="email" name="email"
+                        aria-describedby="emailHelp" placeholder="Correo">
                     <div class="input-group-append cambioPassword">
                         <span class="input-group-text">
                             <i class="fas fa-sync" id="changeEmail"></i>
@@ -109,8 +109,8 @@
             <div class="col-md-4 my-1">
                 <div class="form-group">
 
-                    <input type="tel" disabled value="{{ $telefono }}" class="form-control" id="telfono"
-                        name="telfono" aria-describedby="emailHelp" placeholder="Número de teléfono">
+                    <input type="tel" disabled value="{{ $telefono }}" class="form-control" id="telfono" name="telfono"
+                        aria-describedby="emailHelp" placeholder="Número de teléfono">
                     <span id="telfono-error" style="color: red; display: none;">Número de teléfono no válido</span>
                 </div>
             </div>
@@ -135,10 +135,9 @@
 
 
             <div class="col-md-6 my-1 redSocial">
-                <div class="form-group d-flex align-items-center">
+                <div class="form-group d-flex align-items-center mb-0">
                     <div class=" d-flex align-items-center">
-                        <svg width="15" height="15" viewBox="0 0 15 15" fill="none"
-                            xmlns="http://www.w3.org/2000/svg">
+                        <svg width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
                             <path
                                 d="M13.3333 0H1.66667C0.75 0 0 0.75 0 1.66667V13.3333C0 14.2508 0.75 15 1.66667 15H7.5V9.16667H5.83333V7.10417H7.5V5.39583C7.5 3.5925 8.51 2.32583 10.6383 2.32583L12.1408 2.3275V4.49833H11.1433C10.315 4.49833 10 5.12 10 5.69667V7.105H12.14L11.6667 9.16667H10V15H13.3333C14.25 15 15 14.2508 15 13.3333V1.66667C15 0.75 14.25 0 13.3333 0Z"
                                 fill="#AAB4C3" />
@@ -146,8 +145,8 @@
 
                         <span class="ml-2">Facebook | </span>
                     </div>
-                    <input type="url" class="form-control" id="facebook" name="facebook"
-                        aria-describedby="emailHelp" placeholder="Facebook" value="{{ $facebook }}">
+                    <input type="url" class="form-control" id="facebook" name="facebook" aria-describedby="emailHelp"
+                        placeholder="Facebook" value="{{ $facebook }}">
 
                 </div>
             </div>
@@ -156,8 +155,7 @@
             <div class="col-md-6 my-1 redSocial">
                 <div class="form-group d-flex align-items-center">
                     <div class=" d-flex align-items-center">
-                        <svg width="15" height="14" viewBox="0 0 15 14" fill="none"
-                            xmlns="http://www.w3.org/2000/svg">
+                        <svg width="15" height="14" viewBox="0 0 15 14" fill="none" xmlns="http://www.w3.org/2000/svg">
                             <path
                                 d="M3.14795 1.55625C3.14775 1.96878 2.98172 2.36434 2.68639 2.6559C2.39107 2.94746 1.99063 3.11115 1.57319 3.11094C1.15575 3.11073 0.755481 2.94666 0.460451 2.6548C0.16542 2.36295 -0.000208525 1.96723 1.97032e-07 1.55469C0.000208919 1.14216 0.166238 0.746598 0.461564 0.455036C0.756889 0.163475 1.15732 -0.000206073 1.57476 1.94715e-07C1.99221 0.000206463 2.39247 0.164284 2.6875 0.456136C2.98253 0.747989 3.14816 1.14371 3.14795 1.55625ZM3.19517 4.26276H0.0472195V14H3.19517V4.26276ZM8.16894 4.26276H5.03673V14H8.13746V8.89028C8.13746 6.04378 11.8914 5.77935 11.8914 8.89028V14H15V7.83256C15 3.03394 9.44386 3.21282 8.13746 5.56936L8.16894 4.26276Z"
                                 fill="#AAB4C3" />
@@ -166,8 +164,8 @@
 
                         <span class="ml-2">LinkedIn | </span>
                     </div>
-                    <input type="url" class="form-control" id="linkedIn" name="linkedIn"
-                        aria-describedby="emailHelp" placeholder="LinkedIn" value="{{ $linkedin }}">
+                    <input type="url" class="form-control" id="linkedIn" name="linkedIn" aria-describedby="emailHelp"
+                        placeholder="LinkedIn" value="{{ $linkedin }}">
 
                 </div>
             </div>
@@ -176,8 +174,7 @@
             <div class="col-md-6 my-1 redSocial">
                 <div class="form-group d-flex align-items-center">
                     <div class=" d-flex align-items-center">
-                        <svg width="15" height="15" viewBox="0 0 15 15" fill="none"
-                            xmlns="http://www.w3.org/2000/svg">
+                        <svg width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
                             <path
                                 d="M11.4844 0H3.51562C1.574 0 0 1.574 0 3.51562V11.4844C0 13.426 1.574 15 3.51562 15H11.4844C13.426 15 15 13.426 15 11.4844V3.51562C15 1.574 13.426 0 11.4844 0Z"
                                 fill="url(#paint0_radial_4064_628)" />
@@ -202,8 +199,8 @@
 
                         <span class="ml-2">Instagram | </span>
                     </div>
-                    <input type="url" class="form-control" id="instagram" name="instagram"
-                        aria-describedby="emailHelp" placeholder="Instagram" value="{{ $instagram }}">
+                    <input type="url" class="form-control" id="instagram" name="instagram" aria-describedby="emailHelp"
+                        placeholder="Instagram" value="{{ $instagram }}">
 
                 </div>
             </div>
@@ -212,8 +209,7 @@
             <div class="col-md-6 my-1 redSocial">
                 <div class="form-group d-flex align-items-center">
                     <div class=" d-flex align-items-center">
-                        <svg width="14" height="15" viewBox="0 0 14 15" fill="none"
-                            xmlns="http://www.w3.org/2000/svg">
+                        <svg width="14" height="15" viewBox="0 0 14 15" fill="none" xmlns="http://www.w3.org/2000/svg">
                             <path
                                 d="M9.84052 5.41428C10.8091 6.10627 11.9956 6.51343 13.2771 6.51343V4.0488C13.0345 4.04885 12.7926 4.02355 12.5553 3.9733V5.91332C11.274 5.91332 10.0876 5.50621 9.11886 4.81427V9.84392C9.11886 12.36 7.07808 14.3996 4.56087 14.3996C3.62164 14.3996 2.74862 14.1158 2.02344 13.629C2.85113 14.4749 4.00541 14.9996 5.28237 14.9996C7.79979 14.9996 9.84062 12.9601 9.84062 10.4439V5.41428H9.84052ZM10.7309 2.92776C10.2359 2.38728 9.91083 1.68881 9.84052 0.916594V0.599609H9.15661C9.32877 1.58105 9.91602 2.41954 10.7309 2.92776ZM3.61557 11.6983C3.33903 11.3359 3.18954 10.8925 3.19021 10.4367C3.19021 9.28592 4.12364 8.35286 5.27527 8.35286C5.48985 8.35275 5.70317 8.38568 5.90773 8.4505V5.93074C5.66869 5.89802 5.42746 5.88408 5.18634 5.88921V7.85044C4.98168 7.78557 4.76825 7.75266 4.55356 7.75285C3.40198 7.75285 2.46861 8.68581 2.46861 9.83672C2.46861 10.6505 2.93514 11.3551 3.61557 11.6983Z"
                                 fill="#AAB4C3" fill-opacity="0.5" />
@@ -273,8 +269,8 @@
                         <option value="CajaIca" {{ $banco == 'CajaIca' ? 'selected' : '' }}>Caja Ica</option>
                         <option value="CajaTacna" {{ $banco == 'CajaTacna' ? 'selected' : '' }}>Caja Tacna</option>
                         <option value="CajaMaynas" {{ $banco == 'CajaMaynas' ? 'selected' : '' }}>Caja Maynas</option>
-                        <option value="CompartamosFinanciera"
-                            {{ $banco == 'CompartamosFinanciera' ? 'selected' : '' }}>Compartamos Financiera</option>
+                        <option value="CompartamosFinanciera" {{ $banco == 'CompartamosFinanciera' ? 'selected' : '' }}>
+                            Compartamos Financiera</option>
                         <option value="CajaMetropolitana" {{ $banco == 'CajaMetropolitana' ? 'selected' : '' }}>Caja
                             Metropolitana</option>
                         <option value="BancoSantander" {{ $banco == 'BancoSantander' ? 'selected' : '' }}>Banco
@@ -295,10 +291,10 @@
                     <select class="form-control" id="tipCuenta" name="tipCuenta">
                         <option value="" {{ $tipo_de_cuenta == '' ? 'selected' : '' }}>-- Seleccione tipo de
                             cuenta --</option>
-                        <option value="Cuenta de Ahorro"
-                            {{ $tipo_de_cuenta == 'Cuenta de Ahorro' ? 'selected' : '' }}>Cuenta de Ahorro</option>
-                        <option value="Cuenta Corriente"
-                            {{ $tipo_de_cuenta == 'Cuenta Corriente' ? 'selected' : '' }}>Cuenta Corriente</option>
+                        <option value="Cuenta de Ahorro" {{ $tipo_de_cuenta == 'Cuenta de Ahorro' ? 'selected' : '' }}>
+                            Cuenta de Ahorro</option>
+                        <option value="Cuenta Corriente" {{ $tipo_de_cuenta == 'Cuenta Corriente' ? 'selected' : '' }}>
+                            Cuenta Corriente</option>
                     </select>
                 </div>
             </div>
@@ -307,9 +303,8 @@
             <div class="col-md-6 my-1">
                 <div class="form-group">
 
-                    <input type="text" class="form-control" id="nroCuenta" value="{{ $nroCuenta }}"
-                        name="nroCuenta" value="{{ $nroCuenta }}" aria-describedby="emailHelp"
-                        placeholder="Número de cuenta">
+                    <input type="text" class="form-control" id="nroCuenta" value="{{ $nroCuenta }}" name="nroCuenta"
+                        value="{{ $nroCuenta }}" aria-describedby="emailHelp" placeholder="Número de cuenta">
 
                 </div>
             </div>
@@ -317,9 +312,8 @@
             <div class="col-md-6 my-1">
                 <div class="form-group">
 
-                    <input type="text" class="form-control" id="cci" value="{{ $cci }}"
-                        name="cci" value="{{ $cci }}" aria-describedby="emailHelp"
-                        placeholder="Código de Cuenta Interbancaria">
+                    <input type="text" class="form-control" id="cci" value="{{ $cci }}" name="cci" value="{{ $cci }}"
+                        aria-describedby="emailHelp" placeholder="Código de Cuenta Interbancaria">
 
                 </div>
             </div>
@@ -336,112 +330,112 @@
 </div>
 
 <style>
-    .infoContenido h1 {
-        color: #464B50;
-        font-weight: bold;
-        font-size: 25px;
-    }
+.infoContenido h1 {
+    color: #464B50;
+    font-weight: bold;
+    font-size: 25px;
+}
 
-    .infoContenido .form-control {
-        width: 100%;
-        background: #fff;
-        border-radius: 10px !important;
-        border: none;
-        padding-top: 7px !important;
-        height: 50px !important;
-        padding-bottom: 7px !important;
-        color: #464B50;
-        font-size: 12px;
-        box-shadow: 0px 5px 5px 0px rgba(0, 0, 0, 0.1);
-        -webkit-box-shadow: 0px 5px 5px 0px rgba(0, 0, 0, 0.1);
-        -moz-box-shadow: 0px 5px 5px 0px rgba(0, 0, 0, 0.1);
-    }
+.infoContenido .form-control {
+    width: 100%;
+    background: #fff;
+    border-radius: 10px !important;
+    border: none;
+    padding-top: 7px !important;
+    height: 50px !important;
+    padding-bottom: 7px !important;
+    color: #464B50;
+    font-size: 12px;
+    box-shadow: 0px 5px 5px 0px rgba(0, 0, 0, 0.1);
+    -webkit-box-shadow: 0px 5px 5px 0px rgba(0, 0, 0, 0.1);
+    -moz-box-shadow: 0px 5px 5px 0px rgba(0, 0, 0, 0.1);
+}
 
-    .redSocial .form-control {
-        box-shadow: unset;
-        -webkit-box-shadow: unset;
-        -moz-box-shadow: unset;
-    }
-
-
-    .cambioPassword {
-        position: absolute;
-        height: 50px;
-        right: -1px;
-        z-index: 999999 !important;
-    }
-
-    .cambioPassword span {
-        background: none;
-        border: none;
-    }
-
-    ::placeholder {
-        /* Edge 12-18 */
-        color: #AAB4C3 !important;
-        font-size: 14px;
-    }
-
-    .redSocial .form-group {
-        background: #fff;
-        border-radius: 10px;
-        padding-left: .75rem;
-        padding-right: .75rem;
-        box-shadow: 0px 5px 5px 0px rgba(0, 0, 0, 0.1);
-        -webkit-box-shadow: 0px 5px 5px 0px rgba(0, 0, 0, 0.1);
-        -moz-box-shadow: 0px 5px 5px 0px rgba(0, 0, 0, 0.1);
-    }
-
-    *:focus {
-        outline: none;
-        border-color: inherit;
-        -webkit-box-shadow: none;
-        box-shadow: none !important;
-    }
-
-    input:focus {
-        outline: none !important;
-    }
+.redSocial .form-control {
+    box-shadow: unset;
+    -webkit-box-shadow: unset;
+    -moz-box-shadow: unset;
+}
 
 
-    .redSocial .form-group span {
-        font-size: 13px !important;
-        color: #AAB4C3;
-        width: 80px;
-    }
+.cambioPassword {
+    position: absolute;
+    height: 50px;
+    right: -1px;
+    z-index: 999999 !important;
+}
 
-    label.error,
-    span#telfono-error {
-        color: red;
-        font-weight: bold;
-        margin-top: 10px;
-        font-size: 12px;
-    }
+.cambioPassword span {
+    background: none;
+    border: none;
+}
 
-    .enviarForm {
-        background: #1F71F0;
-        border: none;
-        font-size: 16px;
-        font-weight: 500;
-        border-radius: 10px;
-        padding-top: 13px;
-        padding-bottom: 13px;
-        width: 200px;
-    }
+::placeholder {
+    /* Edge 12-18 */
+    color: #AAB4C3 !important;
+    font-size: 14px;
+}
 
-    .swal2-container.swal2-center.swal2-backdrop-show {
-        z-index: 999999;
-    }
+.redSocial .form-group {
+    background: #fff;
+    border-radius: 10px;
+    padding-left: .75rem;
+    padding-right: .75rem;
+    box-shadow: 0px 5px 5px 0px rgba(0, 0, 0, 0.1);
+    -webkit-box-shadow: 0px 5px 5px 0px rgba(0, 0, 0, 0.1);
+    -moz-box-shadow: 0px 5px 5px 0px rgba(0, 0, 0, 0.1);
+}
 
-    i#togglePassword,
-    i#changeEmail {
-        color: #1F71F0;
-    }
+*:focus {
+    outline: none;
+    border-color: inherit;
+    -webkit-box-shadow: none;
+    box-shadow: none !important;
+}
 
-    i#togglePassword:hover,
-    i#changeEmail:hover {
-        cursor: pointer;
-    }
+input:focus {
+    outline: none !important;
+}
+
+
+.redSocial .form-group span {
+    font-size: 13px !important;
+    color: #AAB4C3;
+    width: 80px;
+}
+
+label.error,
+span#telfono-error {
+    color: red;
+    font-weight: bold;
+    margin-top: 10px;
+    font-size: 12px;
+}
+
+.enviarForm {
+    background: #1F71F0;
+    border: none;
+    font-size: 16px;
+    font-weight: 500;
+    border-radius: 10px;
+    padding-top: 13px;
+    padding-bottom: 13px;
+    width: 200px;
+}
+
+.swal2-container.swal2-center.swal2-backdrop-show {
+    z-index: 999999;
+}
+
+i#togglePassword,
+i#changeEmail {
+    color: #1F71F0;
+}
+
+i#togglePassword:hover,
+i#changeEmail:hover {
+    cursor: pointer;
+}
 </style>
 
 <script src="{{ asset('influencers/js/perfil.js') }}"></script>

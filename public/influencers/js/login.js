@@ -173,7 +173,7 @@ $forgotPasswordForm.validate({
         var $submitButton = $(form).find("button[type='submit']");
         $submitButton.prop("disabled", true);
         $.ajax({
-            url: "/changeEmail",
+            url: "/cambiarEmail",
             method: "GET", // Adjust method if necessary, POST is usually preferred for such actions
             data: {
                 user: emailCorreo,
