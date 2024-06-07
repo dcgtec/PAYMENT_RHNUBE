@@ -1,5 +1,7 @@
 $("select#idCountry,select#idPaquete").select2();
 
+
+
 $(document).ready(function () {
     var $valor = $("#valor");
     var $idPla = $("select#idPla");
@@ -215,6 +217,8 @@ function obtenerPlanId($idPaquete, $idBotonPeriodoSelec, successCallback) {
 }
 
 function changePer(descuento) {
+
+    console.log(descuento);
     var $valor = $("#valor");
     var quantity = $valor.val();
     var $idBotonPeriodoSeleccionado = $(".periodo button.seleccionado");
@@ -248,6 +252,7 @@ function changePer(descuento) {
                 descuento: descuento,
             },
             success: function (response) {
+                console.log(response);
                 updatePrices(response, descuento);
             },
             error: function (xhr, status, error) {

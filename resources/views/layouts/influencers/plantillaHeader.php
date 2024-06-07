@@ -119,7 +119,7 @@ if ($propietarios['foto_portada']) {
                 <div class="col-md-12 mt-5 perfilPort" style="background-image: url('<?php echo $rutaImgPortada; ?>')">
                     <img src="{{ asset('influencers/images/editPortada.png') }}" id="imgPort" alt="imgPort">
                     <input type="file" id="inputFilePortada" accept=".png, .jpg, .jpeg" style="display: none;" />
-                    <img src="{{ asset('influencers/images/savePerfil.png') }}" id="savemgPerfilPortada"
+                    <img src="{{ asset('influencers/images/iconRemove.png') }}" id="savemgPerfilPortada"
                         alt="savePhoto">
                 </div>
 
@@ -131,7 +131,7 @@ if ($propietarios['foto_portada']) {
                                     style="display: none;" />
                                 <img src="{{ asset('influencers/images/editPerfil.png') }}" id="changeImgPerfil"
                                     alt="perfilPhoto">
-                                <img src="{{ asset('influencers/images/savePerfil.png') }}" id="savemgPerfil"
+                                <img src="{{ asset('influencers/images/iconRemove.png') }}" id="savemgPerfil"
                                     alt="savePhoto">
                             </div>
 

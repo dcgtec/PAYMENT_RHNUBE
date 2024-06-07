@@ -166,13 +166,14 @@ class InfluencerController extends Controller
 
                 if ($cleanedTotalGanancia <= 1.00) {
                     return response()->json([
-                        'error' => 'El monto a retirar debe ser mayor a $1.00.',
+                        'success' => false,
+                        'message' => 'El monto a retirar debe ser mayor a $1.00.',
                         'totalGanancia' => $cleanedTotalGanancia
-                    ], 422);
+                    ], 200);
                 }
 
                 // Retorna la respuesta decodificada (puedes personalizar esto según tus necesidades)
-                return response()->json($responseData, 200);
+                return response()->json(['success' => true, 'success' => $responseData], 200);
             } else {
                 // Maneja el error si la solicitud no fue exitosa
                 return response()->json(['error' => 'Error en la solicitud a la API'], $response->status());
@@ -219,7 +220,7 @@ class InfluencerController extends Controller
 
         try {
 
-            $imageUrl = 'http://127.0.0.1:8000/influencers/images/imgDefault.png';
+            $imageUrl = url('influencers/images/imgDefault.png');
 
             $accion = 'perfil';
 
@@ -581,7 +582,7 @@ class InfluencerController extends Controller
                 $validatedData = $request->validate([
                     'codigo' => 'required|string',
                     'nombres' => 'required|string',
-                    'razon_social' => 'string',
+                    'razon_social' => 'nullable',
                     'apellido_paterno' => 'required|string',
                     'apellido_materno' => 'required|string',
                     'numero_movil' => 'required|string',
@@ -589,12 +590,21 @@ class InfluencerController extends Controller
                     'cargo' => 'nullable|string',
                     'email' => 'required|email',
                     'redes_sociales' => 'nullable|string',
+                    'banco' => 'nullable',
+                    'tipCuenta' => 'nullable',
+                    'cci' => 'nullable',
+                    'nroCuenta' => 'nullable',
                 ]);
 
                 $faceboook = $request->input('facebook');
                 $linkedIn = $request->input('linkedIn');
                 $instagram = $request->input('instagram');
                 $tiktok = $request->input('tiktok');
+
+                $banco = $request->input('banco');
+                $tipo_de_cuenta = $request->input('tipCuenta');
+                $cci = $request->input('cci');
+                $numero_de_cuenta = $request->input('nroCuenta');
 
                 $redesSociales = "{'facebook': '$faceboook', 'linkedIn': '$linkedIn', 'instagram': '$instagram', 'tiktok': '$tiktok'}";
 
@@ -609,10 +619,15 @@ class InfluencerController extends Controller
                     'password' => $validatedData['password'],
                     'numero_movil' => $validatedData['numero_movil'],
                     'razon_social' => $validatedData['razon_social'],
+
+                    'banco' =>  $banco,
+                    'tipo_de_cuenta' => $tipo_de_cuenta,
+                    'cci' => $cci,
+                    'numero_de_cuenta' =>   $numero_de_cuenta,
+
+
                     'cargo' => $validatedData['cargo'] ?? null, // Opcional
                 ]);
-
-
 
                 if ($response->successful()) {
                     $responseData = $response->json();

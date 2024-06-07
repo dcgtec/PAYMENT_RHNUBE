@@ -207,6 +207,11 @@ $(document).ready(function () {
             const instagram = $("#instagram").val();
             const tiktok = $("#tiktok").val();
 
+            const banco = $("select#banco").val();
+            const tipCuenta = $("#tipCuenta").val();
+            const nroCuenta = $("#nroCuenta").val();
+            const cci = $("#cci").val();
+
             $.ajaxSetup({
                 headers: {
                     "X-CSRF-TOKEN": csrfToken,
@@ -229,6 +234,13 @@ $(document).ready(function () {
                     linkedIn: linkedIn,
                     instagram: instagram,
                     tiktok: tiktok,
+
+
+                    banco: banco,
+                    tipCuenta: tipCuenta,
+                    nroCuenta: nroCuenta,
+                    cci: cci,
+
                 },
                 method: "get",
                 success: function (response) {

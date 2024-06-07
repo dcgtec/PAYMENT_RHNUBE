@@ -19,7 +19,7 @@ class PlanController extends Controller
         $planId = $request->input('plan_id');
         $quantity = $request->input('quantity');
         $country = $request->input('country');
-        $descuento = $request->input('descuento');
+        $descuento = number_format($request->input('descuento'), 2, '.', '');
 
         $cadDescu =  number_format($descuento, 2, '.', '') . '%';
 
@@ -32,7 +32,7 @@ class PlanController extends Controller
         // $newtax = number_format($subtotal * $newPlan->tax / 100, 2, '.', '');
 
         $subDescu = number_format($subtotal * (1 - ($descuento / 100)), 2, '.', '');
-
+        
 
         if ($country == 'PE') {
             $newtax = number_format(0.18, 2, '.', '');
@@ -41,6 +41,7 @@ class PlanController extends Controller
         }
 
         $impuesto = number_format($subDescu * $newtax, 2, '.', '');
+
 
         $total = number_format($subDescu  + $impuesto, 2, '.', '');
         // Devolver la información actualizada

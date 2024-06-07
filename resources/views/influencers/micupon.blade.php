@@ -1,8 +1,8 @@
 @include('layouts.influencers.header')
 
 @php
-$jsonData = $cupon->getData();
-$cuponCode = $jsonData->cupon; // Obtiene el valor de la propiedad "cupon"
+    $jsonData = $cupon->getData();
+    $cuponCode = $jsonData->cupon; // Obtiene el valor de la propiedad "cupon"
 @endphp
 
 <div class="container infoContenido pt-5 pl-md-4 pr-md-4 pb-5">
@@ -11,8 +11,14 @@ $cuponCode = $jsonData->cupon; // Obtiene el valor de la propiedad "cupon"
         <div class="card-body">
             <div class="row mostrarQR" bis_skin_checked="1">
                 <div class="col-md-12 text-center mb-3" bis_skin_checked="1">
-                    <h1 class="mb-4">{{$cuponCode}}</h1>
-                    <img data-cupon="{{$cuponCode}}" src="https://api.qrserver.com/v1/create-qr-code/?data=https://payment.rhnube.com.pe/payment?cupon={{$cuponCode}}&amp;size=150x150" alt="QR Code"><br><button class="mt-3 btn btn-primary  mx-1 btn-download" data-url="https://payment.rhnube.com.pe/payment?cupon=PRACTICAR"><i class="fa fa-download "></i></button><button class="mt-3  mx-1 btn btn-secondary btn-copy" data-url="https://payment.rhnube.com.pe/payment?cupon=PRACTICAR"><i class="fa fa-copy"></i></button>
+                    <h1 class="mb-4">{{ $cuponCode }}</h1>
+                    <img data-cupon="{{ $cuponCode }}"
+                        src="https://api.qrserver.com/v1/create-qr-code/?data=https://payment.rhnube.com.pe/payment?cupon={{ $cuponCode }}&amp;size=150x150"
+                        alt="QR Code"><br><button class="mt-3 btn btn-primary  mx-1 btn-download"
+                        data-url="https://payment.rhnube.com.pe/payment?cupon=PRACTICAR"><i
+                            class="fa fa-download "></i></button><button class="mt-3  mx-1 btn btn-secondary btn-copy"
+                        data-url="https://payment.rhnube.com.pe/payment?cupon=PRACTICAR"><i
+                            class="fa fa-copy"></i></button>
                 </div>
             </div>
         </div>
@@ -28,6 +34,24 @@ $cuponCode = $jsonData->cupon; // Obtiene el valor de la propiedad "cupon"
 </style>
 
 <script>
+    $(".btn-copy").click(function() {
+        var url = $(this).data("url");
+        navigator.clipboard.writeText(url).then(
+            function() {
+                Swal.fire({
+                    title: "Enlace copiado",
+                    icon: "success",
+                });
+            },
+            function(err) {
+                Swal.fire({
+                    title: "Error",
+                    text: 'Enlace no copiado',
+                    icon: "error",
+                });
+            }
+        );
+    });
     $(".btn-download").click(function() {
         var url = $(this).data("cupon");
         var img = new Image();

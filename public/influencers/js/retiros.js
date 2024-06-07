@@ -77,7 +77,7 @@ $(document).ready(function () {
         const monto = parseFloat($("#cantReti").val().replace("$", "").trim());
 
         // Verificar si el monto es mayor a 1.00
-        if (monto <= 1.0) {
+        if (monto <= -1) {
             Swal.fire({
                 title: "¡Error!",
                 text: "El monto a retirar debe ser mayor a $1.00.",
@@ -97,52 +97,58 @@ $(document).ready(function () {
                         idCompra: ids,
                     },
                     success: function (response) {
-                        var ganancia = response.totalGanancia;
-
-                        Swal.fire({
-                            title: "Confirmación",
-                            text:
-                                "¿Estás seguro de retirar el monto de " +
-                                ganancia +
-                                "?",
-                            icon: "question",
-                            showCancelButton: true,
-                            confirmButtonText: "Sí",
-                            cancelButtonText: "No",
-                        }).then((result) => {
-                            if (result.isConfirmed) {
-                                $.ajax({
-                                    url: "/retirarDinero",
-                                    type: "GET", // Cambiado a POST
-                                    data: {
-                                        idCompra: ids,
-                                    },
-                                    success: function (data) {
-                                        console.log(data);
-                                        Swal.fire({
-                                            title: "Éxito",
-                                            text:
-                                                "El monto de " +
-                                                ganancia +
-                                                " ha sido retirado correctamente.",
-                                            icon: "success",
-                                        }).then(() => {
-                                            location.reload(); // Recarga la página después de cerrar el SweetAlert
-                                        });
-                                    },
-                                    error: function (xhr) {
-                                        console.log(xhr.responseJSON.error);
-                                        Swal.fire({
-                                            title: "¡Error!",
-                                            text:
-                                                xhr.responseJSON.error ||
-                                                "Ocurrió un error inesperado.",
-                                            icon: "error",
-                                        });
-                                    },
-                                });
-                            }
-                        });
+                        if (response.success) {
+                            var ganancia = response.totalGanancia;
+                            Swal.fire({
+                                title: "Confirmación",
+                                text:
+                                    "¿Estás seguro de retirar el monto de " +
+                                    ganancia +
+                                    "?",
+                                icon: "question",
+                                showCancelButton: true,
+                                confirmButtonText: "Sí",
+                                cancelButtonText: "No",
+                            }).then((result) => {
+                                if (result.isConfirmed) {
+                                    $.ajax({
+                                        url: "/retirarDinero",
+                                        type: "GET", // Cambiado a POST
+                                        data: {
+                                            idCompra: ids,
+                                        },
+                                        success: function (data) {
+                                            Swal.fire({
+                                                title: "Éxito",
+                                                text:
+                                                    "El monto de " +
+                                                    ganancia +
+                                                    " ha sido retirado correctamente.",
+                                                icon: "success",
+                                            }).then(() => {
+                                                location.reload(); // Recarga la página después de cerrar el SweetAlert
+                                            });
+                                        },
+                                        error: function (xhr) {
+                                            console.log(xhr.responseJSON.error);
+                                            Swal.fire({
+                                                title: "¡Error!",
+                                                text:
+                                                    xhr.responseJSON.error ||
+                                                    "Ocurrió un error inesperado.",
+                                                icon: "error",
+                                            });
+                                        },
+                                    });
+                                }
+                            });
+                        } else {
+                            Swal.fire({
+                                title: "¡Error!",
+                                text: response.message,
+                                icon: "error",
+                            });
+                        }
                     },
                     error: function (xhr) {
                         Swal.fire({

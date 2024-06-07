@@ -128,7 +128,7 @@ if ($propietarios['foto_portada']) {
                                     style="display: none;" />
                                 <img src="{{ asset('influencers/images/editPerfil.png') }}" id="changeImgPerfil"
                                     alt="perfilPhoto">
-                                <img src="{{ asset('influencers/images/savePerfil.png') }}" id="savemgPerfil"
+                                <img src="{{ asset('influencers/images/iconRemove.png') }}" id="savemgPerfil"
                                     alt="savePhoto">
                             </div>
 

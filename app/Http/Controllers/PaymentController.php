@@ -100,6 +100,8 @@ class PaymentController extends Controller
             if ($country == "PE") {
                 $taxes = ['txr_1ORzFnCbKz5YJFE3k4IpT5vR'];
             }
+            // Prod = txr_1ORzFnCbKz5YJFE3k4IpT5vR
+            // Prueba = txr_1OMyoaCbKz5YJFE3ajJh9S4U
 
             $sessionData = [
                 'payment_method_types' => ['card'],
