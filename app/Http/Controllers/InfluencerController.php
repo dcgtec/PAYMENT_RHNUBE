@@ -2,6 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\change_tokens;
+use App\Mail\EmailChangeRequestMail;
+use App\propietarios;
 use Illuminate\Http\Client\RequestException;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Http;
@@ -12,7 +15,8 @@ use Symfony\Component\HttpKernel\Exception\HttpException;
 use Intervention\Image\Facades\Image;
 use Exception;
 use Carbon\Carbon;
-use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Str;
 
 class InfluencerController extends Controller
 {
@@ -740,69 +744,6 @@ class InfluencerController extends Controller
         }
     }
 
-
-    public function changeEmailToken(Request $request)
-    {
-        try {
-
-            $idPropietario = null;
-            $status = 'email-change';
-            $title = 'correo electrónico';
-
-            if ($request->user) {
-                $idPropietario = $request->user;
-                $status = 'pass-change';
-                $title = 'contraseña';
-            } elseif (session()->get('logeado')) {
-                $logeado = session()->get('logeado');
-
-                if (empty($logeado)) {
-                    return response()->json([
-                        'success' => false,
-                        'message' => 'No se encontró información de inicio de sesión.',
-                    ], 400);
-                }
-
-                $responseProp = $this->obtenerPropietario();
-                $responseData = json_decode($responseProp->getContent(), true);
-                $idPropietario = $responseData["propietario"]["propietario"]["0"]["id_propietario"];
-            }
-
-            if (!$idPropietario) {
-                return response()->json([
-                    'success' => false,
-                    'message' => 'ID del propietario no proporcionado.',
-                ], 400);
-            }
-
-            $response = Http::post('https://rhnube.com.pe/api/statusChangeToken', [
-                'idPropietario' => $idPropietario,
-                'status' => $status,
-                'title' => $title,
-            ]);
-
-            $respuesta = $response->json();
-            return response()->json([
-                'success' => $respuesta["success"],
-                'message' => $respuesta["message"],
-            ], 200);
-        } catch (ValidationException $e) {
-            return response()->json([
-                'success' => false,
-                'message' => 'Datos inválidos: ' . json_encode($e->errors()),
-            ], 400);
-        } catch (RequestException $e) {
-            return response()->json([
-                'success' => false,
-                'message' => 'Error al conectar con la API externa changeToken: ' . $e->getMessage(),
-            ], 500);
-        } catch (\Exception $e) {
-            return response()->json([
-                'success' => false,
-                'message' => 'Ocurrió un error inesperado changeToken: ' . $e->getMessage(),
-            ], 500);
-        }
-    }
 
     public function actualizarPerfil(Request $request)
     {

@@ -7,6 +7,7 @@ use App\Http\Controllers\CategoryPlanController;
 use App\Http\Controllers\ChangeModuloController;
 use App\Http\Controllers\InfluencerController;
 use App\Http\Controllers\PaymentController;
+use App\Http\Controllers\PropietarioController;
 use Illuminate\Support\Facades\Auth;
 
 /*
@@ -64,14 +65,16 @@ Route::middleware(['AuthSession'])->group(function () {
     Route::get('/retiros', [InfluencerController::class, 'retiros']);
     Route::get('/logout', [InfluencerController::class, 'logout']);
     Route::get('/actualizarPerfil', [InfluencerController::class, 'actualizarPerfil']);
-
     Route::post('/upload-image', [InfluencerController::class, 'uploadImage']);
     Route::get('/deletePthoPerfil', [InfluencerController::class, 'deletePthoPerfil']);
     Route::get('/cambiarEstadoPorCobrar', [InfluencerController::class, 'cambiarEstadoPorCobrar']);
     Route::get('/retirarDinero', [InfluencerController::class, 'retirarDinero']);
 });
 
-Route::get('/cambiarEmail', [InfluencerController::class, 'changeEmailToken']);
+
+/*ENVIO DE CORREOS PARA SOLICITAR CAMBIO DE CORREO Y CONTRASEÑAS*/
+Route::get('/cambiarEmail', [PropietarioController::class, 'sendChangeEmailPasswordToken']);
+/**===================================*/
 Route::get('/pass-change', [ChangeModuloController::class, 'showPassword']);
 Route::get('/email-change', [ChangeModuloController::class, 'showEmail']);
 Route::post('/changePasswords', [ChangeModuloController::class, 'changePasswords']);
