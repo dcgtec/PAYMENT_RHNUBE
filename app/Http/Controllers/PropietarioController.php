@@ -30,41 +30,42 @@ class PropietarioController extends Controller
     {
         try {
 
-            $request->validate([
-                'user' => 'required'
-            ]);
+            // Obtener el usuario logeado o del request
+            $logeado = session()->get('logeado') ?? $request->input('user');
 
-            // Verificando si el idPropietario es un correo electrónico
-            if (filter_var($request->user, FILTER_VALIDATE_EMAIL)) {
-                $propietario = propietarios::where('correo', $request->user)->first();
-            } else {
-                $propietario = propietarios::find($request->user);
+            // Validar si no hay usuario logeado ni en el request
+            if (!$logeado) {
+                return response()->json(['success' => false, 'message' => 'Usuario no está logeado o no se proporcionó.'], 400);
             }
 
-            if (!$propietario) {
-                return response()->json(['success' => false, 'message' => 'Propietario no existe.'], 400);
-            }
+            // Definir el estado y título basado en la fuente del usuario logeado
+            $status = session()->get('logeado') ? 'email-change' : 'pass-change';
+            $title = $status === 'email-change' ? 'correo electrónico' : 'contraseña';
 
-            $status = 'email-change';
-            $title = 'correo electrónico';
+            // Buscar propietario por correo electrónico o ID
+            $propietario = filter_var($logeado, FILTER_VALIDATE_EMAIL)
+                ? propietarios::where('correo', $logeado)->firstOrFail()
+                : propietarios::findOrFail($logeado);
 
-
-
+            // Verificar si ya existe un token activo para este propietario
             $existingToken = change_tokens::where('id_propietario', $propietario->id_propietario)
-                ->where('type_token',  $status)
+                ->where('type_token', $status)
                 ->where('expires_at', '>', Carbon::now())
                 ->first();
 
             if ($existingToken) {
-                return response()->json(['success' => false, 'message' => 'Ya ha solicitado un cambio de ' . $request->title . '. Verifique su correo electrónico.'], 400);
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Ya ha solicitado un cambio de ' . $title . '. Verifique su correo electrónico.'
+                ], 201);
             }
 
+            // Crear un nuevo token y código de validación
             $token = Str::random(60);
             $codigoValidacion = $this->generateUniqueCodigoValidacion();
             $expiresAt = Carbon::now()->addHour();
 
-
-
+            // Guardar el token en la base de datos
             change_tokens::create([
                 'id_propietario' => $propietario->id_propietario,
                 'token' => $token,
@@ -73,10 +74,15 @@ class PropietarioController extends Controller
                 'codigo_validacion' => $codigoValidacion
             ]);
 
+            // Enviar el correo electrónico
             Mail::to($propietario->correo)
                 ->send(new EmailChangeRequestMail($token, $status, $title, $codigoValidacion));
 
-            return response()->json(['success' => true, 'message' => 'Se ha enviado un correo electrónico para cambiar su ' . $title . '.', 'token' => $token]);
+            return response()->json([
+                'success' => true,
+                'message' => 'Se ha enviado un correo electrónico para cambiar su ' . $title . '.',
+                'token' => $token
+            ]);
         } catch (\Illuminate\Validation\ValidationException $e) {
             return response()->json([
                 'success' => false,

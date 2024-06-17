@@ -28,13 +28,7 @@ Route::get('/', function () {
 Auth::routes();
 
 Route::get('/', [CategoryPlanController::class, 'index']);
-
-// Route::middleware("auth")->group(function () {
-
-// Route::get('payment/{slug}', [CategoryPlanController::class, 'show'])->name('category_plans.show');
 Route::get('payment/{slug?}', [CategoryPlanController::class, 'show'])->name('category_plans.show')->where('slug', '(.*)');
-
-// routes/web.php
 Route::get('update_prices', [PlanController::class, 'updatePrices'])->name('update_prices');
 
 // Ruta para el proceso de pago (checkout)
@@ -53,10 +47,10 @@ Route::post('/', [PaymentController::class, 'index'])->name('index');
 
 //Influencer
 Route::get('/iniciarSesion', [InfluencerController::class, 'index']);
-Route::post('/logear', [InfluencerController::class, 'login']);
+Route::get('/logear', [InfluencerController::class, 'login']);
 // Ruta para el enlace con 'pl' y 'cid'
 Route::get('/pl', [InfluencerController::class, 'show'])->name('pl.show');
-Route::get('/registrarNuevo', [InfluencerController::class, 'registrarNuevo']);
+Route::post('/registrarNuevo', [InfluencerController::class, 'registrarNuevo']);
 
 Route::middleware(['AuthSession'])->group(function () {
     Route::get('/perfil', [InfluencerController::class, 'perfil']);
@@ -68,7 +62,7 @@ Route::middleware(['AuthSession'])->group(function () {
     Route::post('/upload-image', [InfluencerController::class, 'uploadImage']);
     Route::get('/deletePthoPerfil', [InfluencerController::class, 'deletePthoPerfil']);
     Route::get('/cambiarEstadoPorCobrar', [InfluencerController::class, 'cambiarEstadoPorCobrar']);
-    Route::get('/retirarDinero', [InfluencerController::class, 'retirarDinero']);
+    Route::post('/retirarDinero', [InfluencerController::class, 'retirarDinero']);
 });
 
 

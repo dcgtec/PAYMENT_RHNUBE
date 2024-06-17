@@ -77,8 +77,8 @@ $(document).ready(function () {
             },
             password: {
                 required: true,
-                minlength: 6,
-                regex: /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).+$/,
+                minlength: 8,
+                regex: /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*#?&]).+$/,
             },
             telfono: {
                 required: false, // Opcional, pero si está presente, se debe validar
@@ -140,8 +140,8 @@ $(document).ready(function () {
             },
             password: {
                 required: "Ingrese la contraseña",
-                minlength: "Debe tener al menos 6 caracteres",
-                regex: "Debe contener al menos una letra mayúscula, una letra minúscula y un número",
+                minlength: jQuery.validator.format("Debe tener al menos {0} caracteres"),
+                regex: "Debe contener al menos una letra minúscula, una letra mayúscula, un número y un carácter especial (@$!%*#?&)",
             },
             telfono: {
                 telefonoPeru: "Número de teléfono no válido",
@@ -270,6 +270,7 @@ $(document).ready(function () {
             url: "/cambiarEmail",
             method: "GET",
             success: function (response) {
+                console.log(response);
                 if (response.success) {
                     Swal.fire({
                         title: "¡Correcto!",

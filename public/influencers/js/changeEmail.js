@@ -59,10 +59,10 @@ $(document).ready(function () {
                 url: "/changeEmail",
                 data: {
                     token: token,
-                    email: email,
+                    new_email: email,
                     codValidation: codValidation,
                 },
-                method: "POST",
+                method: "post",
                 success: function (response) {
                     console.log(response);
                     if (response.success) {

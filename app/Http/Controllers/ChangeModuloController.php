@@ -2,6 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use App\AesCrypt;
+use App\change_tokens;
+use App\propietarios;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Validator;
@@ -12,97 +16,84 @@ class ChangeModuloController extends Controller
 
     public function showPassword(Request $request)
     {
-        $ce = $request->query('ce');
-
-        if (!$ce) {
-            // Si 'ce' no está presente, devolver una respuesta de error o redirigir
-            abort(404);
-        }
-
-        $response = Http::post('https://rhnube.com.pe/api/validateStatusToken', [
-            'token' => $ce,
-            'type_token' => 'pass-change'
-        ]);
-
-        $respuesta = $response->json();
-
-        if ($respuesta["success"]) {
-            session()->forget('logeado');
-            session()->forget('detalleUusario');
-            return view('influencers.changePassword', compact('ce'));
-        }
-
-        abort(404);
+        return $this->showChangeForm($request, 'pass-change', 'influencers.changePassword');
     }
 
     public function showEmail(Request $request)
     {
-        $ce = $request->query('ce');
+        return $this->showChangeForm($request, 'email-change', 'influencers.changeEmail');
+    }
 
+    private function showChangeForm(Request $request, $typeToken, $view)
+    {
+        $ce = $request->query('ce');
         if (!$ce) {
-            // Si 'ce' no está presente, devolver una respuesta de error o redirigir
             abort(404);
         }
 
-        $response = Http::post('https://rhnube.com.pe/api/validateStatusToken', [
-            'token' => $ce,
-            'type_token' => 'email-change'
-        ]);
+        $changeToken = change_tokens::where('token', $ce)
+            ->where('type_token', $typeToken)
+            ->where('expires_at', '>', now())
+            ->first();
 
-        $respuesta = $response->json();
-
-        if ($respuesta["success"]) {
-            session()->forget('logeado');
-            session()->forget('detalleUusario');
-            return view('influencers.changeEmail', compact('ce'));
+        if (!$changeToken) {
+            abort(404);
         }
 
-        abort(404);
+        session()->forget('logeado');
+        session()->forget('detalleUusario');
+        return view($view, compact('ce'));
     }
 
     public function changePasswords(Request $request)
     {
         try {
 
-            $email = $request->input('email');
-            $token = $request->input('token');
-            $password = $request->input('password');
-            $newPassword = $request->input('newpassword');
-            $codValidation = $request->input('codValidation');
-
-            $validator = Validator::make($request->all(), [
+            $validatedData = $request->validate([
                 'token' => 'required',
-                'email' => 'required|email',
-                'password' => 'required|min:8|regex:/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).+$/',
+                'password' => [
+                    'required',
+                    'string',
+                    'min:8',
+                    'regex:/[a-z]/',
+                    'regex:/[A-Z]/',
+                    'regex:/[0-9]/',
+                    'regex:/[@$!%*#?&]/'
+                ],
                 'newpassword' => 'required|same:password',
-                'codValidation' => 'required|digits:12',
+                'email' => 'required|email',
+                'codValidation' => 'required|digits:12'
             ]);
 
-            // Si la validación falla, lanzar una excepción con los errores
-            if ($validator->fails()) {
-                throw new ValidationException($validator);
+            $token = $validatedData['token'];
+            $password = $validatedData['password'];
+            $newPassword = $validatedData['newpassword'];
+            $email = $validatedData['email'];
+            $codValidation = $validatedData['codValidation'];
+
+            $changeToken = change_tokens::where('token',  $token)
+                ->where('type_token', 'pass-change')
+                ->where('codigo_validacion', $codValidation)
+                ->first();
+
+            if (!$changeToken || $changeToken->expires_at < Carbon::now()) {
+                return response()->json(['success' => false, 'message' => 'El token o el código de validación es inválido o ha expirado.'], 200);
             }
 
-            $response = Http::post('https://rhnube.com.pe/api/updatePasswprdToken', [
-                'email' => $email,
-                'token' => $token,
-                'password' => $password,
-                'confirm_password' => $newPassword,
-                'codigo_validacion' => $codValidation,
-            ]);
+            $propietario = propietarios::where('correo', $request->email)->first();
 
-            $data = $response->json();
+            if (!$propietario) {
+                return response()->json(['success' => false, 'message' => 'No se encontró ningún propietario con el correo electrónico proporcionado.'], 200);
+            }
 
-            $respuesta = $data["success"];
-            $mensaje = $data["message"];
+            $propietario->password = AesCrypt::encrypt($password);
+            $propietario->save();
+            $changeToken->delete();
 
             return response()->json([
-                'success' => $respuesta,
-                'message' => $mensaje,
-            ], 201);
-
-
-            // Resto del código...
+                'success' => true,
+                'message' => 'Contraseña actualizada con éxito.',
+            ], 200);
 
         } catch (ValidationException $e) {
             // Capturar los mensajes de error de validación y devolverlos como respuesta
@@ -117,41 +108,40 @@ class ChangeModuloController extends Controller
     public function changeEmail(Request $request)
     {
         try {
-
-            $email = $request->input('email');
-            $token = $request->input('token');
-            $codValidation = $request->input('codValidation');
-
-            $validator = Validator::make($request->all(), [
+            $request->validate([
                 'token' => 'required',
-                'email' => 'required|email',
-                'codValidation' => 'required|digits:12',
+                'new_email' => [
+                    'required',
+                    'email',
+                    function ($attribute, $value, $fail) {
+                        // Verificar si el nuevo correo electrónico ya existe en la base de datos
+                        $existingPropietario = propietarios::where('correo', $value)->exists();
+                        if ($existingPropietario) {
+                            $fail('El correo electrónico ya está en uso.');
+                        }
+                    }
+                ],
+                'codValidation' => 'required|size:12'
             ]);
 
-            // Si la validación falla, lanzar una excepción con los errores
-            if ($validator->fails()) {
-                throw new ValidationException($validator);
+            $changeToken = change_tokens::where('token', $request->token)
+                ->where('type_token', 'email-change')
+                ->where('codigo_validacion', $request->codValidation)
+                ->first();
+
+            if (!$changeToken || $changeToken->expires_at < Carbon::now()) {
+                return response()->json(['success' => false, 'message' => 'El token o el código de validación es inválido o ha expirado.'], 400);
             }
 
-            $response = Http::post('https://rhnube.com.pe/api/updateCorreoToken', [
-                'new_email' => $email,
-                'token' => $token,
-                'codigo_validacion' => $codValidation,
-            ]);
-
-            $data = $response->json();
-
-            $respuesta = $data["success"];
-            $mensaje = $data["message"];
+            $propietario = propietarios::find($changeToken->id_propietario);
+            $propietario->correo = $request->new_email;
+            $propietario->save();
+            $changeToken->delete();
 
             return response()->json([
-                'success' => $respuesta,
-                'message' => $mensaje,
-            ], 201);
-
-
-            // Resto del código...
-
+                'success' => true,
+                'message' => 'Correo electrónico actualizado con éxito.',
+            ], 200);
         } catch (ValidationException $e) {
             // Capturar los mensajes de error de validación y devolverlos como respuesta
             return response()->json(['errors' => $e->validator->errors()], 422);

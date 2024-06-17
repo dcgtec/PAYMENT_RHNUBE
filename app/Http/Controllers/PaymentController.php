@@ -6,6 +6,8 @@ use App\CategoryPlan;
 use App\cupon;
 use App\detalle_cupones;
 use App\Mail\CompraExitosa;
+use App\Mail\CompraExitosoPayment;
+use App\PaymentUsuario;
 use App\Periodo;
 use Illuminate\Http\Request;
 use App\Plan;
@@ -60,9 +62,6 @@ class PaymentController extends Controller
             $idplan = $request->input('idPla');
             $country = $request->input('idCountry');
 
-
-
-
             // Validación de entrada
             if (!is_numeric($quanty) || !is_numeric($idplan) || !in_array($country, ['PE', 'otro_pais_valido'])) {
                 throw new \InvalidArgumentException('Entrada inválida. Verifica los valores proporcionados.');
@@ -77,63 +76,67 @@ class PaymentController extends Controller
 
             $cupon = $request->input('cupon');
 
-            $response = Http::post('https://rhnube.com.pe/api/obtenerdatosCupon', [
-                'codigo' => $cupon,
-            ]);
+            $dataCupon = cupon::where('name_cupon', $cupon)->first();
 
-
-            $data = $response->json();
-            $successCu = $data["success"];
-
-            $codCupn = '';
-            $cant_usada = '';
-
-            if ($successCu) {
-                $codCupn = $data["message"]["codigo_cupon"];
-                $cant_usada =  $data["message"]["cant_usada"];
+            if (!$dataCupon) {
+                throw new \Exception('Cupón no encontrado.');
             }
 
-            \Stripe\Stripe::setApiKey(config('services.stripe.secret'));
+            $fechaActual = now(); // Obtener la fecha y hora actual
+            $fechaFinCupon = \Carbon\Carbon::parse($dataCupon->fecha_fin); // Convertir la fecha de finalización del cupón a un objeto Carbon
 
-            // Configuración de impuestos según el país
-            $taxes = [];
-            if ($country == "PE") {
-                $taxes = ['txr_1ORzFnCbKz5YJFE3k4IpT5vR'];
-            }
-            // Prod = txr_1ORzFnCbKz5YJFE3k4IpT5vR
-            // Prueba = txr_1OMyoaCbKz5YJFE3ajJh9S4U
-
-            $sessionData = [
-                'payment_method_types' => ['card'],
-                'line_items' => [[
-                    'price' => $plan->stripe_plan,
-                    'quantity' => $quanty,
-                    'tax_rates' => $taxes
-                ]],
-                'mode' => 'subscription',
-                'success_url' => route('success'),
-                'cancel_url' => route('index'),
-            ];
-
-            // Include discounts parameter only if $codCupn is not empty
-            if (!empty($codCupn)) {
-                $sessionData['discounts'] = [[
-                    'coupon' => $codCupn,
-                ]];
+            if ($fechaFinCupon->isPast() && !$fechaFinCupon->isSameDay($fechaActual)) {
+                throw new \Exception('El cupón ha caducado.');
             }
 
-            $session = \Stripe\Checkout\Session::create($sessionData);
-            // Guardar la ID de la sesión de Stripe en la sesión de Laravel
-            session([
-                'stripe_session_id' => $session->id,
-                'cantEmpleados' => $quanty,
-                'plan' => $idplan,
-                'cant_usada' => $cant_usada,
-                'codCupn' => $cupon
-            ]);
+            if ($dataCupon->cant_usada < $dataCupon->cantidad_uso) {
+                \Stripe\Stripe::setApiKey(config('services.stripe.secret'));
+                $codCupn = $dataCupon["codigo_cupon"];
+                $cant_usada =  $dataCupon["cant_usada"];
 
-            // Redirigir al cliente a la página de checkout de Stripe
-            return redirect()->away($session->url);
+                // Configuración de impuestos según el país
+                $taxes = [];
+                if ($country == "PE") {
+                    $taxes = ['txr_1OMyoaCbKz5YJFE3ajJh9S4U'];
+                }
+                // Prod = txr_1ORzFnCbKz5YJFE3k4IpT5vR
+                // Prueba = txr_1OMyoaCbKz5YJFE3ajJh9S4U
+
+                $sessionData = [
+                    'payment_method_types' => ['card'],
+                    'line_items' => [[
+                        'price' => $plan->stripe_plan,
+                        'quantity' => $quanty,
+                        'tax_rates' => $taxes
+                    ]],
+                    'mode' => 'subscription',
+                    'success_url' => route('success'),
+                    'cancel_url' => route('index'),
+                ];
+
+                // Include discounts parameter only if $codCupn is not empty
+                if (!empty($codCupn)) {
+                    $sessionData['discounts'] = [[
+                        'coupon' => $codCupn,
+                    ]];
+                }
+
+                $session = \Stripe\Checkout\Session::create($sessionData);
+
+                // Guardar la ID de la sesión de Stripe en la sesión de Laravel
+                session([
+                    'stripe_session_id' => $session->id,
+                    'cantEmpleados' => $quanty,
+                    'plan' => $idplan,
+                    'cant_usada' => $cant_usada,
+                    'codCupn' => $cupon
+                ]);
+
+                // Redirigir al cliente a la página de checkout de Stripe
+                return redirect()->away($session->url);
+            } else {
+                throw new \Exception('El cupón limitado.');
+            }
         } catch (\InvalidArgumentException $e) {
             session('message');
             // Manejar errores de validación de entrada
@@ -194,21 +197,9 @@ class PaymentController extends Controller
 
             if ($correoDestino) {
 
-                $data = [
-                    'codigoGenerado' => $codigoGenerado,
-                    'customerName' => $customerName,
-                    'fecha' => $fecha,
-                    'monto' => $monto,
-                    'correoDestino' => $correoDestino,
-                ];
-
-                $response = Http::post('https://rhnube.com.pe/api/correoCompraExitosa', $data);
-
-                if ($response->successful()) {
-                    return response()->json(['success' => true, 'message' => 'Correo electrónico reenviado exitosamente']);
-                } else {
-                    return response()->json(['success' => false, 'message' => 'Error al reenviar el correo electrónico: ' . $response->body()]);
-                }
+                Mail::to($correoDestino)->send(new CompraExitosoPayment($codigoGenerado, $customerName, $fecha, $monto));
+                // Respuesta de éxito
+                return response()->json(['success' => true, 'message' => 'Correo electrónico reenviado exitosamente']);
             } else {
                 throw new \Exception('La dirección de correo electrónico no es válida');
             }
@@ -261,25 +252,35 @@ class PaymentController extends Controller
 
         $ganancia = 0;
         $porGanancia = 0;
-        $params = [
-            'codigo' => $codCupn,
-            'paquete' => '0',
-        ];
+        $cupones = Cupon::with(['detallesCupones.paquete', 'detallesCupones.periodo'])
+            ->where('accion', '1')
+            ->where('name_cupon', $codCupn)
+            ->get();
 
-        $respoCupon = Http::post('https://rhnube.com.pe/api/updateUseCupon', $params);
+        // Filtrar combinaciones únicas de paquete y período para cada fila de cupón
+        $cupones->transform(function ($cupon) {
+            $paquetes = [];
+            $periodos = [];
 
-        if ($respoCupon->successful()) {
-
-            $responseData = $respoCupon->json();
-
-            // Verificar si el mensaje está vacío
-            if (!empty($responseData['message'])) {
-                // Si hay datos en el mensaje, continuar con el procesamiento
-                $datos = $responseData["message"][0];
-                $porGanancia = round($datos["ganancia"], 2);
-                $ganancia = round($monto * $porGanancia / 100, 2);
+            foreach ($cupon->detallesCupones as $detalle) {
+                $paquetes[$detalle->paquete->id_paquete] = $detalle->paquete;
+                $periodos[$detalle->periodo->id_tipo_periodo] = $detalle->periodo;
             }
-        }
+
+            // Reemplazar la clave detalles_cupones con un arreglo vacío
+            unset($cupon->detallesCupones);
+            unset($cupon->password);
+            unset($cupon->usuario);
+
+            $cupon->paquetes = array_values($paquetes);
+            $cupon->periodos = array_values($periodos);
+            return $cupon;
+        });
+
+        $datos = $cupones->first();
+
+        $porGanancia = round($datos["ganancia"], 2);
+        $ganancia = round($monto * $porGanancia / 100, 2);
 
 
         $jsonCompra = [
@@ -295,28 +296,22 @@ class PaymentController extends Controller
 
         $jsonDetalleCompra = json_encode($jsonCompra);
 
+        $estadoCodigo = PaymentUsuario::where('codigo_compra', $codigoGenerado)->get();
 
-        // Consumir la API
-        $response = Http::get('https://rhnube.com.pe/api/verificarSaveCodigo', [
-            'codigo_compra' => $codigoGenerado,
-        ]);
+        if ($estadoCodigo->isEmpty()) {
+            $nuevaCompra = new PaymentUsuario();
+            $nuevaCompra->codigo_compra = $codigoGenerado;
+            $nuevaCompra->dato_usuario = $jsonDetalleCompra;
+            $nuevaCompra->code_stripe =  $stripeSession->id;
+            $nuevaCompra->correo = $stripeSession->customer_details->email;
+            $nuevaCompra->fecha_compra =  $fecha;
+            $nuevaCompra->save();
 
+            $this->actualizarCodigo($codCupn);
 
-        $data = $response->json();
-
-        if (!$data['message']) {
-            $newParams = [
-                'codigo_compra' => $codigoGenerado,
-                'dato_usuario' =>  $jsonDetalleCompra,
-                'code_stripe' => $stripeSession->id,
-                'fecha' => $fecha,
-                'correo' => $stripeSession->customer_details->email,
-            ];
-
-            $responseNew = Http::post('https://rhnube.com.pe/api/saveCode', $newParams);
-            $responseCu = $this->actualizarCodigo($codCupn);
-            //Mail::to($stripeSession->customer_details->email)->send(new CompraExitosa($codigoGenerado, $customerName, $fecha, $monto));
+            Mail::to($stripeSession->customer_details->email)->send(new CompraExitosoPayment($codigoGenerado, $customerName, $fecha, $monto));
         }
+
 
 
         // Verificar el estado de la transacción de pago
@@ -339,18 +334,12 @@ class PaymentController extends Controller
             return response()->json(['success' => false, 'message' => 'Cupón no encontrado']);
         }
 
-
-
-
         $fechaActual = now(); // Obtener la fecha y hora actual
         $fechaFinCupon = \Carbon\Carbon::parse($cupon->fecha_fin); // Convertir la fecha de finalización del cupón a un objeto Carbon
 
         if ($fechaFinCupon->isPast() && !$fechaFinCupon->isSameDay($fechaActual)) {
             return response()->json(['success' => false, 'message' => 'El cupón ha caducado']);
         }
-
-
-
 
         if ($cupon->cant_usada < $cupon->cantidad_uso) {
 
@@ -393,7 +382,7 @@ class PaymentController extends Controller
 
     public function obtenerCupon(Request $request)
     {
-
+        // Validar los parámetros de entrada
         $validator = Validator::make($request->all(), [
             'codigo' => 'required',
             'paquete' => 'required',
@@ -406,96 +395,89 @@ class PaymentController extends Controller
         $codigo = $request->input('codigo');
         $paquete = $request->input('paquete');
 
-
-        // if ($paquete == 'rhnube-plus') {
-        //     $paquete = 1;
-        // }
-
-        // if ($paquete == 'rhnube-remote') {
-        //     $paquete = 2;
-        // }
-
-        // if ($paquete == 'rhnube-route') {
-        //     $paquete = 3;
-        // }
-
-        $params = [
-            'codigo' => $codigo,
-            'paquete' => $paquete,
+        // Mapear los nombres de los paquetes a sus respectivos IDs
+        $paqueteIds = [
+            'rhnube-plus' => 1,
+            'rhnube-remote' => 2,
+            'rhnube-route' => 3,
         ];
 
-        $response = Http::post('https://rhnube.com.pe/api/updateUseCupon', $params);
-
-        if ($response->successful()) {
-            // Obtener los datos de la respuesta
-            $responseData = $response->json();
-            // Hacer algo con los datos de la respuesta, si es necesario
-            // Por ejemplo, devolver los datos como respuesta de tu controlador
-            return response()->json($responseData);
+        // Convertir $paquete a entero si es un nombre de paquete
+        if (isset($paqueteIds[$paquete])) {
+            $paqueteId = $paqueteIds[$paquete];
         } else {
-            // En caso de error en la solicitud, devolver un mensaje de error
-            return response()->json(['error' => 'Error al consumir la API'], $response->status());
+            // Si $paquete es '0', mantenerlo como entero
+            $paqueteId = (int) $paquete;
         }
 
-        // try {
+        $cupon = Cupon::where('name_cupon', $codigo)->first();
 
+        if (!$cupon) {
+            return response()->json(['success' => false, 'message' => 'Cupón no encontrado']);
+        }
 
-        //     $request->validate([
-        //         'codigo' => 'required',
-        //     ]);
+        $fechaActual = now();
+        $fechaFinCupon = \Carbon\Carbon::parse($cupon->fecha_fin);
 
-        //     $codigo = $request->codigo;
-        //     $cupon = Cupon::where('name_cupon', $codigo)->first();
+        if ($fechaFinCupon->isPast() && !$fechaFinCupon->isSameDay($fechaActual)) {
+            return response()->json(['success' => false, 'message' => 'El cupón ha caducado']);
+        }
 
-        //     if (!$cupon) {
-        //         return response()->json(['success' => false, 'message' => 'Cupón no encontrado']);
-        //     }
+        if ($cupon->cant_usada >= $cupon->cantidad_uso) {
+            return response()->json(['success' => false, 'message' => 'El cupón ha alcanzado su límite de uso'], 400);
+        }
 
-        //     $fechaActual = now(); // Obtener la fecha y hora actual
-        //     $fechaFinCupon = \Carbon\Carbon::parse($cupon->fecha_fin); // Convertir la fecha de finalización del cupón a un objeto Carbon
+        if ($paqueteId === 0) {
+            // Obtener todos los detalles de cupones para todos los paquetes
+            $cupones = Cupon::with(['detallesCupones.paquete', 'detallesCupones.periodo'])
+                ->where('accion', '1')
+                ->where('name_cupon', $codigo)
+                ->get()
+                ->transform(function ($cupon) {
+                    $paquetes = [];
+                    $periodos = [];
 
-        //     if ($fechaFinCupon->isPast() && !$fechaFinCupon->isSameDay($fechaActual)) {
-        //         return response()->json(['success' => false, 'message' => 'El cupón ha caducado']);
-        //     }
+                    foreach ($cupon->detallesCupones as $detalle) {
+                        $paquetes[$detalle->paquete->id_paquete] = $detalle->paquete;
+                        $periodos[$detalle->periodo->id_tipo_periodo] = $detalle->periodo;
+                    }
 
-        //     if ($cupon->cant_usada < $cupon->cantidad_uso) {
-        //         $cantiReem = $cupon->cant_usada += 1;
+                    unset($cupon->detallesCupones, $cupon->password, $cupon->usuario);
 
-        //         $detalles_cupones = detalle_cupones::select(
-        //             'id_detalle_cupon_uso',
-        //             'cupon_payment.codigo_cupon as cupon',
-        //             'cupon_payment.id_cupon as id_cupon',
-        //             'cupon_payment.name_cupon as name_cupon',
-        //             'paquete_payment.paquete as paquete',
-        //             'paquete_payment.id_paquete as id_paquete',
-        //             'tipo_periodo.periodo as periodo',
-        //             'tipo_periodo.id_tipo_periodo as id_tipo_periodo',
-        //             'cupon_payment.fecha_inicio',
-        //             'cupon_payment.fecha_fin',
-        //             'detalle_cupon.ganancia',
-        //             'cupon_payment.descuento',
-        //             'cupon_payment.cantidad_uso',
-        //             'detalle_cupon.link'
-        //         )
-        //             ->join('cupon_payment', 'detalle_cupon.id_cupon', '=', 'cupon_payment.id_cupon')
-        //             ->join('paquete_payment', 'detalle_cupon.id_paquete', '=', 'paquete_payment.id_paquete')
-        //             ->join('tipo_periodo', 'detalle_cupon.id_tipo_periodo', '=', 'tipo_periodo.id_tipo_periodo')
-        //             ->where('detalle_cupon.id_cupon', $cupon->id_cupon)
-        //             ->get();
-        //         return response()->json(['success' => true, 'message' => $detalles_cupones, 'cantiReem' => $cantiReem], 200);
-        //     } else {
-        //         return response()->json(['success' => false, 'message' => 'El cupón limitado'], 400);
-        //     }
-        // } catch (ValidationException $validationException) {
-        //     $errors = $validationException->errors();
-        //     Log::error('Excepción en updateUseCupon - Validación: ' . json_encode($errors));
-        //     return response()->json(['error' => 'Ha ocurrido un error de validación.', 'details' => $errors], 422);
-        // } catch (\Exception $e) {
-        //     Log::error('Excepción en updateUseCupon: ' . $e->getMessage());
-        //     return response()->json(['error' => 'Ha ocurrido un error.', 'details' => $e->getMessage()], 500);
-        // }
+                    $cupon->paquetes = array_values($paquetes);
+                    $cupon->periodos = array_values($periodos);
+                    return $cupon;
+                });
+
+            return response()->json(['success' => true, 'message' => $cupones, 'cantiReem' => $cupon->cant_usada], 200);
+        }
+
+        // Obtener detalles de cupones solo para el paquete específico
+        $detallesCupones = detalle_cupones::select(
+            'id_detalle_cupon_uso',
+            'cupon_payment.codigo_cupon as cupon',
+            'cupon_payment.id_cupon as id_cupon',
+            'cupon_payment.name_cupon as name_cupon',
+            'paquete_payment.paquete as paquete',
+            'paquete_payment.id_paquete as id_paquete',
+            'tipo_periodo.periodo as periodo',
+            'tipo_periodo.id_tipo_periodo as id_tipo_periodo',
+            'cupon_payment.fecha_inicio',
+            'cupon_payment.fecha_fin',
+            'cupon_payment.ganancia',
+            'cupon_payment.descuento',
+            'cupon_payment.cantidad_uso',
+            'cupon_payment.link'
+        )
+            ->join('cupon_payment', 'detalle_cupon.id_cupon', '=', 'cupon_payment.id_cupon')
+            ->join('paquete_payment', 'detalle_cupon.id_paquete', '=', 'paquete_payment.id_paquete')
+            ->join('tipo_periodo', 'detalle_cupon.id_tipo_periodo', '=', 'tipo_periodo.id_tipo_periodo')
+            ->where('detalle_cupon.id_cupon', $cupon->id_cupon)
+            ->where('detalle_cupon.id_paquete', $paqueteId)
+            ->get();
+
+        return response()->json(['success' => true, 'message' => $detallesCupones, 'cantiReem' => $cupon->cant_usada], 200);
     }
-
 
     public function failure()
     {

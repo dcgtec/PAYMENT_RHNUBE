@@ -3,7 +3,7 @@
 
 @php
 $datosUsuario = json_decode($responseData, true);
-$compras = $datosUsuario['compras']['compras'];
+$compras = $datosUsuario['compras'];
 @endphp
 
 <div class="container infoContenido pt-5 pl-md-4 pr-md-4 pb-5">

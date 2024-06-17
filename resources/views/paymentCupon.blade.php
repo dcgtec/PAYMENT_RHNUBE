@@ -1,5 +1,8 @@
 @include('layouts.header')
 
+{{-- @php
+    dd($datos['paquetes']);
+@endphp --}}
 <link rel="stylesheet" href="{{ asset('css/payment.css') }}">
 <section class="section py-5 formPage">
     <div class="container">
@@ -127,8 +130,12 @@
                                     <div class="col-sm-4 mx-0 px-0">
                                         <select class="form-control text-center w-100" required id="idPaquete"
                                             name="idPaquete">
+
                                             @if (is_array($datos) && !empty($datos['paquetes']))
-                                                @php $primerElemento = true; @endphp
+                                                @php
+                                                $primerElemento = true;
+                                                @endphp
+                                                                                                                                                @endphp ?> ?>
                                                 @foreach ($datos['paquetes'] as $key => $paquete)
                                                     <option value="{{ $paquete['id_paquete'] }}"
                                                         @if ($primerElemento) selected

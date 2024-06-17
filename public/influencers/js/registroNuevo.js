@@ -48,6 +48,15 @@ $(document).ready(function () {
         "Ingrese un CCI válido de 20 dígitos"
     );
 
+    $.validator.addMethod(
+        "regex",
+        function (value, element, regexp) {
+            var re = new RegExp(regexp);
+            return this.optional(element) || re.test(value);
+        },
+        "Please check your input."
+    );
+
     // Configuración del validador
     $("#editarPerfil").validate({
         rules: {
@@ -75,14 +84,13 @@ $(document).ready(function () {
             },
             password: {
                 required: true,
-                minlength: 6,
+                minlength: 8,
+                regex: /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*#?&]).+$/,
             },
+
             telfono: {
                 required: true, // Opcional, pero si está presente, se debe validar
                 telefonoPeru: true, // Usa el método personalizado
-            },
-            cargo: {
-                required: true,
             },
             // Reglas para campos opcionales que deben ser URLs si se completan
             facebook: {
@@ -140,14 +148,12 @@ $(document).ready(function () {
             },
             password: {
                 required: "Ingrese la contraseña",
-                minlength: "La contraseña debe tener al menos 6 caracteres",
+                minlength: jQuery.validator.format("Debe tener al menos {0} caracteres"),
+                regex: "Debe contener al menos una letra minúscula, una letra mayúscula, un número y un carácter especial (@$!%*#?&)",
             },
             telfono: {
                 required: "Ingrese su número de telefono",
                 telefonoPeru: "Número de teléfono no válido",
-            },
-            cargo: {
-                required: "Ingrese su cargo",
             },
             facebook: {
                 required: "Ingrese su cuenta de facebook",
@@ -234,15 +240,12 @@ $(document).ready(function () {
                     linkedIn: linkedIn,
                     instagram: instagram,
                     tiktok: tiktok,
-
-
                     banco: banco,
                     tipCuenta: tipCuenta,
                     nroCuenta: nroCuenta,
                     cci: cci,
-
                 },
-                method: "get",
+                method: "post",
                 success: function (response) {
                     console.log(response);
                     if (response.success) {
@@ -254,11 +257,19 @@ $(document).ready(function () {
                             window.location.href = "/perfil";
                         });
                     } else {
-                        Swal.fire({
-                            title: "¡Error!",
-                            text: response.message || "Ocurrió un error.",
-                            icon: "error",
-                        });
+                        if (response.validacion) {
+                            Swal.fire({
+                                title: "¡Error!",
+                                text: "¡Por favor, verifique sus datos!",
+                                icon: "error",
+                            });
+                        } else {
+                            Swal.fire({
+                                title: "¡Error!",
+                                text: response.message || "Ocurrió un error.",
+                                icon: "error",
+                            });
+                        }
                     }
 
                     $("button.enviarForm").attr("disabled", false);

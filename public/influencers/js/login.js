@@ -94,7 +94,7 @@ $("#loginForm").validate({
 
         // Enviar datos por AJAX a tu controlador
         $.ajax({
-            type: "post",
+            type: "get",
             url: "/logear", // Asegúrate de que este sea el endpoint correcto
             data: {
                 user: user,

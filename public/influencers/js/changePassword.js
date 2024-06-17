@@ -20,7 +20,7 @@ $(document).ready(function () {
             password: {
                 required: true,
                 minlength: 8,
-                regex: /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).+$/,
+                regex: /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*#?&]).+$/,
             },
             confirm_password: {
                 required: true,
@@ -39,9 +39,11 @@ $(document).ready(function () {
                 email: "Por favor ingrese un correo electrónico válido",
             },
             password: {
-                required: "Por favor ingrese una nueva contraseña",
-                minlength: "La contraseña debe tener al menos 8 caracteres",
-                regex: "La contraseña debe contener al menos una letra mayúscula, una letra minúscula y un número",
+                required: "Ingrese la contraseña",
+                minlength: jQuery.validator.format(
+                    "Debe tener al menos {0} caracteres"
+                ),
+                regex: "Debe contener al menos una letra minúscula, una letra mayúscula, un número y un carácter especial (@$!%*#?&)",
             },
             confirm_password: {
                 required: "Por favor confirme su nueva contraseña",
@@ -94,7 +96,7 @@ $(document).ready(function () {
                     newpassword: newpassword,
                     codValidation: codValidation,
                 },
-                method: "POST",
+                method: "post",
                 success: function (response) {
                     if (response.success) {
                         Swal.fire({

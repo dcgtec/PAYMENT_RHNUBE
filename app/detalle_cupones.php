@@ -14,9 +14,21 @@ class detalle_cupones extends Model
         'id_cupon',
         'id_paquete',
         'id_tipo_periodo',
-        'fecha_inicio',
-        'ganancia',
-        'link'
     ];
     public $timestamps = false;
+
+    public function cupon()
+    {
+        return $this->belongsTo(cupon::class, 'id_cupon');
+    }
+
+    public function paquete()
+    {
+        return $this->belongsTo(paquete::class, 'id_paquete');
+    }
+
+    public function periodo()
+    {
+        return $this->belongsTo(periodo::class, 'id_tipo_periodo');
+    }
 }

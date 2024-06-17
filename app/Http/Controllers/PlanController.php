@@ -32,7 +32,7 @@ class PlanController extends Controller
         // $newtax = number_format($subtotal * $newPlan->tax / 100, 2, '.', '');
 
         $subDescu = number_format($subtotal * (1 - ($descuento / 100)), 2, '.', '');
-        
+
 
         if ($country == 'PE') {
             $newtax = number_format(0.18, 2, '.', '');

@@ -7,7 +7,7 @@
     <form id="editarPerfil" class="mt-5">
         <div class="row">
 
-            <div class="col-md-4 my-1">
+            <div class="col-xl-4 col-lg-4 col-lg-6 col-md-12 my-1">
                 <div class="form-group">
 
                     <input type="number" class="form-control" value="" id="codigo" name="codigo"
@@ -16,7 +16,7 @@
                 </div>
             </div>
 
-            <div class="col-md-4 my-1">
+            <div class="col-xl-4 col-lg-4 col-lg-6 col-md-12 my-1">
                 <div class="form-group">
 
                     <input type="text" class="form-control" value="" id="nombres" name="nombres"
@@ -25,7 +25,7 @@
                 </div>
             </div>
 
-            <div class="col-md-4 my-1">
+            <div class="col-xl-4 col-lg-4 col-lg-6 col-md-12 my-1">
                 <div class="form-group">
 
                     <input type="text" value="" class="form-control" id="apPaterno" name="apPaterno"
@@ -34,7 +34,7 @@
                 </div>
             </div>
 
-            <div class="col-md-4 my-1">
+            <div class="col-xl-4 col-lg-4 col-lg-6 col-md-12 my-1">
                 <div class="form-group">
 
                     <input type="text" value="" class="form-control" id="apMaterno" name="apMaterno"
@@ -43,7 +43,7 @@
                 </div>
             </div>
 
-            <div class="col-md-4 my-1">
+            <div class="col-xl-4 col-lg-4 col-lg-6 col-md-12 my-1">
                 <div class="form-group">
 
                     <input type="email" value="" class="form-control" id="email" name="email"
@@ -52,7 +52,7 @@
                 </div>
             </div>
 
-            <div class="col-md-4 my-1">
+            <div class="col-xl-4 col-lg-4 col-lg-6 col-md-12 my-1">
                 <div class="form-group input-group">
                     <input type="password" class="form-control" value="" id="password" name="password"
                         aria-describedby="emailHelp" placeholder="Cambiar contraseña">
@@ -64,7 +64,7 @@
                 </div>
             </div>
 
-            <div class="col-md-4 my-1">
+            <div class="col-xl-4 col-lg-4 col-lg-6 col-md-12 my-1">
                 <div class="form-group">
 
                     <input type="tel" value="" class="form-control" id="telfono" name="telfono"
@@ -73,7 +73,7 @@
                 </div>
             </div>
 
-            <div class="col-md-4 my-1">
+            <div class="col-xl-4 col-lg-4 col-lg-6 col-md-12 my-1">
                 <div class="form-group">
 
                     <input type="text" class="form-control" id="razon_social" value="" name="razon_social"
@@ -82,7 +82,7 @@
                 </div>
             </div>
 
-            <div class="col-md-4 my-1">
+            <div class="col-xl-4 col-lg-4 col-lg-6 col-md-12 my-1">
                 <div class="form-group">
 
                     <input type="text" class="form-control" id="cargo" name="cargo" value=""

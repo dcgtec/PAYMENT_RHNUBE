@@ -4,14 +4,10 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 
-class Periodo extends Model
+class periodo extends Model
 {
-
+    //
     protected $table = 'tipo_periodo';
-
-    protected $fillable = [
-        'id_tipo_periodo ',
-        'periodo',
-        'slug'
-    ];
+    protected $primaryKey = 'id_tipo_periodo';
+    protected $fillable = ['id_tipo_periodo','periodo','slug'];
 }

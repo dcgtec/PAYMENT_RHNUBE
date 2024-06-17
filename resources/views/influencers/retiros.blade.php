@@ -41,61 +41,6 @@
         </div>
     </div>
 
-    <h1 class="mt-5">Retirados</h1>
-
-    <div class="card mt-4">
-        <div class="card-body">
-            <div class="table-responsive">
-                <table id="misRetiros" class="table table-striped table-bordered">
-                    <thead>
-                        <tr>
-                            <th>#</th>
-                            <th>Fecha</th>
-                            <th>Hora</th>
-                            <th>Ganancia</th>
-                            <th>Estado</th>
-                            <th>Retirar</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-
-
-                        @foreach ($compras as $index => $comprasFiltrada)
-                            @if ($comprasFiltrada['estado_transacion'] == 2)
-                                @php
-                                    // Decodificar el JSON almacenado en 'dato_usuario'
-                                    $dato_usuario = json_decode($comprasFiltrada['dato_usuario'], true);
-                                    // Obtener la ganancia del JSON decodificado
-                                    $ganancia = $dato_usuario['ganancia'] ?? 'No disponible';
-                                    // Obtener la fecha y hora de compra
-                                    $fecha_compra = $comprasFiltrada['fecha_compra'];
-                                    // Separar la fecha y la hora
-                                    $fecha = date('Y-m-d', strtotime($fecha_compra)); // Formato YYYY-MM-DD
-                                    $hora = date('H:i:s', strtotime($fecha_compra)); // Formato HH:MM:SS
-                                    $status_trans = '<span class="badge badge-info py-1 mr-2">Por cobrar</span>';
-                                @endphp
-                                <tr>
-                                    <td>{{ $index + 1 }}</td> <!-- El índice comienza en 0, así que sumamos 1 -->
-                                    <td>{{ $fecha }}</td>
-                                    <td>{{ $hora }}</td>
-                                    <td>$ {{ $ganancia }}</td>
-                                    <td>{!! $status_trans !!}</td>
-                                    <td>
-                                        <input type="checkbox" id="checkbox{{ $index }}" class="checkbox"
-                                            name="seleccionar[]" value="{{ $comprasFiltrada['codigo_compra'] }}">
-                                    </td>
-                                </tr>
-                            @endif
-                        @endforeach
-
-
-
-                    </tbody>
-                </table>
-            </div>
-        </div>
-    </div>
-
     <h1 class="mt-5">Por retirar</h1>
     <div class="card mt-4">
         <div class="card-body">
@@ -148,6 +93,58 @@
             </div>
         </div>
     </div>
+
+    <h1 class="mt-5">Retirados</h1>
+
+    <div class="card mt-4">
+        <div class="card-body">
+            <div class="table-responsive">
+                <table id="misRetiros" class="table table-striped table-bordered">
+                    <thead>
+                        <tr>
+                            <th>Nro de operacion</th>
+                            <th>Monto</th>
+                            <th>Destino</th>
+                            <th>Fecha</th>
+                            <th>Hora</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+
+
+                        @foreach ($compras as $index => $comprasFiltrada)
+                            @if ($comprasFiltrada['estado_transacion'] == 2)
+                                @php
+                                    // Decodificar el JSON almacenado en 'dato_usuario'
+                                    $dato_usuario = json_decode($comprasFiltrada['dato_usuario'], true);
+                                    // Obtener la ganancia del JSON decodificado
+                                    $ganancia = $dato_usuario['ganancia'] ?? 'No disponible';
+                                    // Obtener la fecha y hora de compra
+                                    $fecha_compra = $comprasFiltrada['fecha_compra'];
+                                    // Separar la fecha y la hora
+                                    $fecha = date('Y-m-d', strtotime($fecha_compra)); // Formato YYYY-MM-DD
+                                    $hora = date('H:i:s', strtotime($fecha_compra)); // Formato HH:MM:SS
+                                    $status_trans = '<span class="badge badge-info py-1 mr-2">Por cobrar</span>';
+                                @endphp
+                                <tr>
+                                    <td>{{ $index + 1 }}</td> <!-- El índice comienza en 0, así que sumamos 1 -->
+                                    <td>{{ $fecha }}</td>
+                                    <td>{{ $hora }}</td>
+                                    <td>$ {{ $ganancia }}</td>
+                                    <td>{!! $status_trans !!}</td>
+                                </tr>
+                            @endif
+                        @endforeach
+
+
+
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+
 </div>
 
 <style>

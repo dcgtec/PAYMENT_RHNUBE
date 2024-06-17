@@ -1,7 +1,5 @@
 $("select#idCountry,select#idPaquete").select2();
 
-
-
 $(document).ready(function () {
     var $valor = $("#valor");
     var $idPla = $("select#idPla");
@@ -48,12 +46,17 @@ $(document).ready(function () {
         changePer(descuento);
     });
 
-
     var cuponAnti = $cupon.val();
     $cupon.blur(function () {
         console.log("asdasd");
         var cuponVal = $cupon.val();
         var obPlan = obtenerPlan();
+        if (!cuponVal) {
+            limpiarError("vacio");
+            descuento = 0;
+            seleccionFunction(descuento);
+        }
+
         if (cuponVal && cuponAnti != cuponVal) {
             cuponAnti = cuponVal;
             var csrfToken = $('meta[name="csrf-token"]').attr("content");
@@ -178,11 +181,15 @@ function limpiarError(message) {
     descuento = 0;
     changePer(descuento);
 
-    Swal.fire({
-        title: "¡Cupón no válido!",
-        text: message,
-        icon: "error",
-    });
+    console.log(message);
+
+    if (message !== "vacio") {
+        Swal.fire({
+            title: "¡Cupón no válido!",
+            text: message,
+            icon: "error",
+        });
+    }
 }
 
 function obtenerPlan() {
@@ -217,7 +224,6 @@ function obtenerPlanId($idPaquete, $idBotonPeriodoSelec, successCallback) {
 }
 
 function changePer(descuento) {
-
     console.log(descuento);
     var $valor = $("#valor");
     var quantity = $valor.val();

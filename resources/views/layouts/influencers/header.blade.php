@@ -122,7 +122,7 @@ if ($propietarios['foto_portada']) {
 
                 <div class="col-md-12">
                     <div class="row">
-                        <div class="col-md-3 perfilInf text-center">
+                        <div class="col-xl-3 col-lg-3 col-lg-12 perfilInf text-center">
                             <div class="perfilPhoto" style="background-image: url('<?php echo $rutaImgPerfil; ?>')">
                                 <input type="file" id="inputFile" accept=".png, .jpg, .jpeg"
                                     style="display: none;" />
@@ -162,7 +162,7 @@ if ($propietarios['foto_portada']) {
                             </div>
                         </div>
 
-                        <div class="col-md-9">
+                        <div class="col-xl-9 col-lg-9 col-lg-12">
 
                             <script>
                                 let selectedFile = null;

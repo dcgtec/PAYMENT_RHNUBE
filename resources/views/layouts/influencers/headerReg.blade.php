@@ -33,7 +33,8 @@ $menus = [
 
 <body cz-shortcut-listen="true">
     <header class="header">
-        <a href="#" class="header__logo"> <img src="{{ asset('influencers/images/logoRhnube.png') }}" alt=""></a>
+        <a href="#" class="header__logo"> <img src="{{ asset('influencers/images/logoRhnube.png') }}"
+                alt=""></a>
 
         <ion-icon name="menu-outline" class="header__toggle" id="nav-toggle"></ion-icon>
 
@@ -52,18 +53,19 @@ $menus = [
                     <ul class="nav__list">
 
                         @foreach ($menus as $menu)
-                        @if ($menu['estado'] == 1)
-                        <li class="nav__item"><a href="{{ url($menu['link']) }}"
-                                class="nav__link  active ">{{ $menu['name'] }}</a>
-                        </li>
-                        @endif
+                            @if ($menu['estado'] == 1)
+                                <li class="nav__item"><a href="{{ url($menu['link']) }}"
+                                        class="nav__link  active ">{{ $menu['name'] }}</a>
+                                </li>
+                            @endif
                         @endforeach
                     </ul>
                 </div>
 
                 <div class="nav__social">
 
-                    <a href="#" class="nav__social-icon"><img src="../../influencers/images/imgDefault.png" alt="">
+                    <a href="#" class="nav__social-icon"><img src="../../influencers/images/imgDefault.png"
+                            alt="">
                         <label for="" class="nombrePer">Nuevo usuario</label></a>
                 </div>
             </div>
@@ -81,7 +83,7 @@ $menus = [
 
                 <div class="col-md-12">
                     <div class="row">
-                        <div class="col-md-3 perfilInf text-center">
+                        <div class="col-xl-3 col-lg-3 col-lg-12  perfilInf text-center">
                             <div class="perfilPhoto"
                                 style="background-image: url('../../influencers/images/imgDefault.png')">
 
@@ -93,18 +95,19 @@ $menus = [
 
                             <div class="perfilMenus mt-4">
                                 @foreach ($menus as $menu)
-                                {{-- Verifica si el enlace del menú coincide con la URL actual --}}
-                                <a href="{{ url($menu['link']) }}">
-                                    <button class="mb-4 align-items-center btn w-100 opciones d-flex
+                                    {{-- Verifica si el enlace del menú coincide con la URL actual --}}
+                                    <a href="{{ url($menu['link']) }}">
+                                        <button
+                                            class="mb-4 align-items-center btn w-100 opciones d-flex
                                         @if (request()->path() == $menu['link']) active @endif">
-                                        {{-- Agrega la clase 'active' si es el menú activo --}}
+                                            {{-- Agrega la clase 'active' si es el menú activo --}}
 
-                                        <i class="ml-3 mr-2 {{ $menu['icon'] }}"></i>
-                                        <span class="ml-1">{{ $menu['name'] }}</span>
-                                    </button>
-                                </a>
+                                            <i class="ml-3 mr-2 {{ $menu['icon'] }}"></i>
+                                            <span class="ml-1">{{ $menu['name'] }}</span>
+                                        </button>
+                                    </a>
                                 @endforeach
                             </div>
                         </div>
 
-                        <div class="col-md-9">
+                        <div class="col-xl-9 col-lg-9 col-lg-12">

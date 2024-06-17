@@ -145,7 +145,7 @@
     <!-- Footer -->
     <footer class="bg-light py-3">
         <div class="container text-center">
-            <p class="mb-0">© 2024 Tu Compañía. Todos los derechos reservados.</p>
+            <p class="mb-0">© 2020 RH nube Corp - USA | Todos los derechos reservados.</p>
         </div>
     </footer>
     <script src="{{ asset('influencers/js/changeEmail.js') }}"></script>

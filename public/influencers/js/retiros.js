@@ -71,6 +71,7 @@ $(document).ready(function () {
     });
 
     $("#formRetiro").submit(function (event) {
+        var _token = $("meta[name='csrf-token']").attr("content");
         event.preventDefault(); // Evita el envío del formulario por defecto
 
         // Obtener el valor del campo de entrada
@@ -111,23 +112,37 @@ $(document).ready(function () {
                                 cancelButtonText: "No",
                             }).then((result) => {
                                 if (result.isConfirmed) {
+                                    $.ajaxSetup({
+                                        headers: {
+                                            "X-CSRF-TOKEN": _token,
+                                        },
+                                    });
                                     $.ajax({
                                         url: "/retirarDinero",
-                                        type: "GET", // Cambiado a POST
+                                        method: "post", // Cambiado a POST
                                         data: {
                                             idCompra: ids,
                                         },
                                         success: function (data) {
-                                            Swal.fire({
-                                                title: "Éxito",
-                                                text:
-                                                    "El monto de " +
-                                                    ganancia +
-                                                    " ha sido retirado correctamente.",
-                                                icon: "success",
-                                            }).then(() => {
-                                                location.reload(); // Recarga la página después de cerrar el SweetAlert
-                                            });
+                                            if (data.success) {
+                                                Swal.fire({
+                                                    title: "Éxito",
+                                                    text:
+                                                        "El monto de " +
+                                                        ganancia +
+                                                        " ha sido retirado correctamente.",
+                                                    icon: "success",
+                                                }).then(() => {
+                                                    location.reload(); // Recarga la página después de cerrar el SweetAlert
+                                                });
+                                            } else {
+                                                Swal.fire({
+                                                    title: "¡Error!",
+                                                    text:
+                                                        "Ocurrió un error inesperado.",
+                                                    icon: "error",
+                                                });
+                                            }
                                         },
                                         error: function (xhr) {
                                             console.log(xhr.responseJSON.error);
