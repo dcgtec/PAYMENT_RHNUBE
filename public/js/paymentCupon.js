@@ -48,7 +48,6 @@ $(document).ready(function () {
 
     var cuponAnti = $cupon.val();
     $cupon.blur(function () {
-        console.log("asdasd");
         var cuponVal = $cupon.val();
         var obPlan = obtenerPlan();
         if (!cuponVal) {
@@ -79,7 +78,6 @@ $(document).ready(function () {
                             var botonSeleccionado = false;
                             var periodos = response.message["0"].periodos;
                             var paquetes = response.message["0"].paquetes;
-                            console.log(response.message["0"]);
                             descuento = detallesCupon[0]["descuento"];
                             codCupon = detallesCupon[0]["cupon"];
                             $("input#cupon").attr("descuento", descuento);
@@ -101,8 +99,6 @@ $(document).ready(function () {
                             });
 
                             $(paquetes).each(function (index, paquete) {
-                                console.log(paquete.id_paquete);
-                                console.log(paquete.paquete);
                                 var contenido =
                                     '<option value="' +
                                     paquete.id_paquete +
@@ -140,7 +136,6 @@ $(document).ready(function () {
 
 function seleccionFunction(descuento) {
     $(".periodo button").click(function () {
-        console.log("hola");
         $(".periodo button").removeClass("seleccionado");
         $(this).addClass("seleccionado");
         $idBotonPeriodoSeleccionado = $(".periodo button.seleccionado");
@@ -180,8 +175,6 @@ function limpiarError(message) {
 
     descuento = 0;
     changePer(descuento);
-
-    console.log(message);
 
     if (message !== "vacio") {
         Swal.fire({
@@ -224,7 +217,6 @@ function obtenerPlanId($idPaquete, $idBotonPeriodoSelec, successCallback) {
 }
 
 function changePer(descuento) {
-    console.log(descuento);
     var $valor = $("#valor");
     var quantity = $valor.val();
     var $idBotonPeriodoSeleccionado = $(".periodo button.seleccionado");
@@ -258,7 +250,6 @@ function changePer(descuento) {
                 descuento: descuento,
             },
             success: function (response) {
-                console.log(response);
                 updatePrices(response, descuento);
             },
             error: function (xhr, status, error) {

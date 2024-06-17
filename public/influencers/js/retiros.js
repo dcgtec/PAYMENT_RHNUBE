@@ -66,8 +66,6 @@ $(document).ready(function () {
         }
 
         $("input#cantReti").val("$ " + total.toFixed(2));
-        // Mostrar el total en la consola
-        console.log("Total ganancia:", total.toFixed(2));
     });
 
     $("#formRetiro").submit(function (event) {
@@ -145,7 +143,6 @@ $(document).ready(function () {
                                             }
                                         },
                                         error: function (xhr) {
-                                            console.log(xhr.responseJSON.error);
                                             Swal.fire({
                                                 title: "¡Error!",
                                                 text:

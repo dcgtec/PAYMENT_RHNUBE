@@ -140,9 +140,7 @@ $(document).ready(function () {
     // Agregar el evento blur al elemento cupon
     $cupon.blur(function () {
         var cuponVal = $cupon.val();
-        console.log(cuponVal);
         var obPlan = obtenerPlan();
-        console.log(obPlan);
         if (cuponVal) {
             var csrfToken = $('meta[name="csrf-token"]').attr("content");
             $.ajax({
@@ -299,10 +297,10 @@ $(document).ready(function () {
                 updatePrices(response, descuento);
             },
             error: function (xhr, status, error) {
-                console.log(xhr);
+                //console.log(xhr);
             },
             complete: function () {
-                console.log("Actualización de precios completada");
+               // console.log("Actualización de precios completada");
             },
         });
     }

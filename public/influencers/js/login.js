@@ -105,7 +105,6 @@ $("#loginForm").validate({
                 "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr("content"), // Para evitar ataques CSRF
             },
             success: function (response) {
-                console.log(response);
                 // Si la respuesta es exitosa, comprobar si hubo errores de validación
                 if (response.success) {
                     window.location.href = "/perfil"; // Redirigir si el login fue exitoso
@@ -179,7 +178,6 @@ $forgotPasswordForm.validate({
                 user: emailCorreo,
             },
             success: function (response) {
-                console.log(response);
                 if (response.success) {
                     Swal.fire({
                         title: "¡Correcto!",

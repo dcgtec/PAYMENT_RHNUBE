@@ -64,7 +64,6 @@ $(document).ready(function () {
                 },
                 method: "post",
                 success: function (response) {
-                    console.log(response);
                     if (response.success) {
                         Swal.fire({
                             title: "Éxito",

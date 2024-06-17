@@ -250,9 +250,6 @@ $(document).ready(function () {
                     $("button.enviarForm").attr("disabled", false);
                 },
                 error: function (xhr, status, error) {
-                    console.log(xhr);
-                    console.log(status);
-                    console.log(error);
                     Swal.fire({
                         title: "¡Error!",
                         text: response.message || "Ocurrió un error.",
@@ -270,7 +267,6 @@ $(document).ready(function () {
             url: "/cambiarEmail",
             method: "GET",
             success: function (response) {
-                console.log(response);
                 if (response.success) {
                     Swal.fire({
                         title: "¡Correcto!",
@@ -286,7 +282,6 @@ $(document).ready(function () {
                 }
             },
             error: function (xhr) {
-                console.log();
                 Swal.fire({
                     title: "Error",
                     text: "Hubo un problema al cambiar el correo electrónico.",
