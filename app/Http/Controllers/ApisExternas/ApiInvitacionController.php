@@ -87,12 +87,14 @@ class ApiInvitacionController extends Controller
     {
         try {
             $request->validate([
+                'id_invitacion' => 'nullable',
                 'nombres' => 'required',
                 'accion' => 'required|in:guardar,editar',
                 'fechIni' => 'required',
                 'fechFin' => 'required',
                 'cant' => 'required',
             ]);
+
 
             if ($request->accion === 'guardar') {
 
