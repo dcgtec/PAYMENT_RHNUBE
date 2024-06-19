@@ -19,6 +19,8 @@ class OperacionTransferencia extends Model
         'numero_operacion',
         'fecha',
         'hora',
+        'estado',
+        'mensaje',
     ];
 
     // Definir la relación con el propietario

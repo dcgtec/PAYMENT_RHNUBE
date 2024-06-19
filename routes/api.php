@@ -54,7 +54,7 @@ Route::get('/mostrarcompras', [ApiTransaccionController::class, 'mostrarCompraAu
 Route::post('/accionTransaccion', [ApiTransaccionController::class, 'accionTransaccion']);
 
 Route::get('/mostrarTransacciones',  [ApiTransaccionController::class, 'mostrarTransacciones']);
-
+Route::post('/cambiarEstadoTransaccion', [ApiTransaccionController::class, 'cambiarEstadoTransaccion']);
 
 /*AUDOTORIA*/
 Route::GET('/obtenerAudotira', [ApiAudotoriaController::class, 'listAudotira']);

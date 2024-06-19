@@ -46,7 +46,7 @@ $(document).ready(function () {
         // Realiza una solicitud POST para eliminar la operación
         $.ajax({
             url: "/eliminarRetiro", // Reemplaza con la ruta adecuada
-            type: "POST",
+            type: "post",
             data: {
                 idOperacion: idOperacion,
             },
@@ -61,13 +61,12 @@ $(document).ready(function () {
                         // Redirect to /iniciarSesion after success message is closed
                         window.location.reload();
                     });
-
                 } else {
                     Swal.fire({
                         title: "Error",
                         text: response.message,
                         icon: "error",
-                    }) ;  // Muestra un mensaje de error si no se pudo eliminar
+                    }); // Muestra un mensaje de error si no se pudo eliminar
                 }
             },
             error: function (xhr, status, error) {

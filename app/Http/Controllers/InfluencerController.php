@@ -164,8 +164,8 @@ class InfluencerController extends Controller
                 'totalPagar' => $totalGanancia,
                 'fecha' => Carbon::now()->toDateString(),  // Obtiene la fecha actual en formato 'Y-m-d'
                 'hora' => Carbon::now()->toTimeString(),   // Obtiene la hora actual en formato 'H:i:s'
+                'estado' => 2,
             ]);
-
 
             return response()->json(['success' => true, 'message' => 'La actualización del estado de las transacciones fue exitosa.']);
         } catch (\Exception $e) {
@@ -297,13 +297,13 @@ class InfluencerController extends Controller
 
         $mensagge =  $compraDeco["success"];
 
+
         $compras = [];
         if ($mensagge && isset($compraDeco["compras"])) {
             $compras = $compraDeco["compras"];
         }
 
         $operaciones = OperacionTransferencia::orderBy('id_operacion', 'desc')->get();
-
         return view('influencers.retiros', [
             'compras' => $compras,
             'operaciones' => $operaciones

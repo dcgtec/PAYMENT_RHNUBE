@@ -63,7 +63,7 @@ Route::middleware(['AuthSession'])->group(function () {
     Route::get('/deletePthoPerfil', [InfluencerController::class, 'deletePthoPerfil']);
     Route::get('/cambiarEstadoPorCobrar', [InfluencerController::class, 'cambiarEstadoPorCobrar']);
     Route::post('/retirarDinero', [InfluencerController::class, 'retirarDinero']);
-    Route::post('/eliminarRetiro', [InfluencerController::class, 'eliminarRetiro']);
+    Route::post('/eliminarRetiro', [InfluencerController::class, 'cancelarRetiro']);
 });
 
 
