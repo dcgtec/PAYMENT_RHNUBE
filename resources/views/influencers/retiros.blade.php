@@ -107,37 +107,51 @@
                             <th>Destino</th>
                             <th>Fecha</th>
                             <th>Hora</th>
+                            <th>Acción</th>
                         </tr>
                     </thead>
                     <tbody>
-
-
-                        @foreach ($compras as $index => $comprasFiltrada)
-                            @if ($comprasFiltrada['estado_transacion'] == 2)
-                                @php
-                                    // Decodificar el JSON almacenado en 'dato_usuario'
-                                    $dato_usuario = json_decode($comprasFiltrada['dato_usuario'], true);
-                                    // Obtener la ganancia del JSON decodificado
-                                    $ganancia = $dato_usuario['ganancia'] ?? 'No disponible';
-                                    // Obtener la fecha y hora de compra
-                                    $fecha_compra = $comprasFiltrada['fecha_compra'];
-                                    // Separar la fecha y la hora
-                                    $fecha = date('Y-m-d', strtotime($fecha_compra)); // Formato YYYY-MM-DD
-                                    $hora = date('H:i:s', strtotime($fecha_compra)); // Formato HH:MM:SS
-                                    $status_trans = '<span class="badge badge-info py-1 mr-2">Por cobrar</span>';
-                                @endphp
-                                <tr>
-                                    <td>{{ $index + 1 }}</td> <!-- El índice comienza en 0, así que sumamos 1 -->
-                                    <td>{{ $fecha }}</td>
-                                    <td>{{ $hora }}</td>
-                                    <td>$ {{ $ganancia }}</td>
-                                    <td>{!! $status_trans !!}</td>
-                                </tr>
-                            @endif
+                        @foreach ($operaciones as $operacion)
+                            <tr>
+                                <td>
+                                    @if (empty($operacion->numero_operacion))
+                                        <span class="badge badge-warning py-1 mr-2">
+                                            <i class="fas fa-clock" aria-hidden="true"></i>
+                                            Procesando
+                                        </span>
+                                    @else
+                                        {{ $operacion->numero_operacion }}
+                                    @endif
+                                </td>
+                                <td>$ {{ $operacion->totalPagar }}</td>
+                                <!-- Asegúrate de que 'totalPagar' es un campo existente -->
+                                <td>
+                                    @if (empty($operacion->cuentasBancarias))
+                                        <span class="badge badge-warning py-1 mr-2">
+                                            <i class="fas fa-clock" aria-hidden="true"></i>
+                                            Procesando
+                                        </span>
+                                    @else
+                                        Procesando
+                                    @endif
+                                </td> <!-- Asegúrate de que 'cuentasBancarias' es un campo existente -->
+                                <td>{{ $operacion->fecha }}</td>
+                                <td>{{ $operacion->hora }}</td>
+                                <td>
+                                    @if (empty($operacion->numero_operacion))
+                                        <span id="cancelar-operacion" data-id="{{ $operacion->id_operacion }}"
+                                            class="badge badge-danger py-1 mr-2">
+                                            <i class="fas fa-trash mr-1" aria-hidden="true"></i>
+                                            Cancelar
+                                        </span>
+                                    @else
+                                        <span class="badge badge-secondary py-1 mr-2">
+                                            Completado
+                                        </span>
+                                    @endif
+                                </td>
+                            </tr>
                         @endforeach
-
-
-
                     </tbody>
                 </table>
             </div>
@@ -164,6 +178,10 @@
         font-size: 12px;
         color: #AAB4C3;
     }
+
+    span#cancelar-operacion {
+    cursor: pointer;
+}
 
     button.btn.btn-primary {
         background: #08D7D4;

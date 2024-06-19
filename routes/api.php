@@ -53,6 +53,9 @@ Route::get('/compras-automatizacion', [ApiTransaccionController::class, 'mostrar
 Route::get('/mostrarcompras', [ApiTransaccionController::class, 'mostrarCompraAutoAjax']);
 Route::post('/accionTransaccion', [ApiTransaccionController::class, 'accionTransaccion']);
 
+Route::get('/mostrarTransacciones',  [ApiTransaccionController::class, 'mostrarTransacciones']);
+
+
 /*AUDOTORIA*/
 Route::GET('/obtenerAudotira', [ApiAudotoriaController::class, 'listAudotira']);
 Route::post('/registerAudotira', [ApiAudotoriaController::class, 'registerAudotira']);

@@ -15,8 +15,15 @@ class OperacionTransferencia extends Model
         'id_propietario',
         'id_compras',
         'cuentasBancarias',
+        'totalPagar',
         'numero_operacion',
         'fecha',
         'hora',
     ];
+
+    // Definir la relación con el propietario
+    public function propietario()
+    {
+        return $this->belongsTo(propietarios::class, 'id_propietario', 'id_propietario');
+    }
 }

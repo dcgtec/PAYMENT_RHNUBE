@@ -14,6 +14,24 @@ use Illuminate\Support\Facades\Log;
 
 class ApiTransaccionController extends Controller
 {
+
+    function mostrarTransacciones()
+    {
+        try {
+            // Obtener todas las transacciones
+            $transacciones = OperacionTransferencia::with('propietario:id_propietario,nombres,apellido_paterno,apellido_materno,banco,tipo_de_cuenta,cci,numero_de_cuenta')
+                ->get();
+
+            // Retornar las transacciones como respuesta JSON
+            return response()->json(['transacciones' => $transacciones], 200);
+        } catch (\Exception $e) {
+            // Capturar y registrar cualquier error
+            Log::error('Error en la función mostrarTransacciones: ' . $e->getMessage());
+            // Retornar un JSON con el error
+            return response()->json(['error' => 'Error al obtener transacciones'], 500);
+        }
+    }
+
     function mostrarCompraAuto()
     {
         try {
@@ -33,13 +51,13 @@ class ApiTransaccionController extends Controller
                         ->where('id_propietario', $cupon->id_propietario)
                         ->first();
 
-                    $operaciones_transferencias = OperacionTransferencia::select('numero_operacion')
-                        ->where('id_detalle_payment_compra', $payment->id)
-                        ->first();
+                    // $operaciones_transferencias = OperacionTransferencia::select('numero_operacion')
+                    //     ->where('id_detalle_payment_compra', $payment->id)
+                    //     ->first();
 
                     // Asociar el propietario con el pago correspondiente
                     $codCupnArray[$payment->id] = $propietario;
-                    $codOperacion[$payment->id] = $operaciones_transferencias;
+                    // $codOperacion[$payment->id] = $operaciones_transferencias;
                 }
             }
 

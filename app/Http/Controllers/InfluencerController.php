@@ -10,6 +10,7 @@ use App\detalle_invitacion_influencer;
 use App\InvitacionInfluencer;
 use App\Mail\CuponAsignado;
 use App\Mail\EmailChangeRequestMail;
+use App\OperacionTransferencia;
 use App\PaymentUsuario;
 use App\propietarios;
 use Illuminate\Http\Client\RequestException;
@@ -132,6 +133,7 @@ class InfluencerController extends Controller
                 return response()->json(['error' => 'Falta rellenar sus datos bancarios.'], 422);
             }
 
+            $totalGanancia = 0;
             foreach ($request->idCompra as $codigoCompra) {
                 // Verificar si el código de compra no se repite
                 $idCompraExists = PaymentUsuario::where('codigo_compra', $codigoCompra)->exists();
@@ -144,19 +146,81 @@ class InfluencerController extends Controller
                     ->where('estado_transacion', 1)
                     ->first();
 
-                if (!$transaction) {
-                    return response()->json(['error' => 'El código de compra ' . $codigoCompra . ' no existe o la transacción no está activa.'], 422);
-                }
+                // Decodificar el JSON almacenado en 'dato_usuario'
+                $dato_usuario = json_decode($transaction->dato_usuario, true);
+                // Obtener la ganancia del JSON decodificado y sumar al total
+                $ganancia = $dato_usuario['ganancia'] ?? 0;
+                $totalGanancia += $ganancia;
 
                 $transaction->estado_transacion = 2;
                 $transaction->save();
             }
+
+            $idCompraAsString = json_encode($request->idCompra);
+
+            $operacion = OperacionTransferencia::create([
+                'id_compras' => $idCompraAsString,
+                'id_propietario' => $propietario->id_propietario,
+                'totalPagar' => $totalGanancia,
+                'fecha' => Carbon::now()->toDateString(),  // Obtiene la fecha actual en formato 'Y-m-d'
+                'hora' => Carbon::now()->toTimeString(),   // Obtiene la hora actual en formato 'H:i:s'
+            ]);
 
 
             return response()->json(['success' => true, 'message' => 'La actualización del estado de las transacciones fue exitosa.']);
         } catch (\Exception $e) {
             // Manejar otros errores inesperados
             Log::error('Error inesperado en retarDinero: ' . $e->getMessage());
+            return response()->json([
+                'success' => false,
+                'message' => 'Error inesperado.',
+                'details' => $e->getMessage(),
+            ], 500); // Código 500 para error interno
+        }
+    }
+
+    public function cancelarRetiro(Request $request)
+    {
+        try {
+            $logeado = session()->get('logeado');
+            if (!$logeado) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Usuario no autenticado',
+                ], 401); // Código 401 para no autorizado
+            }
+
+            $request->validate([
+                'idOperacion' => 'required'
+            ]);
+
+            $idOperacion =  $request->input('idOperacion');
+
+            $operacion = OperacionTransferencia::where('id_operacion', $idOperacion)->first();
+            if (!$operacion) {
+                return response()->json(['success' => false, 'message' => 'La operación no existe.'], 200);
+            }
+
+            $compras = $operacion->id_compras;
+
+            if (is_string($compras)) {
+                $compras = json_decode($compras, true);
+            }
+
+            foreach ($compras as $compra) {
+
+                $transaction = PaymentUsuario::where('codigo_compra', $compra)
+                    ->first();
+                $transaction->estado_transacion = 1;
+                $transaction->save();
+            }
+
+            $operacion->delete();
+
+            return response()->json(['success' => true, 'message' => 'Operación cancelada correctamente.'], 200);
+        } catch (\Exception $e) {
+            // Manejar otros errores inesperados
+            Log::error('Error inesperado en eliminarRetiro: ' . $e->getMessage());
             return response()->json([
                 'success' => false,
                 'message' => 'Error inesperado.',
@@ -238,8 +302,11 @@ class InfluencerController extends Controller
             $compras = $compraDeco["compras"];
         }
 
+        $operaciones = OperacionTransferencia::orderBy('id_operacion', 'desc')->get();
+
         return view('influencers.retiros', [
-            'compras' => $compras
+            'compras' => $compras,
+            'operaciones' => $operaciones
         ]);
     }
 

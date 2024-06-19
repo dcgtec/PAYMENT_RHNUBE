@@ -32,6 +32,51 @@ $(document).ready(function () {
         $(this).attr("placeholder", "");
     });
 
+    $("body").on("click", "#cancelar-operacion", function () {
+        // Obtiene el id_operacion de la fila
+        var idOperacion = $(this).data("id");
+        var _token = $("meta[name='csrf-token']").attr("content");
+
+        $.ajaxSetup({
+            headers: {
+                "X-CSRF-TOKEN": _token,
+            },
+        });
+
+        // Realiza una solicitud POST para eliminar la operación
+        $.ajax({
+            url: "/eliminarRetiro", // Reemplaza con la ruta adecuada
+            type: "POST",
+            data: {
+                idOperacion: idOperacion,
+            },
+            success: function (response) {
+                // Maneja la respuesta exitosa si es necesario
+                if (response.success) {
+                    Swal.fire({
+                        title: "Éxito",
+                        text: response.message,
+                        icon: "success",
+                    }).then(() => {
+                        // Redirect to /iniciarSesion after success message is closed
+                        window.location.reload();
+                    });
+
+                } else {
+                    Swal.fire({
+                        title: "Error",
+                        text: response.message,
+                        icon: "error",
+                    }) ;  // Muestra un mensaje de error si no se pudo eliminar
+                }
+            },
+            error: function (xhr, status, error) {
+                console.error("Error en la solicitud:", error); // Maneja errores de la solicitud AJAX
+                alert("Error inesperado al intentar eliminar la operación.");
+            },
+        });
+    });
+
     $("#cantReti").on("blur", function () {
         var currentValue = $(this).val().replace("$", "").trim(); // Elimina el símbolo y espacios
 
@@ -136,8 +181,7 @@ $(document).ready(function () {
                                             } else {
                                                 Swal.fire({
                                                     title: "¡Error!",
-                                                    text:
-                                                        "Ocurrió un error inesperado.",
+                                                    text: "Ocurrió un error inesperado.",
                                                     icon: "error",
                                                 });
                                             }
