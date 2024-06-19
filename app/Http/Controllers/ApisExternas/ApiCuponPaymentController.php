@@ -19,7 +19,7 @@ class ApiCuponPaymentController extends Controller
     function listCupones()
     {
         try {
-            $paymentUsuarios = cupon::select("id_cupon", "codigo_cupon", "name_cupon", "accion")->orderBy('fecha_inicio', 'desc')->get();
+            $paymentUsuarios = cupon::select("id_cupon", "codigo_cupon", "name_cupon", "accion")->orderBy('id_cupon', 'desc')->get();
             return response()->json($paymentUsuarios);
         } catch (Exception $e) {
             Log::error('Error en la función listCupones: ' . $e->getMessage());
@@ -30,8 +30,7 @@ class ApiCuponPaymentController extends Controller
     function listCupon()
     {
         try {
-            $cupones = cupon::with(['detallesCupones.paquete', 'detallesCupones.periodo'])
-                ->get();
+            $cupones = cupon::with(['detallesCupones.paquete', 'detallesCupones.periodo'])->orderBy('id_cupon', 'desc')->get();
 
             // Filtrar combinaciones únicas de paquete y período para cada fila de cupón
             $cupones->transform(function ($cupon) {
@@ -72,7 +71,6 @@ class ApiCuponPaymentController extends Controller
 
             $registro =  cupon::where('codigo_cupon', $idCupon)->first();
 
-
             // Obtener el cupón de Stripe
             $cupon = Coupon::retrieve($idCupon);
 
@@ -83,6 +81,49 @@ class ApiCuponPaymentController extends Controller
             } else {
                 return response()->json(['success' => false, 'message' => 'Cupón no actualizado']);
             }
+        } catch (\Illuminate\Validation\ValidationException $e) {
+            return response()->json(['success' => false, 'message' => 'Error de validación', 'errors' => $e->errors()], 422);
+        } catch (\Exception $e) {
+            // Capturar cualquier error y devolver una respuesta de error
+            return response()->json(['success' => false, 'message' => 'Cupón no encontrado']);
+        }
+    }
+
+    function actCupon(Request $request)
+    {
+        try {
+
+            \Stripe\Stripe::setApiKey(config('services.stripe.secret'));
+
+            $request->validate([
+                'idCupon' => 'required',
+                'desc' => 'required',
+                'nombreCupon' => 'required',
+                'cantUso' => 'required',
+                'dateFin' => 'required'
+            ]);
+
+
+            $desc = $request->input('desc');
+            $nombreCupon = $request->input('nombreCupon');
+            $cantUso = $request->input('cantUso');
+            $dateFin = $request->input('dateFin');
+            $redeem_by_timestamp = strtotime($dateFin . ' 23:59:59');
+            $idCupon = $request->input('idCupon');
+
+            $registro =  cupon::where('codigo_cupon', $idCupon)->first();
+
+            $stripeCoupon = \Stripe\Coupon::create([
+                'percent_off' => $desc,
+                'name' => $nombreCupon,
+                'max_redemptions' => $cantUso,
+                'redeem_by' => $redeem_by_timestamp,
+            ]);
+
+            $registro->accion = 1;
+            $registro->codigo_cupon = $stripeCoupon->id;
+            $registro->save();
+            return response()->json(['success' => true, 'message' => 'Cupón actualizado correctamente']);
         } catch (\Illuminate\Validation\ValidationException $e) {
             return response()->json(['success' => false, 'message' => 'Error de validación', 'errors' => $e->errors()], 422);
         } catch (\Exception $e) {
@@ -157,7 +198,7 @@ class ApiCuponPaymentController extends Controller
             $id_propietario  = $request->input('propietario');
 
             if ($accion == "guardar") {
-                if (Cupon::where('name_cupon', $nombreCupon)->exists()) {
+                if (cupon::where('name_cupon', $nombreCupon)->exists()) {
                     return response()->json(['success' => false, 'message' => 'El nombre del cupón ya está en uso']);
                 }
 
@@ -217,7 +258,7 @@ class ApiCuponPaymentController extends Controller
             }
             if ($accion == "editar") {
                 $idCupon = $request->input('idCupon');
-                $cupon = Cupon::where('codigo_cupon', $idCupon)->firstOrFail();
+                $cupon = cupon::where('codigo_cupon', $idCupon)->firstOrFail();
 
                 $cupon->name_cupon = $nombreCupon;
                 $cupon->ganancia = $ganancia;

@@ -34,6 +34,7 @@ Route::post('/accSaUpPropietario', [ApiPropietarioController::class, 'accSaUpPro
 Route::get('/obtenerCupones', [ApiCuponPaymentController::class, 'listCupones']);
 Route::get('/obtenerCupon', [ApiCuponPaymentController::class, 'listCupon']);
 Route::get('/eliminarCupon', [ApiCuponPaymentController::class, 'deleteCupon']);
+Route::post('/actCupon', [ApiCuponPaymentController::class, 'actCupon']);
 Route::post('/accSaUpCupon', [ApiCuponPaymentController::class, 'accSaUpCupon']);
 
 /*PERIODO*/

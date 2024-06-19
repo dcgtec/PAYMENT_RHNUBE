@@ -43,7 +43,7 @@ class ApiTransaccionController extends Controller
                 }
             }
 
-            return response()->json($paymentUsuarios);
+            return response()->json(['paymentUsuarios' => $paymentUsuarios, 'codCupnArray' => $codCupnArray, 'codOperacion' => $codOperacion]);
         } catch (Exception $e) {
             Log::error('Error en la función mostrarCompraAuto: ' . $e->getMessage());
             // Return a JSON response with the error

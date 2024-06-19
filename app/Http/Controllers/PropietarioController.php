@@ -158,6 +158,7 @@ class PropietarioController extends Controller
                     'correEl' => 'required',
                     'nMovil' => 'nullable',
                     'pass' => 'required',
+                    'idPro' => 'nullable',
                 ]);
 
                 $codigo = $request->input('codigo');
