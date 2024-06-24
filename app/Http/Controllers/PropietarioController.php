@@ -7,6 +7,7 @@ use App\change_tokens;
 use App\Mail\EmailChangeRequestMail;
 use App\propietarios;
 use Carbon\Carbon;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Str;
@@ -29,7 +30,6 @@ class PropietarioController extends Controller
     public function sendChangeEmailPasswordToken(Request $request)
     {
         try {
-
             // Obtener el usuario logeado o del request
             $logeado = session()->get('logeado') ?? $request->input('user');
 
@@ -83,6 +83,11 @@ class PropietarioController extends Controller
                 'message' => 'Se ha enviado un correo electrónico para cambiar su ' . $title . '.',
                 'token' => $token
             ]);
+        } catch (ModelNotFoundException $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Usuario no encontrado.',
+            ], 404);
         } catch (\Illuminate\Validation\ValidationException $e) {
             return response()->json([
                 'success' => false,
