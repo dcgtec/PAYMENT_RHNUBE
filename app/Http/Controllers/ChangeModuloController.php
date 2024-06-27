@@ -4,15 +4,27 @@ namespace App\Http\Controllers;
 
 use App\AesCrypt;
 use App\change_tokens;
+use App\Mail\EjemploMail;
 use App\propietarios;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Http;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\ValidationException;
 
 class ChangeModuloController extends Controller
 {
+
+    public function enviarEjemplo()
+    {
+        $data = [
+            'name' => 'STEFANY ARAUCO VASQUEZ'
+        ];
+
+        Mail::to('jfarronans@usmp.pe')->send(new EjemploMail($data));
+        return response()->json(['message' => 'Email sent successfully'], 200);
+    }
 
     public function showPassword(Request $request)
     {
@@ -94,7 +106,6 @@ class ChangeModuloController extends Controller
                 'success' => true,
                 'message' => 'Contraseña actualizada con éxito.',
             ], 200);
-
         } catch (ValidationException $e) {
             // Capturar los mensajes de error de validación y devolverlos como respuesta
             return response()->json(['errors' => $e->validator->errors()], 422);

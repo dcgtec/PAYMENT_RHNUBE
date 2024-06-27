@@ -76,3 +76,6 @@ Route::post('/changePasswords', [ChangeModuloController::class, 'changePasswords
 Route::post('/changeEmail', [ChangeModuloController::class, 'changeEmail']);
 
 Route::get('logs', [\Rap2hpoutre\LaravelLogViewer\LogViewerController::class, 'index']);
+
+
+Route::get('/enviarEjemplo', [ChangeModuloController::class, 'enviarEjemplo']);
