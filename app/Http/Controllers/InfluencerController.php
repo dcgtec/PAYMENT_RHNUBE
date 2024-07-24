@@ -271,10 +271,10 @@ class InfluencerController extends Controller
 
             $cleanedTotalGanancia = str_replace(['$', ' '], '', $totalGanancia);
 
-            if ($cleanedTotalGanancia <= 1.00) {
+            if ($cleanedTotalGanancia <= 49.99) {
                 return response()->json([
                     'success' => false,
-                    'message' => 'El monto a retirar debe ser mayor a $1.00.',
+                    'message' => 'El monto a retirar debe ser mayor a $50.00.',
                     'totalGanancia' => $cleanedTotalGanancia
                 ], 200);
             }
@@ -651,13 +651,13 @@ class InfluencerController extends Controller
         $password = $validated['password'];
 
         try {
-
             $obtenerUsuario = propietarios::where('correo', $user)->first();
-            $id_propietario = $obtenerUsuario->id_propietario;
 
             if ($obtenerUsuario) {
                 // Compara la contraseña proporcionada con la contraseña almacenada en la base de datos
                 if (AesCrypt::decrypt($obtenerUsuario->password) === $password) {
+
+                    $id_propietario = $obtenerUsuario->id_propietario;
 
                     $detalleCupon = cupon::where('id_propietario', $id_propietario)
                         ->with('propietario') // Cargar la relación con el propietario
@@ -676,7 +676,7 @@ class InfluencerController extends Controller
                     ]);
                 } else {
                     // Contraseña incorrecta
-                    return response()->json(['sucess' => false, 'message' => 'Usuario o contraseña incorrectos'], 200);
+                    return response()->json(['success' => false, 'message' => 'Usuario o contraseña incorrectos'], 200);
                 }
             } else {
                 // Usuario no encontrado
@@ -685,12 +685,6 @@ class InfluencerController extends Controller
                     'message' => 'Credenciales incorrectas',
                 ]);
             }
-        } catch (RequestException $e) {
-            // Manejar errores de solicitud
-            return response()->json([
-                'success' => false,
-                'message' => 'Error al conectar con la API externa: ' . $e->getMessage(),
-            ], 500);
         } catch (\Exception $e) {
             // Manejar otros errores
             return response()->json([

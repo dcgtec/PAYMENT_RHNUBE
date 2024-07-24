@@ -47,7 +47,7 @@ Route::post('/', [PaymentController::class, 'index'])->name('index');
 
 //Influencer
 Route::get('/iniciarSesion', [InfluencerController::class, 'index']);
-Route::get('/logear', [InfluencerController::class, 'login']);
+Route::post('/logear', [InfluencerController::class, 'login']);
 // Ruta para el enlace con 'pl' y 'cid'
 Route::get('/pl', [InfluencerController::class, 'show'])->name('pl.show');
 Route::post('/registrarNuevo', [InfluencerController::class, 'registrarNuevo']);

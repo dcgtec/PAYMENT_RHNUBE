@@ -119,11 +119,11 @@ $(document).ready(function () {
         // Obtener el valor del campo de entrada
         const monto = parseFloat($("#cantReti").val().replace("$", "").trim());
 
-        // Verificar si el monto es mayor a 1.00
-        if (monto <= -1) {
+        // Verificar si el monto es mayor a 50.00
+        if (monto <= 49) {
             Swal.fire({
                 title: "¡Error!",
-                text: "El monto a retirar debe ser mayor a $1.00.",
+                text: "El monto a retirar debe ser mayor a $50.00.",
                 icon: "error",
             });
         } else {

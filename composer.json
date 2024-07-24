@@ -16,6 +16,7 @@
         "intervention/image": "^2.7",
         "laravel/cashier": "^12.17",
         "laravel/framework": "^7.29",
+        "laravel/sanctum": "^2.15",
         "laravel/tinker": "^2.5",
         "laravel/ui": "^2.5",
         "mercadopago/dx-php": "^2.6",

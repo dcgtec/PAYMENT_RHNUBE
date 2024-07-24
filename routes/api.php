@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\ApiKeyController;
 use App\Http\Controllers\ApisExternas\ApiAudotoriaController;
 use App\Http\Controllers\ApisExternas\ApiCuponPaymentController;
 use App\Http\Controllers\ApisExternas\ApiInvitacionController;
@@ -7,7 +8,9 @@ use App\Http\Controllers\ApisExternas\ApiPaqueteController;
 use App\Http\Controllers\ApisExternas\ApiPeriodoController;
 use App\Http\Controllers\ApisExternas\ApiPropietarioController;
 use App\Http\Controllers\ApisExternas\ApiTransaccionController;
+use App\Http\Controllers\PropietarioController;
 use Illuminate\Support\Facades\Route;
+use Laravel\Sanctum\Sanctum;
 
 /*
 |--------------------------------------------------------------------------
@@ -25,37 +28,41 @@ use Illuminate\Support\Facades\Route;
 // });
 
 
-/*PROPIETARIOS*/
+Route::post('/generate-api-key', [ApiKeyController::class, 'generateKey']);
 
-Route::get('/obtenerPropietarios', [ApiPropietarioController::class, 'listPropietarios']);
-Route::post('/accSaUpPropietario', [ApiPropietarioController::class, 'accSaUpPropietario']);
+Route::middleware('api.key')->group(function () {
+    /*PROPIETARIOS*/
 
-/*CUPONES*/
-Route::get('/obtenerCupones', [ApiCuponPaymentController::class, 'listCupones']);
-Route::get('/obtenerCupon', [ApiCuponPaymentController::class, 'listCupon']);
-Route::get('/eliminarCupon', [ApiCuponPaymentController::class, 'deleteCupon']);
-Route::post('/actCupon', [ApiCuponPaymentController::class, 'actCupon']);
-Route::post('/accSaUpCupon', [ApiCuponPaymentController::class, 'accSaUpCupon']);
+    Route::get('/obtenerPropietarios', [ApiPropietarioController::class, 'listPropietarios']);
+    Route::post('/accSaUpPropietario', [ApiPropietarioController::class, 'accSaUpPropietario']);
 
-/*PERIODO*/
-Route::get('/obtenerPeriodo', [ApiPeriodoController::class, 'listPeriodo']);
+    /*CUPONES*/
+    Route::get('/obtenerCupones', [ApiCuponPaymentController::class, 'listCupones']);
+    Route::get('/obtenerCupon', [ApiCuponPaymentController::class, 'listCupon']);
+    Route::get('/eliminarCupon', [ApiCuponPaymentController::class, 'deleteCupon']);
+    Route::post('/actCupon', [ApiCuponPaymentController::class, 'actCupon']);
+    Route::post('/accSaUpCupon', [ApiCuponPaymentController::class, 'accSaUpCupon']);
 
-/*PAQUETE*/
-Route::get('/obtenerPaquete', [ApiPaqueteController::class, 'listPaquete']);
+    /*PERIODO*/
+    Route::get('/obtenerPeriodo', [ApiPeriodoController::class, 'listPeriodo']);
 
-/*INVITACIONES*/
-Route::get('/obtenerInvitaciones', [ApiInvitacionController::class, 'listInvitaciones']);
-Route::get('/accionEstInvitacion', [ApiInvitacionController::class, 'changeEstInvitacion']);
-Route::post('/regUpdInvitacion', [ApiInvitacionController::class, 'regUpdInvitacion']);
+    /*PAQUETE*/
+    Route::get('/obtenerPaquete', [ApiPaqueteController::class, 'listPaquete']);
 
-/*TRANSACCIONES*/
-Route::get('/compras-automatizacion', [ApiTransaccionController::class, 'mostrarCompraAuto']);
-Route::get('/mostrarcompras', [ApiTransaccionController::class, 'mostrarCompraAutoAjax']);
-Route::post('/accionTransaccion', [ApiTransaccionController::class, 'accionTransaccion']);
+    /*INVITACIONES*/
+    Route::get('/obtenerInvitaciones', [ApiInvitacionController::class, 'listInvitaciones']);
+    Route::get('/accionEstInvitacion', [ApiInvitacionController::class, 'changeEstInvitacion']);
+    Route::post('/regUpdInvitacion', [ApiInvitacionController::class, 'regUpdInvitacion']);
 
-Route::get('/mostrarTransacciones',  [ApiTransaccionController::class, 'mostrarTransacciones']);
-Route::post('/cambiarEstadoTransaccion', [ApiTransaccionController::class, 'cambiarEstadoTransaccion']);
+    /*TRANSACCIONES*/
+    Route::get('/compras-automatizacion', [ApiTransaccionController::class, 'mostrarCompraAuto']);
+    Route::get('/mostrarcompras', [ApiTransaccionController::class, 'mostrarCompraAutoAjax']);
+    Route::post('/accionTransaccion', [ApiTransaccionController::class, 'accionTransaccion']);
 
-/*AUDOTORIA*/
-Route::GET('/obtenerAudotira', [ApiAudotoriaController::class, 'listAudotira']);
-Route::post('/registerAudotira', [ApiAudotoriaController::class, 'registerAudotira']);
+    Route::get('/mostrarTransacciones',  [ApiTransaccionController::class, 'mostrarTransacciones']);
+    Route::post('/cambiarEstadoTransaccion', [ApiTransaccionController::class, 'cambiarEstadoTransaccion']);
+
+    /*AUDOTORIA*/
+    Route::GET('/obtenerAudotoria', [ApiAudotoriaController::class, 'listAudotira']);
+    Route::post('/registerAudotira', [ApiAudotoriaController::class, 'registerAudotira']);
+});
